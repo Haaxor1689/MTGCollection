@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/MTGCollection/static/js/main.16f41d3f.chunk.js",
-    "main.js.map": "/MTGCollection/static/js/main.16f41d3f.chunk.js.map",
+    "main.js": "/MTGCollection/static/js/main.05045b3a.chunk.js",
+    "main.js.map": "/MTGCollection/static/js/main.05045b3a.chunk.js.map",
     "runtime~main.js": "/MTGCollection/static/js/runtime~main.cac312b3.js",
     "runtime~main.js.map": "/MTGCollection/static/js/runtime~main.cac312b3.js.map",
-    "static/js/2.83a3c4f8.chunk.js": "/MTGCollection/static/js/2.83a3c4f8.chunk.js",
-    "static/js/2.83a3c4f8.chunk.js.map": "/MTGCollection/static/js/2.83a3c4f8.chunk.js.map",
+    "static/js/2.67138546.chunk.js": "/MTGCollection/static/js/2.67138546.chunk.js",
+    "static/js/2.67138546.chunk.js.map": "/MTGCollection/static/js/2.67138546.chunk.js.map",
     "index.html": "/MTGCollection/index.html",
-    "precache-manifest.7c735240d20ac54d92f81ef1cbf3951d.js": "/MTGCollection/precache-manifest.7c735240d20ac54d92f81ef1cbf3951d.js",
+    "precache-manifest.2a4e97afddfb83253f2d56a54b60bbe4.js": "/MTGCollection/precache-manifest.2a4e97afddfb83253f2d56a54b60bbe4.js",
     "service-worker.js": "/MTGCollection/service-worker.js"
   }
 }
