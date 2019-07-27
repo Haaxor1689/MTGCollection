@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "84d2e5f3d920c77bdc2439be6dc00de0",
+    "revision": "495d2e12c6b9bc20be154f93aef5f999",
     "url": "/MTGCollection/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/MTGCollection/static/js/2.23c9ba1f.chunk.js"
   },
   {
-    "revision": "b6e1249eca1e7039eb3a",
-    "url": "/MTGCollection/static/js/main.427514a5.chunk.js"
+    "revision": "98ee1d9e33299e54c7d3",
+    "url": "/MTGCollection/static/js/main.b9bea609.chunk.js"
   },
   {
     "revision": "f4c4c7493e343141b54c",
