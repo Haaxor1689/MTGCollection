@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3b0c1fb64c6d58b03c9e603b1bde1afb",
+    "revision": "8db62207e14f482369370e4a4ea500b6",
     "url": "/MTGCollection/index.html"
   },
   {
