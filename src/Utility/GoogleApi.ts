@@ -25,7 +25,7 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
         fields: "nextPageToken, files(id, name)",
     });
 
-    const collectionFile = (response.result.files && response.result.files.find(f => f.name === "collection.txt")) || undefined;
+    const collectionFile = response.result?.files?.find(f => f.name === "collection.txt");
     if (!collectionFile) {
         console.info("Creating collection");
         dispatch({

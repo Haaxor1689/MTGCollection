@@ -8,7 +8,7 @@ import GoogleApi from "../Utility/GoogleApi";
 import CollectionParser from "../Utility/CollectionParser";
 import DeckPreview from "./DeckPreveiw";
 
-const App: React.FunctionComponent = () => {
+const App: React.FC = () => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
     const [signedIn, setSignedIn] = React.useState(false);
