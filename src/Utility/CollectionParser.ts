@@ -45,5 +45,4 @@ const parseCsv = (collection: string): Deck => {
 const CollectionParser = {
     parse,
 };
-
 export default CollectionParser;

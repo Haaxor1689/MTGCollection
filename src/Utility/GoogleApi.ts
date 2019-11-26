@@ -104,7 +104,7 @@ const signOut = () => gapi.auth2.getAuthInstance().signOut();
 
 export type GoogleProfile = gapi.auth2.BasicProfile;
 
-export const GoogleApi = {
+const GoogleApi = {
     initClient,
     getProfile,
     signIn,
@@ -114,3 +114,4 @@ export const GoogleApi = {
     updateFile,
     getFileContents,
 };
+export default GoogleApi;

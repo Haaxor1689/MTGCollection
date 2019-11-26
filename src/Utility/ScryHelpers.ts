@@ -20,5 +20,4 @@ const ScryHelpers = {
     getImage,
     getPlaceholder,
 };
-
 export default ScryHelpers;

@@ -2,7 +2,7 @@ import React from "react";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import CollectionParser from "../Utility/CollectionParser";
-import { GoogleApi, GoogleProfile } from "../Utility/GoogleApi";
+import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import DeckPreview from "./DeckPreview";
 import { ImportCards } from "./ImportCards";
 
