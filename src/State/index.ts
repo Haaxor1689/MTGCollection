@@ -1,39 +1,37 @@
 import React from "react";
 import Scry from "scryfall-sdk";
 import { Action } from "./Actions";
+import DeepReadonly from "../Utility/DeepReadonly";
 
-export interface DeckCard {
+export type DeckCard = DeepReadonly<{
     amount: number;
     name: string;
     isFoil?: boolean;
     set?: string;
     comment?: string;
-}
+}>;
 
-export type Deck = DeckCard[];
+export type Deck = DeepReadonly<DeckCard[]>;
 
-export type DeckLink = {
-    [deckName: string]: string;
-};
-
-export type FileIds = DeckLink & {
+export type FileIds = DeepReadonly<{
     collection: string;
-};
+    [deckName: string]: string;
+}>;
 
-export type Decks = {
+export type Decks = DeepReadonly<{
     collection: Deck;
     [deckName: string]: Deck;
-};
+}>;
 
-export interface CardList {
+export type CardList = DeepReadonly<{
     [cardName: string]: Scry.Card;
-}
+}>;
 
-export interface AppState {
+export type AppState = DeepReadonly<{
     files: FileIds;
     decks: Decks;
     cardList: CardList;
-}
+}>;
 
 export const initialState: AppState = {
     files: {

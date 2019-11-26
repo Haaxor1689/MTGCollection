@@ -1,6 +1,7 @@
 import Scry from "scryfall-sdk";
+import DeepReadonly from "./DeepReadonly";
 
-const getImage = (card: Scry.Card, type: keyof Scry.ImageUris): string => {
+const getImage = (card: DeepReadonly<Scry.Card>, type: keyof Scry.ImageUris): string => {
     var images: Scry.ImageUris | null | undefined;
     switch (card.layout) {
         case "transform":

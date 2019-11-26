@@ -5,9 +5,9 @@ import CardPreview from "./CardPreview";
 
 export type PreviewStyle = "Minimal" | "Checklist" | "Images" | "Full";
 
-interface Props {
+type Props = {
     deckName: string;
-}
+};
 
 const DeckPreview = ({ deckName }: Props) => {
     const [state, dispatch] = React.useContext(State);
@@ -21,7 +21,7 @@ const DeckPreview = ({ deckName }: Props) => {
         Scry.Cards.collection(
             ...missingCards.map(card => (card.set ? Scry.CardIdentifier.byName(card.name, card.set) : Scry.CardIdentifier.byName(card.name)))
         ).on("data", (card: any) => dispatch({ type: "AddCard", card }));
-    }, [deck]);
+    }, [deck, dispatch, state.cardList]);
     return (
         <div>
             <div>Deck: {deckName}</div>
