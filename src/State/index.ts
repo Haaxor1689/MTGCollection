@@ -1,5 +1,5 @@
-import Scry from "scryfall-sdk";
 import React from "react";
+import Scry from "scryfall-sdk";
 import { Action } from "./Actions";
 
 export interface DeckCard {

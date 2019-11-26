@@ -1,6 +1,6 @@
-import { AppState, FileIds, CardList, Decks } from ".";
-import { Action } from "./Actions";
 import { omit } from "lodash";
+import { AppState, CardList, Decks, FileIds } from ".";
+import { Action } from "./Actions";
 
 const filesReducer = (state: FileIds, action: Action): FileIds => {
     switch (action.type) {

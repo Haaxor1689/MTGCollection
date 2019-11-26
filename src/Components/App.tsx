@@ -1,11 +1,10 @@
 import React from "react";
-
-import { ImportCards } from "./ImportCards";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
-import { GoogleApi, GoogleProfile } from "../Utility/GoogleApi";
 import CollectionParser from "../Utility/CollectionParser";
+import { GoogleApi, GoogleProfile } from "../Utility/GoogleApi";
 import DeckPreview from "./DeckPreview";
+import { ImportCards } from "./ImportCards";
 
 const App: React.FC = () => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -13,12 +12,8 @@ const App: React.FC = () => {
     const [signedIn, setSignedIn] = React.useState(false);
     const [profile, setProfile] = React.useState<GoogleProfile>();
 
-    const handleAuthClick = () => {
-        GoogleApi.auth.signin();
-    };
-
     const handleSignoutClick = () => {
-        GoogleApi.auth.signout();
+        GoogleApi.signOut();
         setProfile(undefined);
     };
 
@@ -32,7 +27,7 @@ const App: React.FC = () => {
             if (!isSignedIn) {
                 return;
             }
-            setProfile( GoogleApi.getProfile() );
+            setProfile(GoogleApi.getProfile());
             GoogleApi.prepareAppData()(dispatch);
         });
     }, []);
@@ -62,7 +57,7 @@ const App: React.FC = () => {
         </State.Provider>
     ) : (
         // TODO: Login screen design
-        <button onClick={handleAuthClick}>Sign in to google</button>
+        <button onClick={GoogleApi.signIn}>Sign in to google</button>
     );
 };
 

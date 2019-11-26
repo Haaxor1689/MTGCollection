@@ -1,8 +1,7 @@
 import React from "react";
+import * as Scry from "scryfall-sdk";
 import { State } from "../State";
 import CardPreview from "./CardPreview";
-
-import * as Scry from "scryfall-sdk";
 
 export type PreviewStyle = "Minimal" | "Checklist" | "Images" | "Full";
 

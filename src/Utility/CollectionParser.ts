@@ -1,6 +1,6 @@
-import { Deck } from "../State";
 import { isNull } from "lodash";
 import Papa from "papaparse";
+import { Deck } from "../State";
 
 const parse = (collection: string): Deck => {
     if (!collection || collection === "") {

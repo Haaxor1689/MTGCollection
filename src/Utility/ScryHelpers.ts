@@ -14,7 +14,7 @@ const getImage = (card: Scry.Card, type: keyof Scry.ImageUris): string => {
     return image || getPlaceholder(card.name);
 };
 
-const getPlaceholder = (cardName: string): string => `https://via.placeholder.com/146x204?text=${cardName.replace(/\s/, "+")}`
+const getPlaceholder = (cardName: string): string => `https://via.placeholder.com/146x204?text=${cardName.replace(/\s/, "+")}`;
 
 const ScryHelpers = {
     getImage,
