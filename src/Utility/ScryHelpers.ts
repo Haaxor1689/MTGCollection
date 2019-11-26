@@ -10,8 +10,7 @@ const getImage = (card: Scry.Card, type: keyof Scry.ImageUris): string => {
         default:
             images = card.image_uris;
     }
-    const image = images ? images[type] : undefined;
-    return image || getPlaceholder(card.name);
+    return images?.[type] ?? getPlaceholder(card.name);
 };
 
 const getPlaceholder = (cardName: string): string => `https://via.placeholder.com/146x204?text=${cardName.replace(/\s/, "+")}`;

@@ -20,7 +20,7 @@ const CardPreview = ({ style, ...card }: Props) => {
                         {card.isFoil && <div>(Foil)</div>}
                         {card.name}
                     </td>
-                    <td>{card.set || "-"}</td>
+                    <td>{card.set ?? "-"}</td>
                 </tr>
             );
         case "Checklist":

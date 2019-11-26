@@ -1,4 +1,5 @@
 import React from "react";
+import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import CollectionParser from "../Utility/CollectionParser";
@@ -45,7 +46,7 @@ const App: React.FC = () => {
         // TODO: Main dashboard design
         <State.Provider value={[state, dispatch]}>
             <button onClick={handleSignoutClick}>Sign Out</button>
-            {profile !== undefined && (
+            {!isNullOrUndefined(profile) && (
                 <div>
                     <img src={profile.getImageUrl()} alt="Profile" />
                     <div>Welcome back, {profile.getGivenName()}</div>

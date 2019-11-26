@@ -30,14 +30,14 @@ const parseCsv = (collection: string): Deck => {
         dynamicTyping: true,
         skipEmptyLines: "greedy",
     });
-    if (result.errors && result.errors.length > 0) {
+    if (result.errors?.length > 0) {
         result.errors.forEach(console.error);
     }
     return result.data.map(c => ({
         amount: c.amount,
-        name: c.name || c.card_name,
-        isFoil: c.isFoil || c.is_foil === 1,
-        set: c.set || c.set_code,
+        name: c.name ?? c.card_name,
+        isFoil: c.isFoil ?? c.is_foil === 1,
+        set: c.set ?? c.set_code,
         comment: c.comment,
     }));
 };
