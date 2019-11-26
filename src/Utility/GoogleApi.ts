@@ -93,18 +93,22 @@ const getFileContents = async ({ id }: { id: string }) => {
 };
 
 const getProfile = () => {
-    return gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
-}
+    return gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getBasicProfile();
+};
+
+const signIn = () => gapi.auth2.getAuthInstance().signIn();
+const signOut = () => gapi.auth2.getAuthInstance().signOut();
 
 export type GoogleProfile = gapi.auth2.BasicProfile;
 
 export const GoogleApi = {
     initClient,
     getProfile,
-    auth: {
-        signin: gapi.auth2.getAuthInstance().signIn,
-        signout: gapi.auth2.getAuthInstance().signOut
-    },
+    signIn,
+    signOut,
     prepareAppData,
     createNewFile,
     updateFile,
