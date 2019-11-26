@@ -1,40 +1,38 @@
-/* global gapi */
 import React from "react";
 
 import { ImportCards } from "./ImportCards";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
-import GoogleApi from "../Utility/GoogleApi";
+import { GoogleApi, GoogleProfile } from "../Utility/GoogleApi";
 import CollectionParser from "../Utility/CollectionParser";
-import DeckPreview from "./DeckPreveiw";
+import DeckPreview from "./DeckPreview";
 
 const App: React.FC = () => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
     const [signedIn, setSignedIn] = React.useState(false);
-    const [basicProfile, setBasicProfile] = React.useState<gapi.auth2.BasicProfile>();
+    const [profile, setProfile] = React.useState<GoogleProfile>();
 
     const handleAuthClick = () => {
-        gapi.auth2.getAuthInstance().signIn();
+        GoogleApi.auth.signin();
     };
 
     const handleSignoutClick = () => {
-        gapi.auth2.getAuthInstance().signOut();
-        setBasicProfile(undefined);
+        GoogleApi.auth.signout();
+        setProfile(undefined);
     };
 
+    /**
+     * Called at app init, sets Google API signin callback
+     * info stored in React profile state
+     */
     React.useEffect(() => {
         GoogleApi.initClient(async (isSignedIn: boolean) => {
             setSignedIn(isSignedIn);
             if (!isSignedIn) {
                 return;
             }
-            setBasicProfile(
-                gapi.auth2
-                    .getAuthInstance()
-                    .currentUser.get()
-                    .getBasicProfile()
-            );
+            setProfile( GoogleApi.getProfile() );
             GoogleApi.prepareAppData()(dispatch);
         });
     }, []);
@@ -49,12 +47,13 @@ const App: React.FC = () => {
     };
 
     return signedIn ? (
+        // TODO: Main dashboard design
         <State.Provider value={[state, dispatch]}>
             <button onClick={handleSignoutClick}>Sign Out</button>
-            {basicProfile !== undefined && (
+            {profile !== undefined && (
                 <div>
-                    <img src={basicProfile.getImageUrl()} alt="Profile" />
-                    <div>Welcome back, {basicProfile.getGivenName()}</div>
+                    <img src={profile.getImageUrl()} alt="Profile" />
+                    <div>Welcome back, {profile.getGivenName()}</div>
                 </div>
             )}
             <ImportCards onImport={importCollection} />
@@ -62,6 +61,7 @@ const App: React.FC = () => {
             <DeckPreview deckName="collection" />
         </State.Provider>
     ) : (
+        // TODO: Login screen design
         <button onClick={handleAuthClick}>Sign in to google</button>
     );
 };
