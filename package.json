@@ -1,6 +1,6 @@
 {
   "name": "mtg-collection",
-  "homepage": "https://haaxor1689.github.io/MTGCollection/",
+  "homepage": "http://marosbetko.games/MTGCollection/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,6 +12,8 @@
     "papaparse": "^5.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0-next.62",
     "scryfall-sdk": "^1.5.1",
     "styled-components": "^4.3.2"
@@ -45,6 +47,8 @@
     "@types/gapi.client.drive": "^3.0.3",
     "@types/lodash.omit": "^4.5.6",
     "@types/papaparse": "^5.0.1",
+    "@types/react-router": "^5.1.3",
+    "@types/react-router-dom": "^5.1.3",
     "@types/styled-components": "^4.1.18",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",

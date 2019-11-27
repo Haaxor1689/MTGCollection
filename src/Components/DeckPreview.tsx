@@ -22,6 +22,7 @@ const DeckPreview = ({ deckName }: Props) => {
             ...missingCards.map(card => (card.set ? Scry.CardIdentifier.byName(card.name, card.set) : Scry.CardIdentifier.byName(card.name)))
         ).on("data", (card: any) => dispatch({ type: "AddCard", card }));
     }, [deck, dispatch, state.cardList]);
+    
     return (
         <div>
             <div>Deck: {deckName}</div>
