@@ -92,6 +92,7 @@ const DrawerToolbar = styled(Toolbar)`
 const MainContent = styled.div<{ open: boolean }>`
     flex-grow: 1;
     padding: ${p => p.theme.spacing(3)}px;
+    margin-left: ${p => p.theme.spacing(7) + 1}px;
     ${bodyClose}
     ${p => p.open && bodyOpen}
 `;
