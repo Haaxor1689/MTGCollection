@@ -4,6 +4,7 @@ import baseStyled, { css as styledCss, ThemedStyledInterface, ThemedStyledProps,
 const additionalArgs = {
     constants: {
         drawerWidth: "240px",
+        appletHeight: "240px",
     } 
 };
 

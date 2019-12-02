@@ -1,9 +1,7 @@
-import { AppBar, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Divider, Drawer, IconButton, Toolbar, Avatar, Typography, Tooltip } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { isNullOrUndefined } from "util";
@@ -16,6 +14,7 @@ import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { css, MainTheme } from "./Styled/Theme";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const bodyOpen = css<any>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -97,6 +96,10 @@ const MainContent = styled.div<{ open: boolean }>`
     ${p => p.open && bodyOpen}
 `;
 
+const ProfileAvatar = styled.div`
+    margin-right: ${p => p.theme.spacing(1)}px;
+`;
+
 const App: React.FC = () => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
@@ -139,13 +142,17 @@ const App: React.FC = () => {
                     <FlexCol />
                     {isSignedIn ? (
                         <>
-                            <button onClick={handleSignoutClick}>Sign Out</button>
                             {!isNullOrUndefined(profile) && (
-                                <div>
-                                    <img src={profile.getImageUrl()} alt="Profile" />
-                                    <div>Welcome back, {profile.getGivenName()}</div>
-                                </div>
+                                <ProfileAvatar>
+                                    <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
+                                        <Avatar alt={profile.getGivenName()} src={profile.getImageUrl()} />
+                                    </Tooltip>
+                                </ProfileAvatar>
                             )}
+                            <IconButton onClick={handleSignoutClick}>
+                                <ExitToAppIcon />
+                                <Typography variant="srOnly">SignOut</Typography>
+                            </IconButton>
                         </>
                     ) : (
                         <SignInButton onClick={GoogleApi.signIn} />
