@@ -1,6 +1,7 @@
-import { AppBar, Divider, Drawer, IconButton, Toolbar, Avatar, Typography, Tooltip } from "@material-ui/core";
+import { AppBar, Avatar, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
@@ -13,10 +14,9 @@ import NotFound from "./NotFound";
 import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
-import styled, { css, MainTheme } from "./Styled/Theme";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 
-const bodyOpen = css<any>`
+const bodyOpen = css<ComponentProps>`
     margin-left: ${p => p.theme.constants.drawerWidth};
     width: calc(100% - ${p => p.theme.constants.drawerWidth});
     transition: ${p =>
@@ -26,7 +26,7 @@ const bodyOpen = css<any>`
         })};
 `;
 
-const bodyClose = css<any>`
+const bodyClose = css<ComponentProps>`
     transition: ${p =>
         p.theme.transitions.create(["width", "margin"], {
             easing: p.theme.transitions.easing.sharp,
@@ -49,7 +49,7 @@ const MenuButton = styled(IconButton)<{ open: boolean }>`
         `}
 `;
 
-const drawerOpen = css<any>`
+const drawerOpen = css<ComponentProps>`
     width: ${p => p.theme.constants.drawerWidth};
     transition: ${p =>
         p.theme.transitions.create("width", {
@@ -58,7 +58,7 @@ const drawerOpen = css<any>`
         })};
 `;
 
-const drawerClose = css<any>`
+const drawerClose = css<ComponentProps>`
     transition: ${p =>
         p.theme.transitions.create("width", {
             easing: p.theme.transitions.easing.sharp,
