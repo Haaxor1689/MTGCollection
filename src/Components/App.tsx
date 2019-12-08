@@ -16,7 +16,7 @@ import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 
-const bodyOpen = css<ComponentProps>`
+const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
     width: calc(100% - ${p => p.theme.constants.drawerWidth});
     transition: ${p =>
@@ -26,7 +26,7 @@ const bodyOpen = css<ComponentProps>`
         })};
 `;
 
-const bodyClose = css<ComponentProps>`
+const bodyClose = css<ComponentProps<any>>`
     transition: ${p =>
         p.theme.transitions.create(["width", "margin"], {
             easing: p.theme.transitions.easing.sharp,
@@ -49,7 +49,7 @@ const MenuButton = styled(IconButton)<{ open: boolean }>`
         `}
 `;
 
-const drawerOpen = css<ComponentProps>`
+const drawerOpen = css<ComponentProps<any>>`
     width: ${p => p.theme.constants.drawerWidth};
     transition: ${p =>
         p.theme.transitions.create("width", {
@@ -58,7 +58,7 @@ const drawerOpen = css<ComponentProps>`
         })};
 `;
 
-const drawerClose = css<ComponentProps>`
+const drawerClose = css<ComponentProps<any>>`
     transition: ${p =>
         p.theme.transitions.create("width", {
             easing: p.theme.transitions.easing.sharp,
