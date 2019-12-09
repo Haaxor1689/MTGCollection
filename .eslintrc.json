@@ -29,6 +29,7 @@
                 "ignoreCase": true,
                 "ignoreDeclarationSort": true
             }
-        ]
+        ],
+        "react/prop-types": 0
     }
 }
