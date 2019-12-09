@@ -5,17 +5,18 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import Scry from "../Utility/Scry";
 import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
+import DrawerDeckList from "./DrawerDeckList";
 import Home from "./Home";
 import NotFound from "./NotFound";
 import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
-import DrawerDeckList from "./DrawerDeckList";
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -130,6 +131,7 @@ const App: React.FC = () => {
             setProfile(GoogleApi.getProfile());
             GoogleApi.prepareAppData()(dispatch);
         });
+        Scry.Symbology.All().then(symbols => dispatch({ type: "AddSymbols", symbols }));
     }, []);
 
     return (

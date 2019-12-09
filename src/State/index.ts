@@ -1,6 +1,7 @@
 import React from "react";
 import Scry from "scryfall-sdk";
 import DeepReadonly from "../Utility/DeepReadonly";
+import { ScryCardSymbol } from "../Utility/Scry/Types";
 import { Action } from "./Actions";
 
 export enum DeckName {
@@ -38,10 +39,15 @@ export type CardList = DeepReadonly<{
     [cardName: string]: Scry.Card;
 }>;
 
+export type SymbolList = DeepReadonly<{
+    [symbol: string]: ScryCardSymbol;
+}>;
+
 export type AppState = DeepReadonly<{
     files: FileIds;
     decks: Decks;
     cardList: CardList;
+    symbolList: SymbolList;
     selectedDeck: string | null;
 }>;
 
@@ -55,6 +61,7 @@ export const initialState: AppState = {
         [DeckName.Wishlist]: { name: DeckName.Wishlist, cards: [] },
     },
     cardList: {},
+    symbolList: {},
     selectedDeck: null,
 };
 

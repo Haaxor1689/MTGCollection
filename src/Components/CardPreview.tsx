@@ -1,7 +1,7 @@
 import { DeckCard, State } from "../State";
 import React from "react";
 import { PreviewStyle } from "./Applets/DeckPreview";
-import ScryHelpers from "../Utility/ScryHelpers";
+import ScryHelpers from "../Utility/Scry";
 
 type Props = DeckCard & {
     style: PreviewStyle;

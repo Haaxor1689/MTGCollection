@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { AppState, CardList, Decks, FileIds } from ".";
+import { AppState, CardList, Decks, FileIds, SymbolList } from ".";
 import { Action } from "./Actions";
 
 const filesReducer = (state: FileIds, action: Action): FileIds => {
@@ -22,6 +22,14 @@ const cardListReducer = (state: CardList, action: Action): CardList => {
                 ...state,
                 [action.card.name]: action.card,
             };
+    }
+    return state;
+};
+
+const symbolListReducer = (state: SymbolList, action: Action): SymbolList => {
+    switch (action.type) {
+        case "AddSymbols":
+            return action.symbols.reduce((obj, s) => ({ ...obj, [s.symbol]: s }), {});
     }
     return state;
 };
@@ -63,6 +71,7 @@ const combineReducers = <State, Action>(reducers: { [P in keyof State]: (state: 
 export const reducer = combineReducers<AppState, Action>({
     files: filesReducer,
     cardList: cardListReducer,
+    symbolList: symbolListReducer,
     decks: decksReducer,
     selectedDeck: selectedDeckReducer,
 });

@@ -39,7 +39,7 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
             }),
         });
     } else {
-        console.info("Loading wishlist...");
+        console.info("Loading collection...");
         dispatch({ type: "SetDeckLink", name: DeckName.Collection, link: collectionFile.id! });
         dispatch({ type: "UpdateDeck", name: DeckName.Collection, cardList: CollectionParser.parse(await getFileContents({ id: collectionFile.id! })) });
     }
