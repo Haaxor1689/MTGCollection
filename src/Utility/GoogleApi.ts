@@ -29,46 +29,42 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
     const collectionFile = response.result?.files?.find(f => f.name === `${DeckName.Collection}.txt`);
     if (!collectionFile) {
         console.info("Creating collection...");
-        dispatch({
-            type: "SetDeckLink",
-            name: DeckName.Collection,
-            link: await createNewFile({
-                name: `${DeckName.Collection}.txt`,
-                fileContent: "",
-                folder: [],
-            }),
-        });
+        createNewDeck(dispatch, { name: DeckName.Collection });
     } else {
         console.info("Loading collection...");
-        dispatch({ type: "SetDeckLink", name: DeckName.Collection, link: collectionFile.id! });
-        dispatch({ type: "UpdateDeck", name: DeckName.Collection, cardList: CollectionParser.parse(await getFileContents({ id: collectionFile.id! })) });
+        dispatch({ type: "CreateDeck", name: DeckName.Collection, link: collectionFile.id! });
+        dispatch({ type: "UpdateDeck", name: DeckName.Collection, cards: CollectionParser.parse(await getFileContents({ id: collectionFile.id! })) });
     }
 
     const wishlistFile = response.result?.files?.find(f => f.name === `${DeckName.Wishlist}.txt`);
     if (!wishlistFile) {
         console.info("Creating wishlist...");
-        dispatch({
-            type: "SetDeckLink",
-            name: DeckName.Wishlist,
-            link: await createNewFile({
-                name: `${DeckName.Wishlist}.txt`,
-                fileContent: "",
-                folder: [],
-            }),
-        });
+        createNewDeck(dispatch, { name: DeckName.Wishlist });
     } else {
         console.info("Loading wishlist...");
-        dispatch({ type: "SetDeckLink", name: DeckName.Wishlist, link: wishlistFile.id! });
-        dispatch({ type: "UpdateDeck", name: DeckName.Wishlist, cardList: CollectionParser.parse(await getFileContents({ id: wishlistFile.id! })) });
+        dispatch({ type: "CreateDeck", name: DeckName.Wishlist, link: wishlistFile.id! });
+        dispatch({ type: "UpdateDeck", name: DeckName.Wishlist, cards: CollectionParser.parse(await getFileContents({ id: wishlistFile.id! })) });
     }
 };
 
-const createNewFile = async ({ name, fileContent, folder }: { name: string; fileContent: string; folder: string[] }): Promise<string> => {
-    const file = new Blob([fileContent], { type: "text/plain" });
+const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileContent }: { name: string; fileContent?: string }) => {
+    dispatch({
+        type: "CreateDeck",
+        name,
+        link: await createNewFile({
+            name: `${name}.txt`,
+            fileContent,
+        }),
+        cards: CollectionParser.parse(fileContent),
+    });
+};
+
+const createNewFile = async ({ name, fileContent, folder }: { name: string; fileContent?: string; folder?: string[] }): Promise<string> => {
+    const file = new Blob([fileContent ?? ""], { type: "text/plain" });
     const metadata = {
         name,
         mimeType: "text/plain",
-        parents: ["appDataFolder", ...folder],
+        parents: ["appDataFolder", ...(folder ?? [])],
     };
 
     const accessToken = gapi.auth.getToken().access_token;
@@ -129,6 +125,7 @@ const GoogleApi = {
     signIn,
     signOut,
     prepareAppData,
+    createNewDeck,
     createNewFile,
     updateFile,
     getFileContents,

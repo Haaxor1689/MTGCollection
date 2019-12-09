@@ -2,12 +2,6 @@ import Scry from "scryfall-sdk";
 import { DeckCard } from ".";
 import { ScryCardSymbol } from "../Utility/Scry/Types";
 
-type SetDeckLink = {
-    type: "SetDeckLink";
-    name: string;
-    link: string;
-};
-
 type AddCard = {
     type: "AddCard";
     card: Scry.Card;
@@ -18,11 +12,19 @@ type AddSymbols = {
     symbols: ScryCardSymbol[];
 };
 
+type CreateDeck = {
+    type: "CreateDeck";
+    name: string;
+    link: string;
+    previewUrl?: string;
+    cards?: DeckCard[];
+}
+
 type UpdateDeck = {
     type: "UpdateDeck";
     name: string;
     previewUrl?: string;
-    cardList?: DeckCard[];
+    cards?: DeckCard[];
 };
 
 type DeleteDeck = {
@@ -35,4 +37,4 @@ type SelectDeck = {
     name: string | null;
 };
 
-export type Action = SetDeckLink | AddCard | AddSymbols | UpdateDeck | DeleteDeck | SelectDeck;
+export type Action = CreateDeck | AddCard | AddSymbols | UpdateDeck | DeleteDeck | SelectDeck;

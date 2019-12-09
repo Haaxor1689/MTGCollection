@@ -2,7 +2,7 @@ import { isNull } from "lodash";
 import Papa from "papaparse";
 import { DeckCard } from "../State";
 
-const parse = (collection: string): DeckCard[] => {
+const parse = (collection?: string): DeckCard[] => {
     if (!collection || collection === "") {
         return [];
     }

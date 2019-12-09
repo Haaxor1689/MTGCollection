@@ -4,7 +4,7 @@ import { Action } from "./Actions";
 
 const filesReducer = (state: FileIds, action: Action): FileIds => {
     switch (action.type) {
-        case "SetDeckLink":
+        case "CreateDeck":
             return {
                 ...state,
                 [action.name]: action.link,
@@ -36,6 +36,14 @@ const symbolListReducer = (state: SymbolList, action: Action): SymbolList => {
 
 const decksReducer = (state: Decks, action: Action): Decks => {
     switch (action.type) {
+        case "CreateDeck":
+            return {
+                ...state,
+                [action.name]: {
+                    cards: [],
+                    ...omit(action, ["type", "link"]),
+                },
+            };
         case "UpdateDeck":
             return {
                 ...state,
