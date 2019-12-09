@@ -17,6 +17,8 @@ export type DeckCard = DeepReadonly<{
     comment?: string;
 }>;
 
+export type DeckProps = Omit<Deck, "cards">;
+
 export type Deck = DeepReadonly<{
     name: string;
     previewUrl?: string;

@@ -62,6 +62,8 @@ const selectedDeckReducer = (state: string | null, action: Action): string | nul
     switch (action.type) {
         case "SelectDeck":
             return action.name;
+        case "DeleteDeck":
+            return action.name === state ? null : state;
     }
     return state;
 };

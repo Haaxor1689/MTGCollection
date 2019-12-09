@@ -22,6 +22,9 @@ const AddDeck = () => {
             return;
         }
         GoogleApi.createNewDeck(dispatch, { name: deckName, fileContent: importText });
+        setImportText("");
+        setDeckName("");
+        setInvalidName(false);
     };
 
     return (

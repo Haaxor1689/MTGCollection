@@ -1,6 +1,6 @@
 /* global gapi */
 import React from "react";
-import { DeckName } from "../State";
+import { DeckName, DeckProps } from "../State";
 import { Action } from "../State/Actions";
 import CollectionParser from "./CollectionParser";
 
@@ -23,10 +23,10 @@ const initClient = (onUpdateStatus: (isSignedIn: boolean) => void) => {
 const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
     var response = await gapi.client.drive.files.list({
         spaces: "appDataFolder",
-        fields: "nextPageToken, files(id, name)",
+        fields: "nextPageToken, files(id, name, appProperties)",
     });
 
-    const collectionFile = response.result?.files?.find(f => f.name === `${DeckName.Collection}.txt`);
+    const collectionFile = response.result?.files?.find(f => f.appProperties?.name === DeckName.Collection);
     if (!collectionFile) {
         console.info("Creating collection...");
         createNewDeck(dispatch, { name: DeckName.Collection });
@@ -36,7 +36,7 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
         dispatch({ type: "UpdateDeck", name: DeckName.Collection, cards: CollectionParser.parse(await getFileContents({ id: collectionFile.id! })) });
     }
 
-    const wishlistFile = response.result?.files?.find(f => f.name === `${DeckName.Wishlist}.txt`);
+    const wishlistFile = response.result?.files?.find(f => f.appProperties?.name === DeckName.Wishlist);
     if (!wishlistFile) {
         console.info("Creating wishlist...");
         createNewDeck(dispatch, { name: DeckName.Wishlist });
@@ -45,25 +45,37 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
         dispatch({ type: "CreateDeck", name: DeckName.Wishlist, link: wishlistFile.id! });
         dispatch({ type: "UpdateDeck", name: DeckName.Wishlist, cards: CollectionParser.parse(await getFileContents({ id: wishlistFile.id! })) });
     }
+
+    const otherFiles = response.result?.files?.filter(f => f.appProperties?.name !== DeckName.Collection && f.appProperties?.name !== DeckName.Wishlist)!;
+    for (let i = 0; i < otherFiles.length; i++) {
+        const file = otherFiles[i];
+        const name = file.appProperties?.name ?? file.name?.match(/(.*?)\.txt/)?.[0] ?? "unnamed";
+        dispatch({ type: "CreateDeck", name, link: file.id! });
+        dispatch({
+            type: "UpdateDeck",
+            name,
+            previewUrl: file.appProperties?.previewUrl,
+            cards: CollectionParser.parse(await getFileContents({ id: file.id! })),
+        });
+    }
 };
 
-const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileContent }: { name: string; fileContent?: string }) => {
-    dispatch({
-        type: "CreateDeck",
-        name,
-        link: await createNewFile({
-            name: `${name}.txt`,
-            fileContent,
-        }),
-        cards: CollectionParser.parse(fileContent),
-    });
-};
-
-const createNewFile = async ({ name, fileContent, folder }: { name: string; fileContent?: string; folder?: string[] }): Promise<string> => {
+const createNewFile = async ({
+    name,
+    props,
+    fileContent,
+    folder,
+}: {
+    name: string;
+    props?: object;
+    fileContent?: string;
+    folder?: string[];
+}): Promise<string> => {
     const file = new Blob([fileContent ?? ""], { type: "text/plain" });
     const metadata = {
         name,
         mimeType: "text/plain",
+        appProperties: props ?? {},
         parents: ["appDataFolder", ...(folder ?? [])],
     };
 
@@ -102,9 +114,30 @@ const getFileContents = async ({ id }: { id: string }) => {
         fileId: id,
         alt: "media",
     });
-    const lines = res.body.split("\n");
-    const text = lines.slice(4, lines.length - 2).join("\n");
-    return text;
+    return res.body;
+};
+
+const deleteFile = async ({ id }: { id: string }) => gapi.client.drive.files.delete({ fileId: id });
+
+const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileContent, ...restProps }: DeckProps & { fileContent?: string }) => {
+    dispatch({
+        type: "CreateDeck",
+        name,
+        link: await createNewFile({
+            name: `${name}.txt`,
+            props: {
+                name,
+                ...restProps,
+            },
+            fileContent,
+        }),
+        cards: CollectionParser.parse(fileContent),
+    });
+};
+
+const deleteDeck = async (dispatch: React.Dispatch<Action>, { name, id }: { name: string; id: string }) => {
+    await deleteFile({id});
+    dispatch({ type: "DeleteDeck", name });
 };
 
 const getProfile = () => {
@@ -125,9 +158,11 @@ const GoogleApi = {
     signIn,
     signOut,
     prepareAppData,
-    createNewDeck,
     createNewFile,
     updateFile,
+    deleteFile,
+    createNewDeck,
+    deleteDeck,
     getFileContents,
 };
 export default GoogleApi;
