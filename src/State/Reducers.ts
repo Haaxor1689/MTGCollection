@@ -10,7 +10,7 @@ const filesReducer = (state: FileIds, action: Action): FileIds => {
                 [action.name]: action.link,
             };
         case "DeleteDeck":
-            return { collection: "", ...omit(state, [action.name]) };
+            return { ...omit(state, [action.name]) } as FileIds;
     }
     return state;
 };
@@ -31,10 +31,21 @@ const decksReducer = (state: Decks, action: Action): Decks => {
         case "UpdateDeck":
             return {
                 ...state,
-                [action.name]: action.cardList,
+                [action.name]: {
+                    ...state[action.name],
+                    ...omit(action, ["type"]),
+                },
             };
         case "DeleteDeck":
-            return { collection: [], ...omit(state, [action.name]) };
+            return { ...omit(state, [action.name]) } as Decks;
+    }
+    return state;
+};
+
+const selectedDeckReducer = (state: string | null, action: Action): string | null => {
+    switch (action.type) {
+        case "SelectDeck":
+            return action.name;
     }
     return state;
 };
@@ -53,4 +64,5 @@ export const reducer = combineReducers<AppState, Action>({
     files: filesReducer,
     cardList: cardListReducer,
     decks: decksReducer,
+    selectedDeck: selectedDeckReducer,
 });

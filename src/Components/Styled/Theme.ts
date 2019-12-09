@@ -1,5 +1,6 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 import baseStyled, { css as styledCss, ThemedStyledInterface, ThemedStyledProps, ThemeProvider as ThemeProv } from "styled-components";
+import { colors } from "@material-ui/core";
 
 const additionalArgs = {
     constants: {
@@ -8,7 +9,16 @@ const additionalArgs = {
     },
 };
 
-export const MainTheme = createMuiTheme({}, additionalArgs);
+export const MainTheme = createMuiTheme(
+    {
+        palette: {
+            type: "dark",
+            primary: { main: colors.deepOrange[700] },
+            secondary: { main: colors.blueGrey[500] },
+        },
+    },
+    additionalArgs
+);
 
 export const ThemeProvider = ThemeProv;
 export const css = styledCss;

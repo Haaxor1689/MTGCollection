@@ -1,15 +1,15 @@
-import React from "react";
 import { Grid } from "@material-ui/core";
-import { AppletPaper } from "../Styled/Grid";
+import React from "react";
+import { AppletPaper, Title } from "../Styled/Grid";
 
 const CardSearch: React.FC = () => {
     return (
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md>
             <AppletPaper>
-                CardSearch placeholder
+                <Title>Card search</Title>
             </AppletPaper>
         </Grid>
-    )
-}
+    );
+};
 
 export default CardSearch;

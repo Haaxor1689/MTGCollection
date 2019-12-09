@@ -1,8 +1,8 @@
 import { isNull } from "lodash";
 import Papa from "papaparse";
-import { Deck } from "../State";
+import { DeckCard } from "../State";
 
-const parse = (collection: string): Deck => {
+const parse = (collection: string): DeckCard[] => {
     if (!collection || collection === "") {
         return [];
     }
@@ -12,7 +12,7 @@ const parse = (collection: string): Deck => {
     return parseSimple(collection);
 };
 
-const parseSimple = (collection: string): Deck =>
+const parseSimple = (collection: string): DeckCard[] =>
     collection
         .split("\n")
         .filter(line => !line.match(/^\s*$/) && !line.startsWith("//"))
@@ -24,7 +24,7 @@ const parseSimple = (collection: string): Deck =>
             set: match![2],
         }));
 
-const parseCsv = (collection: string): Deck => {
+const parseCsv = (collection: string): DeckCard[] => {
     const result = Papa.parse(collection, {
         header: true,
         dynamicTyping: true,
@@ -45,4 +45,5 @@ const parseCsv = (collection: string): Deck => {
 const CollectionParser = {
     parse,
 };
+
 export default CollectionParser;

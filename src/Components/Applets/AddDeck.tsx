@@ -1,9 +1,9 @@
-import { Button, Grid, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@material-ui/core";
 import React from "react";
 import { State } from "../../State";
 import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
-import { AppletPaper } from "../Styled/Grid";
+import { AppletPaper, Title } from "../Styled/Grid";
 
 const AddDeck = () => {
     const [state, dispatch] = React.useContext(State);
@@ -23,8 +23,9 @@ const AddDeck = () => {
     return (
         <Grid item xs={12} md={3}>
             <AppletPaper>
+                <Title>Add deck</Title>
                 <Button variant="outlined" onClick={handleClickOpen}>
-                    Import new deck
+                    Import cards
                 </Button>
                 <Dialog open={open} onClose={handleClose} aria-labelledby="import-deck-dialog" fullWidth maxWidth="md">
                     <DialogTitle id="import-deck-dialog">Import</DialogTitle>

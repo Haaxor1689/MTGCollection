@@ -2,9 +2,10 @@ import React from "react";
 import * as Scry from "scryfall-sdk";
 import { State } from "../../State";
 import CardPreview from "../CardPreview";
-import { Grid } from "@material-ui/core";
-import { AppletPaper } from "../Styled/Grid";
+import { Grid, IconButton, Typography } from "@material-ui/core";
+import { AppletPaper, Title } from "../Styled/Grid";
 import GoogleApi from "../../Utility/GoogleApi";
+import CloseIcon from "@material-ui/icons/Close";
 
 export type PreviewStyle = "Minimal" | "Checklist" | "Images" | "Full";
 
@@ -19,7 +20,7 @@ const DeckPreview = ({ deckName }: Props) => {
     const [style, setStyle] = React.useState<PreviewStyle>("Minimal");
 
     React.useEffect(() => {
-        const missingCards = deck.filter(card => !state.cardList[card.name]);
+        const missingCards = deck.cards.filter(card => !state.cardList[card.name]);
         console.log({ deck, missingCards });
         Scry.Cards.collection(
             ...missingCards.map(card => (card.set ? Scry.CardIdentifier.byName(card.name, card.set) : Scry.CardIdentifier.byName(card.name)))
@@ -30,9 +31,25 @@ const DeckPreview = ({ deckName }: Props) => {
         console.log(await GoogleApi.getFileContents({ id: state.files.collection }));
     };
 
+    const closePreview = () => {
+        dispatch({ type: "SelectDeck", name: null });
+    };
+
     return (
         <Grid item xs={12} md={6}>
             <AppletPaper>
+                <Grid container direction="row" justify="space-between">
+                    <Grid item>
+                        <Title>Deck preview</Title>
+                    </Grid>
+                    <Grid item>
+                        <IconButton size="small" onClick={closePreview}>
+                            <CloseIcon />
+                            <Typography variant="srOnly">Close preview</Typography>
+                        </IconButton>
+                    </Grid>
+                </Grid>
+
                 <div>Deck: {deckName}</div>
                 <button onClick={exportCollection}>Export collection</button>
                 <div>
@@ -72,14 +89,14 @@ const DeckPreview = ({ deckName }: Props) => {
                             </thead>
                         )}
                         <tbody>
-                            {deck.map((card, i) => (
+                            {deck.cards.map((card, i) => (
                                 <CardPreview style={style} key={i} {...card} />
                             ))}
                         </tbody>
                     </table>
                 ) : (
                     <div>
-                        {deck.map((card, i) => (
+                        {deck.cards.map((card, i) => (
                             <CardPreview style={style} key={i} {...card} />
                         ))}
                     </div>

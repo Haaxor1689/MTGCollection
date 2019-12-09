@@ -15,6 +15,7 @@ import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
+import DrawerDeckList from "./DrawerDeckList";
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -164,7 +165,7 @@ const App: React.FC = () => {
                     <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
                 </DrawerToolbar>
                 <Divider />
-                {/* {Drawer content} */}
+                <DrawerDeckList />
             </CustomDrawer>
             <MainContent open={open}>
                 <BrowserRouter basename={process.env.PUBLIC_URL}>

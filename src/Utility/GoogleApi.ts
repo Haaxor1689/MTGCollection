@@ -1,5 +1,6 @@
 /* global gapi */
 import React from "react";
+import { DeckName } from "../State";
 import { Action } from "../State/Actions";
 import CollectionParser from "./CollectionParser";
 
@@ -25,22 +26,40 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
         fields: "nextPageToken, files(id, name)",
     });
 
-    const collectionFile = response.result?.files?.find(f => f.name === "collection.txt");
+    const collectionFile = response.result?.files?.find(f => f.name === `${DeckName.Collection}.txt`);
     if (!collectionFile) {
-        console.info("Creating collection");
+        console.info("Creating collection...");
         dispatch({
             type: "SetDeckLink",
-            name: "collection",
+            name: DeckName.Collection,
             link: await createNewFile({
-                name: "collection.txt",
+                name: `${DeckName.Collection}.txt`,
                 fileContent: "",
                 folder: [],
             }),
         });
     } else {
-        console.info("Loading collection");
-        dispatch({ type: "SetDeckLink", name: "collection", link: collectionFile.id! });
-        dispatch({ type: "UpdateDeck", name: "collection", cardList: CollectionParser.parse(await getFileContents({ id: collectionFile.id! })) });
+        console.info("Loading wishlist...");
+        dispatch({ type: "SetDeckLink", name: DeckName.Collection, link: collectionFile.id! });
+        dispatch({ type: "UpdateDeck", name: DeckName.Collection, cardList: CollectionParser.parse(await getFileContents({ id: collectionFile.id! })) });
+    }
+
+    const wishlistFile = response.result?.files?.find(f => f.name === `${DeckName.Wishlist}.txt`);
+    if (!wishlistFile) {
+        console.info("Creating wishlist...");
+        dispatch({
+            type: "SetDeckLink",
+            name: DeckName.Wishlist,
+            link: await createNewFile({
+                name: `${DeckName.Wishlist}.txt`,
+                fileContent: "",
+                folder: [],
+            }),
+        });
+    } else {
+        console.info("Loading wishlist...");
+        dispatch({ type: "SetDeckLink", name: DeckName.Wishlist, link: wishlistFile.id! });
+        dispatch({ type: "UpdateDeck", name: DeckName.Wishlist, cardList: CollectionParser.parse(await getFileContents({ id: wishlistFile.id! })) });
     }
 };
 

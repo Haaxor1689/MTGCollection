@@ -1,5 +1,5 @@
 import Scry from "scryfall-sdk";
-import { Deck } from ".";
+import { DeckCard } from ".";
 
 type SetDeckLink = {
     type: "SetDeckLink";
@@ -15,7 +15,8 @@ type AddCard = {
 type UpdateDeck = {
     type: "UpdateDeck";
     name: string;
-    cardList: Deck;
+    previewUrl?: string;
+    cardList?: DeckCard[];
 };
 
 type DeleteDeck = {
@@ -23,4 +24,9 @@ type DeleteDeck = {
     name: string;
 };
 
-export type Action = SetDeckLink | AddCard | UpdateDeck | DeleteDeck;
+type SelectDeck = {
+    type: "SelectDeck";
+    name: string | null;
+};
+
+export type Action = SetDeckLink | AddCard | UpdateDeck | DeleteDeck | SelectDeck;

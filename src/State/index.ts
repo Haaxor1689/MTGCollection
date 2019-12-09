@@ -1,7 +1,12 @@
 import React from "react";
 import Scry from "scryfall-sdk";
-import { Action } from "./Actions";
 import DeepReadonly from "../Utility/DeepReadonly";
+import { Action } from "./Actions";
+
+export enum DeckName {
+    Collection = "_collection",
+    Wishlist = "_wishlist",
+}
 
 export type DeckCard = DeepReadonly<{
     amount: number;
@@ -11,15 +16,21 @@ export type DeckCard = DeepReadonly<{
     comment?: string;
 }>;
 
-export type Deck = DeepReadonly<DeckCard[]>;
+export type Deck = DeepReadonly<{
+    name: string;
+    previewUrl?: string;
+    cards: DeckCard[];
+}>;
 
 export type FileIds = DeepReadonly<{
-    collection: string;
+    [DeckName.Collection]: string;
+    [DeckName.Wishlist]: string;
     [deckName: string]: string;
 }>;
 
 export type Decks = DeepReadonly<{
-    collection: Deck;
+    [DeckName.Collection]: Deck;
+    [DeckName.Wishlist]: Deck;
     [deckName: string]: Deck;
 }>;
 
@@ -31,16 +42,20 @@ export type AppState = DeepReadonly<{
     files: FileIds;
     decks: Decks;
     cardList: CardList;
+    selectedDeck: string | null;
 }>;
 
 export const initialState: AppState = {
     files: {
-        collection: "",
+        [DeckName.Collection]: "",
+        [DeckName.Wishlist]: "",
     },
     decks: {
-        collection: [],
+        [DeckName.Collection]: { name: DeckName.Collection, cards: [] },
+        [DeckName.Wishlist]: { name: DeckName.Wishlist, cards: [] },
     },
     cardList: {},
+    selectedDeck: null,
 };
 
 export const State = React.createContext<[AppState, React.Dispatch<Action>]>([initialState, undefined as any]);
