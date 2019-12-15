@@ -120,6 +120,7 @@ const getFileContents = async ({ id }: { id: string }) => {
 const deleteFile = async ({ id }: { id: string }) => gapi.client.drive.files.delete({ fileId: id });
 
 const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileContent, ...restProps }: DeckProps & { fileContent?: string }) => {
+    console.log({restProps, fileContent});
     dispatch({
         type: "CreateDeck",
         name,
@@ -132,6 +133,7 @@ const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileConte
             fileContent,
         }),
         cards: CollectionParser.parse(fileContent),
+        ...restProps,
     });
 };
 
