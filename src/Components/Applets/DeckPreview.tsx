@@ -84,7 +84,7 @@ const DeckPreview = ({ deckName }: Props) => {
                     </Grid>
                 </Grid>
                 <FlexCol>
-                    <CollectionPreview cards={deck.cards as any[]} />
+                    <CollectionPreview cards={deck.cards.map(c => ({ ...c, ...(state.cardList[c.name] ?? {}) })) as any} />
                 </FlexCol>
                 <AppletActions>
                     <TooltipButton title="Export deck" onClick={onExportOpen}>

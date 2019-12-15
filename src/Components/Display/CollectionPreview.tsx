@@ -8,6 +8,7 @@ import { FlexCol } from "../Styled/Grid";
 import styled from "../Styled/Theme";
 import ScrySdk from "scryfall-sdk";
 import ListCollecion from "./ListCollection";
+import ImagesCollecion from "./ImagesCollection";
 
 export type PreviewStyle = "Standard" | "List" | "Images";
 
@@ -49,6 +50,8 @@ const CollectionPreview: React.FC<Props> = ({ cards }) => {
         switch (style) {
             case "List":
                 return <ListCollecion cards={cards} />;
+            case "Images":
+                return <ImagesCollecion cards={cards} />;
         }
     };
 
