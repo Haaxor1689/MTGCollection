@@ -10,7 +10,7 @@ type Props = TypographyProps & {
 const SymbolTypography: React.FC<Props> = ({ text, ...typographyProps }) => {
     const [parsed, setParsed] = React.useState<JSX.Element[]>([]);
     React.useEffect(() => {
-        setParsed(text.match(/({.*?})|([^{]+)/g)!.map((m, i) => (m[0] === "{" ? <SymbolIcon key={i} symbol={m} /> : <span key={i}>{m}</span>)));
+        setParsed((text.match(/({.*?})|([^{]+)/g) ?? []).map((m, i) => (m[0] === "{" ? <SymbolIcon key={i} symbol={m} /> : <span key={i}>{m}</span>)));
     }, [text]);
     return <Typography {...typographyProps}>{parsed}</Typography>;
 };
