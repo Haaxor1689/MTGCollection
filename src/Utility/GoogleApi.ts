@@ -132,6 +132,7 @@ const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileConte
             fileContent,
         }),
         cards: CollectionParser.parse(fileContent),
+        ...restProps,
     });
 };
 

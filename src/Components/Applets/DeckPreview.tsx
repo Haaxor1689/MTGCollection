@@ -1,4 +1,4 @@
-import { Grid, IconButton, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
@@ -7,6 +7,8 @@ import { DeckName, State } from "../../State";
 import GoogleApi from "../../Utility/GoogleApi";
 import CardPreview from "../CardPreview";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
+import { CompressIcon, ExpandIcon } from "../Styled/Icons";
+import TooltipButton from "../Styled/TooltipButton";
 
 export type PreviewStyle = "Minimal" | "Checklist" | "Images" | "Full";
 
@@ -19,6 +21,7 @@ const DeckPreview = ({ deckName }: Props) => {
     const deck = state.decks[deckName];
 
     const [style, setStyle] = React.useState<PreviewStyle>("Minimal");
+    const [expanded, setExpanded] = React.useState(true);
 
     React.useEffect(() => {
         const missingCards = deck.cards.filter(card => !state.cardList[card.name]);
@@ -35,25 +38,30 @@ const DeckPreview = ({ deckName }: Props) => {
         dispatch({ type: "SelectDeck", name: null });
     };
 
+    const toggleExpanded = () => {
+        setExpanded(e => !e);
+    };
+
     const onDeleteDeck = () => {
         GoogleApi.deleteDeck(dispatch, { name: deckName, id: state.files[deckName] });
     };
 
     return (
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={expanded ? 6 : 4}>
             <AppletPaper>
                 <Grid container direction="row" justify="space-between">
                     <Grid item>
                         <Title>Deck preview</Title>
                     </Grid>
                     <Grid item>
-                        <IconButton size="small" onClick={closePreview}>
+                        <TooltipButton title={expanded ? "Compress" : "Expand"} size="small" onClick={toggleExpanded}>
+                            {expanded ? <CompressIcon /> : <ExpandIcon />}
+                        </TooltipButton>
+                        <TooltipButton title="Close preview" size="small" onClick={closePreview}>
                             <CloseIcon />
-                            <Typography variant="srOnly">Close preview</Typography>
-                        </IconButton>
+                        </TooltipButton>
                     </Grid>
                 </Grid>
-
                 <FlexCol>
                     <div>Deck: {deckName}</div>
                     <button onClick={exportCollection}>Export collection</button>
@@ -109,9 +117,9 @@ const DeckPreview = ({ deckName }: Props) => {
                 </FlexCol>
                 <AppletActions>
                     {deckName !== DeckName.Collection && deckName !== DeckName.Wishlist && (
-                        <IconButton aria-label="delete" onClick={onDeleteDeck}>
+                        <TooltipButton title="Delete deck" onClick={onDeleteDeck}>
                             <DeleteIcon />
-                        </IconButton>
+                        </TooltipButton>
                     )}
                 </AppletActions>
             </AppletPaper>

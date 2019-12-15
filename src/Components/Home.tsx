@@ -11,10 +11,14 @@ const Home: React.FC = () => {
     return (
         <Container maxWidth="lg">
             <Grid container spacing={3}>
-                <UserInfo />
-                <AddDeck />
-                <CardSearch />
-                { state.selectedDeck !== null && <DeckPreview deckName={state.selectedDeck} />}
+                <Grid item direction="row" container spacing={3}>
+                    <UserInfo />
+                    <AddDeck />
+                </Grid>
+                <Grid item direction="row" container spacing={3}>
+                    <CardSearch />
+                    {state.selectedDeck !== null && <DeckPreview deckName={state.selectedDeck} />}
+                </Grid>
             </Grid>
         </Container>
     );

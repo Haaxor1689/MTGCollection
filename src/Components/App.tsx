@@ -6,13 +6,13 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
-
-import Scry from "../Utility/Scry";
+import React from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
-
+import Scry from "../Utility/Scry";
 import DrawerDeckList from "./DrawerDeckList";
 import Home from "./Home";
 import NotFound from "./NotFound";
@@ -20,6 +20,7 @@ import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
+import TooltipButton from "./Styled/TooltipButton";
 
 
 const bodyOpen = css<ComponentProps<any>>`
@@ -71,7 +72,7 @@ const drawerClose = css<ComponentProps<any>>`
             duration: p.theme.transitions.duration.leavingScreen,
         })};
     overflow-x: hidden;
-    width: ${p => p.theme.spacing(7) + 1}px;
+    width: ${p => p.theme.constants.drawerWidthClosed};
 `;
 
 const CustomDrawer = styled(Drawer).attrs(() => ({
@@ -97,7 +98,7 @@ const DrawerToolbar = styled(Toolbar)`
 const MainContent = styled.div<{ open: boolean }>`
     flex-grow: 1;
     padding: ${p => p.theme.spacing(3)}px;
-    margin-left: ${p => p.theme.spacing(7) + 1}px;
+    margin-left: ${p => p.theme.constants.drawerWidthClosed};
     ${bodyClose}
     ${p => p.open && bodyOpen}
 `;
@@ -156,10 +157,9 @@ const App: React.FC = () => {
                                     </Tooltip>
                                 </ProfileAvatar>
                             )}
-                            <IconButton onClick={handleSignoutClick}>
+                            <TooltipButton title="SignOut" onClick={handleSignoutClick}>
                                 <ExitToAppIcon />
-                                <Typography variant="srOnly">SignOut</Typography>
-                            </IconButton>
+                            </TooltipButton>
                         </>
                     ) : (
                         <SignInButton onClick={GoogleApi.signIn} />
@@ -171,7 +171,7 @@ const App: React.FC = () => {
                     <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
                 </DrawerToolbar>
                 <Divider />
-                <DrawerDeckList />
+                <DrawerDeckList open={open} />
             </CustomDrawer>
             <MainContent open={open}>
                 <BrowserRouter basename={process.env.PUBLIC_URL}>
