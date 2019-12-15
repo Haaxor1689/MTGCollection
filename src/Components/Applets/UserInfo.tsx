@@ -4,7 +4,7 @@ import { AppletPaper, Title } from "../Styled/Grid";
 
 const UserInfo: React.FC = () => {
     return (
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} sm md>
             <AppletPaper>
                 <Title>User info</Title>
                 UserInfo paceholder
