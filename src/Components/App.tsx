@@ -1,13 +1,10 @@
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-
 import { AppBar, Avatar, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
-import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
