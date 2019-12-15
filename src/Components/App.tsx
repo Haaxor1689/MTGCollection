@@ -5,11 +5,11 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import Scry from "../Utility/Scry";
 import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
+import Scry from "../Utility/Scry";
 import DrawerDeckList from "./DrawerDeckList";
 import Home from "./Home";
 import NotFound from "./NotFound";
@@ -17,6 +17,7 @@ import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
+import TooltipButton from "./Styled/TooltipButton";
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -152,10 +153,9 @@ const App: React.FC = () => {
                                     </Tooltip>
                                 </ProfileAvatar>
                             )}
-                            <IconButton onClick={handleSignoutClick}>
+                            <TooltipButton title="SignOut" onClick={handleSignoutClick}>
                                 <ExitToAppIcon />
-                                <Typography variant="srOnly">SignOut</Typography>
-                            </IconButton>
+                            </TooltipButton>
                         </>
                     ) : (
                         <SignInButton onClick={GoogleApi.signIn} />
@@ -167,7 +167,7 @@ const App: React.FC = () => {
                     <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
                 </DrawerToolbar>
                 <Divider />
-                <DrawerDeckList />
+                <DrawerDeckList open={open} />
             </CustomDrawer>
             <MainContent open={open}>
                 <BrowserRouter basename={process.env.PUBLIC_URL}>
