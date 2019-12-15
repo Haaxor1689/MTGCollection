@@ -9,7 +9,7 @@ import { State } from "../State";
 const Home: React.FC = () => {
     const [state] = React.useContext(State);
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
             <Grid container spacing={3}>
                 <Grid item direction="row" container spacing={3}>
                     <UserInfo />
