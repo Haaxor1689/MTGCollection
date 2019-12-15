@@ -44,10 +44,6 @@ const DeckPreview = ({ deckName }: Props) => {
         ).on("data", (card: any) => dispatch({ type: "AddCard", card }));
     }, [deck, dispatch, state.cardList]);
 
-    const exportCollection = async () => {
-        console.log(await GoogleApi.getFileContents({ id: state.files.collection }));
-    };
-
     const closePreview = () => {
         dispatch({ type: "SelectDeck", name: null });
     };
