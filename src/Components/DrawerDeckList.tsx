@@ -1,4 +1,4 @@
-import { Avatar, Divider, List, ListItem, ListItemIcon, ListItemText, Tooltip } from "@material-ui/core";
+import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from "@material-ui/core";
 import CollectionsIcon from "@material-ui/icons/Collections";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import React from "react";
@@ -19,17 +19,21 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
             <List>
                 <Tooltip title={open ? "" : "Collection"} placement="right">
                     <ListItem button onClick={selectDeck(DeckName.Collection)}>
-                        <ListItemIcon>
-                            <CollectionsIcon />
-                        </ListItemIcon>
+                        <ListItemAvatar>
+                            <Avatar alt="Collection">
+                                <CollectionsIcon />
+                            </Avatar>
+                        </ListItemAvatar>
                         <ListItemText primary="Collection" />
                     </ListItem>
                 </Tooltip>
                 <Tooltip title={open ? "" : "Wishlist"} placement="right">
                     <ListItem button onClick={selectDeck(DeckName.Wishlist)}>
-                        <ListItemIcon>
-                            <FavoriteIcon />
-                        </ListItemIcon>
+                        <ListItemAvatar>
+                            <Avatar alt="Wishlist">
+                                <FavoriteIcon />
+                            </Avatar>
+                        </ListItemAvatar>
                         <ListItemText primary="Wishlist" />
                     </ListItem>
                 </Tooltip>
@@ -41,7 +45,11 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
                     .map(deck => (
                         <Tooltip key={deck.name} title={open ? "" : deck.name} placement="right">
                             <ListItem button onClick={selectDeck(deck.name)}>
-                                <ListItemIcon>{deck.previewUrl ? <Avatar alt={deck.name} src={deck.previewUrl} /> : <CollectionsIcon />}</ListItemIcon>
+                                <ListItemAvatar>
+                                    <Avatar alt={deck.name} src={deck.previewUrl}>
+                                        <CollectionsIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
                                 <ListItemText primary={deck.name} />
                             </ListItem>
                         </Tooltip>
