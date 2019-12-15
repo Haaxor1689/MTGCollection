@@ -19,13 +19,20 @@ const Api = (() => {
     return {
         endpoint,
         Symbology: {
-            All: () => endpoint.get<List<ScryCardSymbol>>("/symbology").then(l => l.data.data),
-            ParseMana: (cost: string) => endpoint.get<ScryManaCost>("/symbology/parse-mana", { params: { cost } }),
+            All: () => endpoint.get<List<ScryCardSymbol>>("/symbology").then(r => r.data.data),
+            ParseMana: (cost: string) => endpoint.get<ScryManaCost>("/symbology/parse-mana", { params: { cost } }).then(r => r.data),
+        },
+        Cards: {
+            Autocomplete: (q: string) =>
+                endpoint
+                    .get<List<string>>("/cards/autocomplete", { params: { q, include_extras: true } })
+                    .then(r => r.data.data),
+            Named: (fuzzy: string) => endpoint.get<ScrySdk.Card>("/cards/named", { params: { fuzzy } }).then(r => r.data),
         },
     };
 })();
 
-const getImage = (card: DeepReadonly<ScrySdk.Card>, type: keyof ScrySdk.ImageUris): string => {
+const getImage = (card: DeepReadonly<ScrySdk.Card>, type: keyof ScrySdk.ImageUris): string | null => {
     var images: ScrySdk.ImageUris | null | undefined;
     switch (card.layout) {
         case "transform":
@@ -35,7 +42,7 @@ const getImage = (card: DeepReadonly<ScrySdk.Card>, type: keyof ScrySdk.ImageUri
         default:
             images = card.image_uris;
     }
-    return images?.[type] ?? getPlaceholder(card.name);
+    return images?.[type] ?? null;
 };
 
 const getPlaceholder = (cardName: string): string => `https://via.placeholder.com/146x204?text=${cardName.replace(/\s/, "+")}`;
