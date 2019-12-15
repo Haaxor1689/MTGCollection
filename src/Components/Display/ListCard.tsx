@@ -17,7 +17,7 @@ const ListCard: React.FC<Props> = ({ card }) => {
             <TableCell>{card.name}</TableCell>
             <TableCell>{card.set}</TableCell>
             <TableCell>
-                <SymbolTypography text={card.mana_cost ?? ""} />
+                <SymbolTypography text={card.mana_cost ?? ""} noWrap />
             </TableCell>
             <TableCell>{card.type_line}</TableCell>
         </TableRow>
