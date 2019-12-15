@@ -7,6 +7,7 @@ const CardSearch: React.FC = () => {
         <Grid item xs={12} md>
             <AppletPaper>
                 <Title>Card search</Title>
+                
             </AppletPaper>
         </Grid>
     );
