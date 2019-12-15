@@ -68,7 +68,7 @@ const drawerClose = css<ComponentProps<any>>`
             duration: p.theme.transitions.duration.leavingScreen,
         })};
     overflow-x: hidden;
-    width: ${p => p.theme.spacing(7) + 1}px;
+    width: ${p => p.theme.constants.drawerWidthClosed};
 `;
 
 const CustomDrawer = styled(Drawer).attrs(() => ({
@@ -94,7 +94,7 @@ const DrawerToolbar = styled(Toolbar)`
 const MainContent = styled.div<{ open: boolean }>`
     flex-grow: 1;
     padding: ${p => p.theme.spacing(3)}px;
-    margin-left: ${p => p.theme.spacing(7) + 1}px;
+    margin-left: ${p => p.theme.constants.drawerWidthClosed};
     ${bodyClose}
     ${p => p.open && bodyOpen}
 `;
