@@ -1,7 +1,7 @@
 import { DeckCard, State } from "../State";
 import React from "react";
 import { PreviewStyle } from "./Applets/DeckPreview";
-import ScryHelpers from "../Utility/Scry";
+import Scry from "../Utility/Scry";
 
 type Props = DeckCard & {
     style: PreviewStyle;
@@ -36,7 +36,7 @@ const CardPreview = ({ style, ...card }: Props) => {
                 </tr>
             );
         case "Images":
-            return <img title={card.name} alt={card.name} src={scryCard ? ScryHelpers.getImage(scryCard, "small") : ScryHelpers.getPlaceholder(card.name)} />;
+            return <img title={card.name} alt={card.name} src={scryCard && (Scry.getImage(scryCard, "small") ?? undefined)} />;
         case "Full":
             return <div>PLACEHOLDER</div>;
     }
