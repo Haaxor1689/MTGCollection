@@ -2,7 +2,7 @@ import { Container, Grid } from "@material-ui/core";
 import React from "react";
 import AddDeck from "./Applets/AddDeck";
 import DeckPreview from "./Applets/DeckPreview";
-import CardSearch from "./Applets/CardSearchh";
+import CardSearch from "./Applets/CardSearch";
 import UserInfo from "./Applets/UserInfo";
 import { State } from "../State";
 

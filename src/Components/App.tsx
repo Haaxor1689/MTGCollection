@@ -1,15 +1,18 @@
+import React from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+
 import { AppBar, Avatar, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
-import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+
 import Scry from "../Utility/Scry";
 import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
+
 import DrawerDeckList from "./DrawerDeckList";
 import Home from "./Home";
 import NotFound from "./NotFound";
@@ -17,6 +20,7 @@ import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
+
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
