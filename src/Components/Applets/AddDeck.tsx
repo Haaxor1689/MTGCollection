@@ -19,7 +19,7 @@ const PreviewRow = styled.div`
     }
 `;
 
-const AddDeck = () => {
+const AddDeck: React.FC = () => {
     const [state, dispatch] = React.useContext(State);
 
     const [importText, setImportText] = React.useState<string>("");
