@@ -1,10 +1,9 @@
-import ColorSpriteRed from "./sprites/colors/r.png";
-import ColorSpriteGreen from "./sprites/colors/g.png";
-import ColorSpriteBlue from "./sprites/colors/u.png";
-import ColorSpriteBlack from "./sprites/colors/b.png";
-import ColorSpriteWhite from "./sprites/colors/w.png";
-
 import logo from "./logo.png";
+import ColorSpriteBlack from "./sprites/colors/b.png";
+import ColorSpriteGreen from "./sprites/colors/g.png";
+import ColorSpriteRed from "./sprites/colors/r.png";
+import ColorSpriteBlue from "./sprites/colors/u.png";
+import ColorSpriteWhite from "./sprites/colors/w.png";
 
 export const Sprites = {
     Colors: {
@@ -12,8 +11,8 @@ export const Sprites = {
         green: ColorSpriteGreen,
         blue: ColorSpriteBlue,
         black: ColorSpriteBlack,
-        white: ColorSpriteWhite
+        white: ColorSpriteWhite,
     },
-}
+};
 
 export const Logo: string = logo;

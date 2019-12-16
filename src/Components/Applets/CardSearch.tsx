@@ -1,19 +1,27 @@
-import React from "react";
-import { 
-    Grid, Button, TextField, Dialog, DialogTitle, 
-    DialogActions, Checkbox, FormGroup, FormControlLabel, 
-    DialogContent, Typography, Avatar, Tooltip 
+import {
+    Avatar,
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    FormGroup,
+    Grid,
+    TextField,
+    Tooltip,
+    Typography,
 } from "@material-ui/core";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import SearchIcon from "@material-ui/icons/Search";
 import { Autocomplete } from "@material-ui/lab";
-import SearchIcon from '@material-ui/icons/Search';
-import FilterListIcon from '@material-ui/icons/FilterList';
-
-import { AppletPaper, Title, AppletActions, FlexCol } from "../Styled/Grid";
+import React from "react";
+import { Sprites } from "../../Assets";
 import { State } from "../../State";
 import Scry from "../../Utility/Scry";
+import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
-import { Sprites } from "../../Assets"
-
 
 // TODO: remove from here & make it reusable?
 const PreviewRow = styled.div`
@@ -29,7 +37,6 @@ const PreviewRow = styled.div`
 
 // Reusable?
 interface CardSearchFilter {
-
     /** Array of selected colors inside advanced search */
     colors: {
         r: boolean; // Red
@@ -50,7 +57,6 @@ interface CardSearchFilter {
     // subtype: string;
 
     // legality: string;
-
 }
 
 const initCardSearchFilter = (): CardSearchFilter => {
@@ -59,9 +65,8 @@ const initCardSearchFilter = (): CardSearchFilter => {
         colorExactMatch: false,
         cmc: 0,
         cmcType: "=",
-    }
-}
-
+    };
+};
 
 const CardSearch: React.FC = () => {
     const [state, dispatch] = React.useContext(State);
@@ -73,11 +78,11 @@ const CardSearch: React.FC = () => {
     const updateAutoComplete = (name: string) => {
         setCardName(name);
         Scry.Cards.Autocomplete(cardName).then(names => setAutocompleteOptions(names));
-    }
+    };
 
     const performSearch = () => {
         alert(JSON.stringify(filter));
-    }
+    };
 
     // Advanced Filters Dialog structures
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
@@ -86,15 +91,14 @@ const CardSearch: React.FC = () => {
 
     // Filter structures
     const [filter, setFilter] = React.useState<CardSearchFilter>(initCardSearchFilter());
-    
+
     const resetFilter = () => setFilter(initCardSearchFilter());
-    const handleColors = (color: 'r' | 'g' | "u" | "b" | "w") => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleColors = (color: "r" | "g" | "u" | "b" | "w") => (event: React.ChangeEvent<HTMLInputElement>) => {
         const newFilter = { ...filter };
         newFilter.colors[color] = event.target.checked;
         setFilter(newFilter);
     };
 
-    
     return (
         <Grid item xs={12} md>
             <AppletPaper>
@@ -103,7 +107,8 @@ const CardSearch: React.FC = () => {
                 <FlexCol>
                     <PreviewRow>
                         <Autocomplete
-                            autoHighlight disableClearable
+                            autoHighlight
+                            disableClearable
                             options={autoompleteOptions}
                             inputValue={cardName}
                             onInputChange={(e, value) => updateAutoComplete(value)}
@@ -115,40 +120,56 @@ const CardSearch: React.FC = () => {
                 <Dialog open={dialogOpen} onClose={closeDialog} aria-labelledby="advanced-card-search-dialog" maxWidth="md" fullWidth>
                     <DialogTitle id="advanced-card-search-dialog">Advanced card search</DialogTitle>
                     <DialogContent>
-
                         <Typography variant="subtitle2">Filter by color</Typography>
                         <FormGroup row>
-                            <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.red} alt="" title="Red"/></Avatar>}
-                                control={<Checkbox checked={filter.colors.r} onChange={handleColors('r')}/>}
+                            <FormControlLabel
+                                label={
+                                    <Avatar>
+                                        <img src={Sprites.Colors.red} alt="" title="Red" />
+                                    </Avatar>
+                                }
+                                control={<Checkbox checked={filter.colors.r} onChange={handleColors("r")} />}
                             />
-                            <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.green} alt="" title="Green"/></Avatar>}
-                                control={<Checkbox checked={filter.colors.g} onChange={handleColors('g')}/>}
+                            <FormControlLabel
+                                label={
+                                    <Avatar>
+                                        <img src={Sprites.Colors.green} alt="" title="Green" />
+                                    </Avatar>
+                                }
+                                control={<Checkbox checked={filter.colors.g} onChange={handleColors("g")} />}
                             />
-                            <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.blue} alt="" title="Blue"/></Avatar>}
-                                control={<Checkbox checked={filter.colors.u} onChange={handleColors('u')}/>}
+                            <FormControlLabel
+                                label={
+                                    <Avatar>
+                                        <img src={Sprites.Colors.blue} alt="" title="Blue" />
+                                    </Avatar>
+                                }
+                                control={<Checkbox checked={filter.colors.u} onChange={handleColors("u")} />}
                             />
-                            <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.black} alt="" title="Black"/></Avatar>}
-                                control={<Checkbox checked={filter.colors.b} onChange={handleColors('b')}/>}
+                            <FormControlLabel
+                                label={
+                                    <Avatar>
+                                        <img src={Sprites.Colors.black} alt="" title="Black" />
+                                    </Avatar>
+                                }
+                                control={<Checkbox checked={filter.colors.b} onChange={handleColors("b")} />}
                             />
-                            <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.white} alt="" title="White"/></Avatar>}
-                                control={<Checkbox checked={filter.colors.w} onChange={handleColors('w')}/>}
+                            <FormControlLabel
+                                label={
+                                    <Avatar>
+                                        <img src={Sprites.Colors.white} alt="" title="White" />
+                                    </Avatar>
+                                }
+                                control={<Checkbox checked={filter.colors.w} onChange={handleColors("w")} />}
                             />
                         </FormGroup>
 
-                        <FormControlLabel 
+                        <FormControlLabel
                             label="Exact color match?"
-                            control={<Checkbox 
-                                checked={filter.colorExactMatch} 
-                                onChange={e => setFilter({ ...filter, colorExactMatch: e.target.checked})} 
-                            />}
+                            control={<Checkbox checked={filter.colorExactMatch} onChange={e => setFilter({ ...filter, colorExactMatch: e.target.checked })} />}
                         />
 
-                        <br/>
+                        <br />
 
                         <ul>
                             <li>[DONE] Filter by color identity (only selected colors or all cards with selected colors)</li>
@@ -156,20 +177,27 @@ const CardSearch: React.FC = () => {
                             <li>Filter by type/subtype (restrict subtype options based on type)</li>
                             <li>Filter by format legality (choose one)</li>
                         </ul>
-
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={resetFilter} color="primary">Reset</Button>
-                        <Button onClick={closeDialog} color="primary">OK</Button>
+                        <Button onClick={resetFilter} color="primary">
+                            Reset
+                        </Button>
+                        <Button onClick={closeDialog} color="primary">
+                            OK
+                        </Button>
                     </DialogActions>
                 </Dialog>
 
                 <AppletActions>
                     <Tooltip title="Advanced search filter">
-                        <Button onClick={openDialog}><FilterListIcon/></Button>
+                        <Button onClick={openDialog}>
+                            <FilterListIcon />
+                        </Button>
                     </Tooltip>
                     <Tooltip title="Search for results">
-                        <Button onClick={performSearch}><SearchIcon/></Button>
+                        <Button onClick={performSearch}>
+                            <SearchIcon />
+                        </Button>
                     </Tooltip>
                 </AppletActions>
             </AppletPaper>
