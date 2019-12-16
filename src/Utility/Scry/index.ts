@@ -28,6 +28,7 @@ const Api = (() => {
                     .get<List<string>>("/cards/autocomplete", { params: { q, include_extras: true } })
                     .then(r => r.data.data),
             Named: (fuzzy: string) => endpoint.get<ScrySdk.Card>("/cards/named", { params: { fuzzy } }).then(r => r.data),
+            //Filtered: (q: string) =>
         },
     };
 })();

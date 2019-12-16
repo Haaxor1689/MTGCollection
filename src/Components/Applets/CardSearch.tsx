@@ -106,6 +106,7 @@ const CardSearch: React.FC = () => {
                 <FlexCol>
                     <PreviewRow>
                         <Autocomplete
+                            freeSolo
                             autoHighlight
                             disableClearable
                             options={autoompleteOptions}
@@ -147,15 +148,16 @@ const CardSearch: React.FC = () => {
                             label="Exact color match?"
                             control={<Checkbox checked={filter.colorExactMatch} onChange={e => setFilter({ ...filter, colorExactMatch: e.target.checked })} />}
                         />
+                        
 
-                        <br />
+                        {/* <br />
 
                         <ul>
                             <li>[DONE] Filter by color identity (only selected colors or all cards with selected colors)</li>
                             <li>Filter by converted mana cost (equal, less than, more than)</li>
                             <li>Filter by type/subtype (restrict subtype options based on type)</li>
                             <li>Filter by format legality (choose one)</li>
-                        </ul>
+                        </ul> */}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={resetFilter} color="primary">
