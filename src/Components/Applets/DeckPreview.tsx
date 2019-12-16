@@ -8,12 +8,14 @@ import * as Scry from "scryfall-sdk";
 import { DeckCard, DeckName, State } from "../../State";
 import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
-import CollectionPreview, { PreviewStyle } from "../Display/CollectionPreview";
+import CollectionPreview, { PreviewStyle, SortByOptions, SortOrderOptions } from "../Display/CollectionPreview";
 import PreviewStyleToggle from "../Display/PreviewStyleToggle";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import { ClipboardIcon, CompressIcon, ExpandIcon } from "../Styled/Icons";
 import styled from "../Styled/Theme";
 import TooltipButton from "../Styled/TooltipButton";
+import SortToggle from "../Display/SortToggle";
+import ShowGroupsToggle from "../Display/ShowGroupsToggle";
 
 const SectionRow = styled.div`
     margin-bottom: ${p => p.theme.spacing(2)}px;
@@ -41,6 +43,9 @@ const DeckPreview = ({ deckName }: Props) => {
     const [expanded, setExpanded] = React.useState(true);
     const [exportOpened, setExportOpened] = React.useState(false);
     const [style, setStyle] = React.useState<PreviewStyle>("List");
+    const [sortBy, setSortBy] = React.useState<SortByOptions>("Cmc");
+    const [sortOrder, setSortOrder] = React.useState<SortOrderOptions>("Asc");
+    const [showGroups, setShowGroups] = React.useState(false);
 
     React.useEffect(() => {
         const missingCards = Object.values(deck.cards)
@@ -73,7 +78,12 @@ const DeckPreview = ({ deckName }: Props) => {
                         </TooltipButton>
                     </Grid>
                 </Grid>
-                {expanded && <PreviewStyleToggle style={style} onToggle={setStyle} />}
+                <Grid container justify="space-between">
+                    <SortToggle sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                    <ShowGroupsToggle show={showGroups} setShow={setShowGroups} />
+                    <FlexCol />
+                    {expanded && <PreviewStyleToggle style={style} onToggle={setStyle} />}
+                </Grid>
                 <FlexCol>
                     {Object.entries(deck.cards).map(([sectionName, cards]) => (
                         <SectionRow key={sectionName}>
@@ -81,6 +91,9 @@ const DeckPreview = ({ deckName }: Props) => {
                                 cards={Object.values(cards).map(c => ({ ...c, ...(state.cardList[c.name] ?? {}) })) as any}
                                 style={expanded ? style : "Compressed"}
                                 actions={deckName === DeckName.Wishlist ? "SearchWishlist" : "Deck"}
+                                sortBy={sortBy}
+                                sortOrder={sortOrder}
+                                showGroups={showGroups}
                                 deckName={deckName}
                                 sectionName={sectionName}
                             />

@@ -6,7 +6,7 @@ import React from "react";
 import styled from "../Styled/Theme";
 import { PreviewStyle } from "./CollectionPreview";
 
-const DisplayRow = styled.div`
+const Body = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: ${p => p.theme.spacing(1)}px;
@@ -40,8 +40,8 @@ type Props = {
 
 const PreviewStyleToggle: React.FC<Props> = ({ style, onToggle }) => {
     return (
-        <DisplayRow>
-            <Typography>Display:</Typography>
+        <Body>
+            <Typography variant="caption">Display:</Typography>
             <ButtonGroup variant="outlined" size="small">
                 {(["Standard", "List", "Images"] as const).map(s => (
                     <Button key={s} onClick={() => onToggle(s)} variant={style === s ? "contained" : undefined}>
@@ -49,7 +49,7 @@ const PreviewStyleToggle: React.FC<Props> = ({ style, onToggle }) => {
                     </Button>
                 ))}
             </ButtonGroup>
-        </DisplayRow>
+        </Body>
     );
 };
 export default PreviewStyleToggle;

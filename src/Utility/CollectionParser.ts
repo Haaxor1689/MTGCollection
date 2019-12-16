@@ -5,7 +5,6 @@ const serialize = (collection?: string, ...sections: string[]): DeckCards => {
     if (!collection || collection === "") {
         return EmptyCards(...sections);
     }
-    console.log({ collection });
     return collection
         .split("##")
         .map((section, index) => {

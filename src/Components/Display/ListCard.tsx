@@ -1,17 +1,20 @@
-import { TableCell, TableRow, TextField } from "@material-ui/core";
+import { TableCell, TableRow, Typography } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
 import React from "react";
 import { isNullOrUndefined } from "util";
 import { SectionName, State } from "../../State";
 import assert from "../../Utility/Assert";
+import TooltipButton from "../Styled/TooltipButton";
 import SymbolTypography from "../SymbolTypography";
 import { CollectionCardProps } from "./CollectionPreview";
 
 const ListCard: React.FC<CollectionCardProps> = ({ card, actions, deckName, sectionName }) => {
-    const dispatch = React.useContext(State)[1];
+    const [state, dispatch] = React.useContext(State);
 
     const updateCardQuantity = (val: number) => {
         assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
-        console.log({sectionName});
+        console.log({ sectionName });
         dispatch({
             type: "UpdateDeckCard",
             deckName,
@@ -26,16 +29,7 @@ const ListCard: React.FC<CollectionCardProps> = ({ card, actions, deckName, sect
     return (
         <TableRow>
             <TableCell component="th" scope="row" align="right">
-                {actions === "Deck" && (
-                    <TextField
-                        type="number"
-                        value={card.amount}
-                        onChange={e => updateCardQuantity(parseInt(e.target.value))}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                )}
+                {card.amount ?? "-"}
             </TableCell>
             <TableCell>{card.name}</TableCell>
             <TableCell>{card.set}</TableCell>
@@ -43,6 +37,16 @@ const ListCard: React.FC<CollectionCardProps> = ({ card, actions, deckName, sect
                 <SymbolTypography text={card.mana_cost ?? ""} noWrap />
             </TableCell>
             <TableCell>{card.type_line}</TableCell>
+            <TableCell>
+                <Typography noWrap>
+                    <TooltipButton size="small" title="Add" onClick={() => updateCardQuantity(card.amount + 1)}>
+                        <AddIcon />
+                    </TooltipButton>
+                    <TooltipButton size="small" title="Remove" onClick={() => updateCardQuantity(card.amount - 1)}>
+                        <RemoveIcon />
+                    </TooltipButton>
+                </Typography>
+            </TableCell>
         </TableRow>
     );
 };

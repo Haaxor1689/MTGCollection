@@ -9,10 +9,15 @@ import CompressedCollecion from "./CompressedCollection";
 
 export type PreviewStyle = "Standard" | "List" | "Images" | "Compressed";
 export type PreviewActions = "SearchDeck" | "SearchWishlist" | "Deck";
+export type SortByOptions = "Name" | "Cmc" | "Type" | "Rarity";
+export type SortOrderOptions = "Asc" | "Desc";
 
 export type CollectionPreviewProps = {
     cards: (DeckCard & ScrySdk.Card)[];
     actions: PreviewActions;
+    sortBy: SortByOptions;
+    sortOrder: SortOrderOptions;
+    showGroups: boolean;
     deckName?: string;
     sectionName?: string;
 };
@@ -24,19 +29,60 @@ export type CollectionCardProps = {
     sectionName?: string;
 };
 
+function desc<T>(a: T, b: T, orderBy: keyof T) {
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+    return 0;
+}
+
+function getSorting<T>(order: SortOrderOptions, orderBy: keyof T): (a: T, b: T) => number {
+    return order === "Desc" ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
+}
+
+function StableSort<T>(array: T[], cmp: (a: T, b: T) => number) {
+    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+    stabilizedThis.sort((a, b) => {
+        const order = cmp(a[0], b[0]);
+        if (order !== 0) return order;
+        return a[1] - b[1];
+    });
+    return stabilizedThis.map(el => el[0]);
+}
+
+const GetSortFunction = (sortBy: SortByOptions, sortOrder: SortOrderOptions) => {
+    switch (sortBy) {
+        case "Name":
+            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "name");
+        case "Cmc":
+            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "mana_cost");
+        case "Type":
+            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "type_line");
+        case "Rarity":
+            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "rarity");
+    }
+};
+
 type Props = CollectionPreviewProps & {
     style: PreviewStyle;
 };
 
 const CollectionPreview: React.FC<Props> = props => {
     const renderCollection = () => {
+        const passedProps = {
+            ...omit(props, "style", "cards"),
+            cards: StableSort(props.cards, GetSortFunction(props.sortBy, props.sortOrder)),
+        };
         switch (props.style) {
             case "List":
-                return <ListCollecion {...omit(props, "style")} />;
+                return <ListCollecion {...passedProps} />;
             case "Images":
-                return <ImagesCollecion {...omit(props, "style")} />;
+                return <ImagesCollecion {...passedProps} />;
             case "Compressed":
-                return <CompressedCollecion {...omit(props, "style")} />;
+                return <CompressedCollecion {...passedProps} />;
         }
     };
 
