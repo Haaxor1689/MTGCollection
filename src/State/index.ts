@@ -9,11 +9,26 @@ export enum DeckName {
     Wishlist = "_wishlist",
 }
 
+export enum SectionName {
+    Default = "_default",
+    Sideboard = "Sideboard",
+    Maybeboard = "Maybeboard",
+}
+
+export const EmptyCards = (...sections: string[]): DeckCards => sections.reduce((obj, s) => ({ ...obj, [s]: {} }), { [SectionName.Default]: {} });
+
+export type DeckCardList = DeepReadonly<{
+    [cardName: string]: DeckCard;
+}>;
+
+export type DeckCards = DeepReadonly<{
+    [SectionName.Default]: DeckCardList;
+    [section: string]: DeckCardList;
+}>;
+
 export type DeckCard = DeepReadonly<{
     amount: number;
     name: string;
-    isFoil?: boolean;
-    set?: string;
     comment?: string;
 }>;
 
@@ -22,7 +37,7 @@ export type DeckProps = Omit<Deck, "cards">;
 export type Deck = DeepReadonly<{
     name: string;
     previewUrl?: string;
-    cards: DeckCard[];
+    cards: DeckCards;
 }>;
 
 export type FileIds = DeepReadonly<{
@@ -59,8 +74,8 @@ export const initialState: AppState = {
         [DeckName.Wishlist]: "",
     },
     decks: {
-        [DeckName.Collection]: { name: DeckName.Collection, cards: [] },
-        [DeckName.Wishlist]: { name: DeckName.Wishlist, cards: [] },
+        [DeckName.Collection]: { name: DeckName.Collection, cards: EmptyCards() },
+        [DeckName.Wishlist]: { name: DeckName.Wishlist, cards: EmptyCards() },
     },
     cardList: {},
     symbolList: {},

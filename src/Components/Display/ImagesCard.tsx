@@ -1,8 +1,7 @@
 import React from "react";
-import ScrySdk from "scryfall-sdk";
-import { DeckCard } from "../../State";
-import styled from "../Styled/Theme";
 import Scry from "../../Utility/Scry";
+import styled from "../Styled/Theme";
+import { CollectionCardProps } from "./CollectionPreview";
 
 const Body = styled.div`
     padding-bottom: 139.344262295%;
@@ -21,11 +20,7 @@ const Image = styled.img`
     height: 100%;
 `;
 
-type Props = {
-    card: DeckCard & ScrySdk.Card;
-};
-
-const ImagesCard: React.FC<Props> = ({ card }) => {
+const ImagesCard: React.FC<CollectionCardProps> = ({ card }) => {
     return (
         <Body>
             <Image src={Scry.getImage(card, "normal") ?? ""} />

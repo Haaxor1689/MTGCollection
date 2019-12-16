@@ -1,5 +1,5 @@
 import Scry from "scryfall-sdk";
-import { DeckCard } from ".";
+import { DeckCard, DeckCards } from ".";
 import { ScryCardSymbol } from "../Utility/Scry/Types";
 
 type AddCard = {
@@ -17,14 +17,21 @@ type CreateDeck = {
     name: string;
     link: string;
     previewUrl?: string;
-    cards?: DeckCard[];
-}
+    cards?: DeckCards;
+};
 
 type UpdateDeck = {
     type: "UpdateDeck";
     name: string;
     previewUrl?: string;
-    cards?: DeckCard[];
+    cards?: DeckCards;
+};
+
+type UpdateDeckCard = {
+    type: "UpdateDeckCard";
+    deckName: string;
+    sectionName: string;
+    card: DeckCard;
 };
 
 type DeleteDeck = {
@@ -37,4 +44,4 @@ type SelectDeck = {
     name: string | null;
 };
 
-export type Action = CreateDeck | AddCard | AddSymbols | UpdateDeck | DeleteDeck | SelectDeck;
+export type Action = CreateDeck | AddCard | AddSymbols | UpdateDeck | UpdateDeckCard | DeleteDeck | SelectDeck;

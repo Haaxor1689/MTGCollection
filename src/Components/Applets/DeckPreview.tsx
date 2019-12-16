@@ -5,13 +5,19 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import copy from "clipboard-copy";
 import React from "react";
 import * as Scry from "scryfall-sdk";
-import { DeckName, State } from "../../State";
+import { DeckCard, DeckName, State } from "../../State";
+import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
-import CollectionPreview from "../Display/CollectionPreview";
+import CollectionPreview, { PreviewStyle } from "../Display/CollectionPreview";
+import PreviewStyleToggle from "../Display/PreviewStyleToggle";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import { ClipboardIcon, CompressIcon, ExpandIcon } from "../Styled/Icons";
-import TooltipButton from "../Styled/TooltipButton";
 import styled from "../Styled/Theme";
+import TooltipButton from "../Styled/TooltipButton";
+
+const SectionRow = styled.div`
+    margin-bottom: ${p => p.theme.spacing(2)}px;
+`;
 
 const ExportRow = styled(FlexCol)`
     display: flex;
@@ -33,39 +39,23 @@ const DeckPreview = ({ deckName }: Props) => {
     const deck = state.decks[deckName];
 
     const [expanded, setExpanded] = React.useState(true);
-
     const [exportOpened, setExportOpened] = React.useState(false);
-    const [exportText, setExportText] = React.useState("");
+    const [style, setStyle] = React.useState<PreviewStyle>("List");
 
     React.useEffect(() => {
-        const missingCards = deck.cards.filter(card => !state.cardList[card.name]);
-        Scry.Cards.collection(
-            ...missingCards.map(card => (card.set ? Scry.CardIdentifier.byName(card.name, card.set) : Scry.CardIdentifier.byName(card.name)))
-        ).on("data", (card: any) => dispatch({ type: "AddCard", card }));
-    }, [deck, dispatch, state.cardList]);
+        const missingCards = Object.values(deck.cards)
+            .reduce((prev, val) => [...prev, ...Object.values(val)], [] as DeckCard[])
+            .filter(card => !state.cardList[card.name]);
+        Scry.Cards.collection(...missingCards.map(card => Scry.CardIdentifier.byName(card.name))).on("data", (card: any) =>
+            dispatch({ type: "AddCard", card })
+        );
+    }, [deckName]);
 
-    const closePreview = () => {
-        dispatch({ type: "SelectDeck", name: null });
-    };
-
-    const toggleExpanded = () => {
-        setExpanded(e => !e);
-    };
-
-    const onDeleteDeck = () => {
-        GoogleApi.deleteDeck(dispatch, { name: deckName, id: state.files[deckName] });
-    };
-
-    const onExportOpen = () => {
-        GoogleApi.getFileContents({ id: state.files[deckName] }).then(exported => {
-            setExportText(exported);
-            setExportOpened(true);
-        });
-    };
-
-    const onExportClose = () => {
-        setExportOpened(false);
-    };
+    const closePreview = () => dispatch({ type: "SelectDeck", name: null });
+    const toggleExpanded = () => setExpanded(e => !e);
+    const onDeleteDeck = () => GoogleApi.deleteDeck(dispatch, { name: deckName, id: state.files[deckName] });
+    const onExportOpen = () => setExportOpened(true);
+    const onExportClose = () => setExportOpened(false);
 
     return (
         <Grid item xs={12} md={expanded ? 6 : 4}>
@@ -83,8 +73,19 @@ const DeckPreview = ({ deckName }: Props) => {
                         </TooltipButton>
                     </Grid>
                 </Grid>
+                {expanded && <PreviewStyleToggle style={style} onToggle={setStyle} />}
                 <FlexCol>
-                    <CollectionPreview cards={deck.cards.map(c => ({ ...c, ...(state.cardList[c.name] ?? {}) })) as any} />
+                    {Object.entries(deck.cards).map(([sectionName, cards]) => (
+                        <SectionRow key={sectionName}>
+                            <CollectionPreview
+                                cards={Object.values(cards).map(c => ({ ...c, ...(state.cardList[c.name] ?? {}) })) as any}
+                                style={expanded ? style : "Compressed"}
+                                actions={deckName === DeckName.Wishlist ? "SearchWishlist" : "Deck"}
+                                deckName={deckName}
+                                sectionName={sectionName}
+                            />
+                        </SectionRow>
+                    ))}
                 </FlexCol>
                 <AppletActions>
                     <TooltipButton title="Export deck" onClick={onExportOpen}>
@@ -101,7 +102,7 @@ const DeckPreview = ({ deckName }: Props) => {
                     <DialogContent>
                         <ExportRow>
                             <DialogContentText>Copy exported text below.</DialogContentText>
-                            <TooltipButton title="Copy to clipboard" onClick={() => copy(exportText)}>
+                            <TooltipButton title="Copy to clipboard" onClick={() => copy(CollectionParser.deserialize(deck.cards))}>
                                 <ClipboardIcon />
                             </TooltipButton>
                         </ExportRow>
@@ -111,7 +112,7 @@ const DeckPreview = ({ deckName }: Props) => {
                             rows="15"
                             fullWidth
                             variant="outlined"
-                            value={exportText}
+                            value={CollectionParser.deserialize(deck.cards)}
                             InputProps={{
                                 readOnly: true,
                             }}

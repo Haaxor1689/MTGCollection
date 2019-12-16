@@ -50,7 +50,7 @@ const AddDeck = () => {
             setInvalidName("Deck name can't be empty");
             return;
         }
-        if (Object.keys(state.decks).find(n => n === name)) {
+        if (state.decks[name]) {
             setInvalidName("Deck with this name already exists");
             return;
         }

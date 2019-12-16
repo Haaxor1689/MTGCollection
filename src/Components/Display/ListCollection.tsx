@@ -1,19 +1,14 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import React from "react";
-import ScrySdk from "scryfall-sdk";
-import { DeckCard } from "../../State";
 import ListCard from "./ListCard";
+import { CollectionPreviewProps } from "./CollectionPreview";
 
-type Props = {
-    cards: (DeckCard & ScrySdk.Card)[];
-};
-
-const ListCollecion: React.FC<Props> = ({ cards }) => {
+const ListCollecion: React.FC<CollectionPreviewProps> = ({ cards, actions, deckName, sectionName }) => {
     return (
         <Table size="small" aria-label="a dense table">
             <TableHead>
                 <TableRow>
-                    <TableCell>Amt.</TableCell>
+                    <TableCell>{actions === "Deck" ? "#" : "Fav"}</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Set</TableCell>
                     <TableCell>Cost</TableCell>
@@ -21,9 +16,13 @@ const ListCollecion: React.FC<Props> = ({ cards }) => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {cards.map(c => (
-                    <ListCard key={c.name} card={c} />
-                ))}
+                {cards.length >= 1 ? (
+                    cards.map(c => <ListCard key={c.name} card={c} actions={actions} deckName={deckName} sectionName={sectionName} />)
+                ) : (
+                    <TableRow>
+                        <TableCell>Empty</TableCell>
+                    </TableRow>
+                )}
             </TableBody>
         </Table>
     );
