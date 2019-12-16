@@ -21,13 +21,6 @@ object-assign
 @license MIT
 */
 
-/* @license
-Papa Parse
-v5.0.1
-https://github.com/mholt/PapaParse
-License: MIT
-*/
-
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
  * @version 1.16.0
@@ -51,6 +44,13 @@ License: MIT
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
  */
 
 /*! *****************************************************************************
