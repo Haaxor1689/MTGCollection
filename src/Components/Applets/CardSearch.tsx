@@ -1,12 +1,17 @@
-import { Grid, Button, TextField, Dialog, DialogTitle, DialogActions, Checkbox, FormGroup, FormControlLabel, DialogContent, Typography, Avatar, Tooltip, Divider } from "@material-ui/core";
 import React from "react";
-import { AppletPaper, Title, AppletActions, FlexCol } from "../Styled/Grid";
-import { State } from "../../State";
+import { 
+    Grid, Button, TextField, Dialog, DialogTitle, 
+    DialogActions, Checkbox, FormGroup, FormControlLabel, 
+    DialogContent, Typography, Avatar, Tooltip 
+} from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import SearchIcon from '@material-ui/icons/Search';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import styled from "../Styled/Theme";
-import { Autocomplete } from "@material-ui/lab";
+
+import { AppletPaper, Title, AppletActions, FlexCol } from "../Styled/Grid";
+import { State } from "../../State";
 import Scry from "../../Utility/Scry";
+import styled from "../Styled/Theme";
 import { Sprites } from "../../Assets"
 
 
@@ -114,23 +119,23 @@ const CardSearch: React.FC = () => {
                         <Typography variant="subtitle2">Filter by color</Typography>
                         <FormGroup row>
                             <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.red} title="Red"/></Avatar>}
+                                label={<Avatar><img src={Sprites.Colors.red} alt="" title="Red"/></Avatar>}
                                 control={<Checkbox checked={filter.colors.r} onChange={handleColors('r')}/>}
                             />
                             <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.green} title="Green"/></Avatar>}
+                                label={<Avatar><img src={Sprites.Colors.green} alt="" title="Green"/></Avatar>}
                                 control={<Checkbox checked={filter.colors.g} onChange={handleColors('g')}/>}
                             />
                             <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.blue} title="Blue"/></Avatar>}
+                                label={<Avatar><img src={Sprites.Colors.blue} alt="" title="Blue"/></Avatar>}
                                 control={<Checkbox checked={filter.colors.u} onChange={handleColors('u')}/>}
                             />
                             <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.black} title="Black"/></Avatar>}
+                                label={<Avatar><img src={Sprites.Colors.black} alt="" title="Black"/></Avatar>}
                                 control={<Checkbox checked={filter.colors.b} onChange={handleColors('b')}/>}
                             />
                             <FormControlLabel 
-                                label={<Avatar><img src={Sprites.Colors.white} title="White"/></Avatar>}
+                                label={<Avatar><img src={Sprites.Colors.white} alt="" title="White"/></Avatar>}
                                 control={<Checkbox checked={filter.colors.w} onChange={handleColors('w')}/>}
                             />
                         </FormGroup>

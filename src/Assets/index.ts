@@ -6,7 +6,6 @@ import ColorSpriteWhite from "./sprites/colors/w.png";
 
 import logo from "./logo.png";
 
-
 export const Sprites = {
     Colors: {
         red: ColorSpriteRed,
