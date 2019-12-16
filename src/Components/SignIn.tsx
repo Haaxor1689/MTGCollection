@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { Logo } from "../Assets";
+import Logo from "../Assets/logo.png";
 import GoogleApi from "../Utility/GoogleApi";
 import SignInButton from "./SignInButton";
 

@@ -1,5 +1,4 @@
 import {
-    Avatar,
     Button,
     Checkbox,
     Dialog,
@@ -17,11 +16,11 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import SearchIcon from "@material-ui/icons/Search";
 import { Autocomplete } from "@material-ui/lab";
 import React from "react";
-import { Sprites } from "../../Assets";
 import { State } from "../../State";
 import Scry from "../../Utility/Scry";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
+import SymbolTypography from "../SymbolTypography";
 
 // TODO: remove from here & make it reusable?
 const PreviewRow = styled.div`
@@ -123,43 +122,23 @@ const CardSearch: React.FC = () => {
                         <Typography variant="subtitle2">Filter by color</Typography>
                         <FormGroup row>
                             <FormControlLabel
-                                label={
-                                    <Avatar>
-                                        <img src={Sprites.Colors.red} alt="" title="Red" />
-                                    </Avatar>
-                                }
+                                label={<SymbolTypography text="{R} Red" />}
                                 control={<Checkbox checked={filter.colors.r} onChange={handleColors("r")} />}
                             />
                             <FormControlLabel
-                                label={
-                                    <Avatar>
-                                        <img src={Sprites.Colors.green} alt="" title="Green" />
-                                    </Avatar>
-                                }
+                                label={<SymbolTypography text="{G} Green" />}
                                 control={<Checkbox checked={filter.colors.g} onChange={handleColors("g")} />}
                             />
                             <FormControlLabel
-                                label={
-                                    <Avatar>
-                                        <img src={Sprites.Colors.blue} alt="" title="Blue" />
-                                    </Avatar>
-                                }
+                                label={<SymbolTypography text="{U} Blue" />}
                                 control={<Checkbox checked={filter.colors.u} onChange={handleColors("u")} />}
                             />
                             <FormControlLabel
-                                label={
-                                    <Avatar>
-                                        <img src={Sprites.Colors.black} alt="" title="Black" />
-                                    </Avatar>
-                                }
+                                label={<SymbolTypography text="{B} Black" />}
                                 control={<Checkbox checked={filter.colors.b} onChange={handleColors("b")} />}
                             />
                             <FormControlLabel
-                                label={
-                                    <Avatar>
-                                        <img src={Sprites.Colors.white} alt="" title="White" />
-                                    </Avatar>
-                                }
+                                label={<SymbolTypography text="{W} White" />}
                                 control={<Checkbox checked={filter.colors.w} onChange={handleColors("w")} />}
                             />
                         </FormGroup>
