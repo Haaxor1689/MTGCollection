@@ -1,49 +1,52 @@
 import { isNull } from "lodash";
-import Papa from "papaparse";
-import { DeckCard } from "../State";
+import { DeckCard, DeckCards, EmptyCards, SectionName } from "../State";
 
-const parse = (collection?: string): DeckCard[] => {
+const serialize = (collection?: string, ...sections: string[]): DeckCards => {
     if (!collection || collection === "") {
-        return [];
+        return EmptyCards(...sections);
     }
-    if (collection.match(/^([\D_]+,?)+/)) {
-        return parseCsv(collection);
-    }
-    return parseSimple(collection);
+    console.log({ collection });
+    return collection
+        .split("##")
+        .map((section, index) => {
+            let name: string, lines: string[];
+            if (index === 0) {
+                name = SectionName.Default;
+                lines = section.split(/\r?\n/);
+            } else {
+                [name, ...lines] = section.split(/\r?\n/);
+            }
+            return [
+                name,
+                lines
+                    .map(line => line.match(/^(\d*) +(.*?)(?: # (.*))?$/))
+                    .filter(match => !isNull(match))
+                    .map(match => ({
+                        amount: parseInt(match![1]),
+                        name: match![2],
+                        comment: match![3],
+                    })),
+            ] as [string, DeckCard[]];
+        })
+        .reduce(
+            (prev, val) => ({ ...prev, [val[0]]: val[1].reduce((p, v) => ({ ...p, [v.name]: v }), {}) }),
+            EmptyCards(...sections)
+        );
 };
 
-const parseSimple = (collection: string): DeckCard[] =>
-    collection
-        .split("\n")
-        .filter(line => !line.match(/^\s*$/) && !line.startsWith("//"))
-        .map(line => line.match(/^(\d*) (?:\[(.*)\] )?(.*)$/))
-        .filter(match => !isNull(match))
-        .map(match => ({
-            amount: parseInt(match![1]),
-            name: match![3],
-            set: match![2],
-        }));
-
-const parseCsv = (collection: string): DeckCard[] => {
-    const result = Papa.parse(collection, {
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: "greedy",
-    });
-    if (result.errors?.length > 0) {
-        result.errors.forEach(console.error);
-    }
-    return result.data.map(c => ({
-        amount: c.amount,
-        name: c.name ?? c.card_name,
-        isFoil: c.isFoil ?? c.is_foil === 1,
-        set: c.set ?? c.set_code,
-        comment: c.comment,
-    }));
-};
+const deserialize = (deck: DeckCards) =>
+    Object.entries(deck).reduce(
+        (str, section) =>
+            `${str}${section[0] !== SectionName.Default ? `#${section[0]}\n` : ""}${Object.values(section[1]).reduce(
+                (s, card) => `${s}${card.amount} ${card.name}${card.comment ? ` # ${card.comment}` : ""}\n`,
+                ""
+            )}\n`,
+        ""
+    );
 
 const CollectionParser = {
-    parse,
+    serialize,
+    deserialize,
 };
 
 export default CollectionParser;

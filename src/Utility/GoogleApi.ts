@@ -1,6 +1,6 @@
 /* global gapi */
 import React from "react";
-import { DeckName, DeckProps } from "../State";
+import { DeckName, DeckProps, SectionName } from "../State";
 import { Action } from "../State/Actions";
 import CollectionParser from "./CollectionParser";
 
@@ -33,7 +33,7 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
     } else {
         console.info("Loading collection...");
         dispatch({ type: "CreateDeck", name: DeckName.Collection, link: collectionFile.id! });
-        dispatch({ type: "UpdateDeck", name: DeckName.Collection, cards: CollectionParser.parse(await getFileContents({ id: collectionFile.id! })) });
+        dispatch({ type: "UpdateDeck", name: DeckName.Collection, cards: CollectionParser.serialize(await getFileContents({ id: collectionFile.id! })) });
     }
 
     const wishlistFile = response.result?.files?.find(f => f.appProperties?.name === DeckName.Wishlist);
@@ -43,7 +43,7 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
     } else {
         console.info("Loading wishlist...");
         dispatch({ type: "CreateDeck", name: DeckName.Wishlist, link: wishlistFile.id! });
-        dispatch({ type: "UpdateDeck", name: DeckName.Wishlist, cards: CollectionParser.parse(await getFileContents({ id: wishlistFile.id! })) });
+        dispatch({ type: "UpdateDeck", name: DeckName.Wishlist, cards: CollectionParser.serialize(await getFileContents({ id: wishlistFile.id! })) });
     }
 
     const otherFiles = response.result?.files?.filter(f => f.appProperties?.name !== DeckName.Collection && f.appProperties?.name !== DeckName.Wishlist)!;
@@ -55,7 +55,7 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
             type: "UpdateDeck",
             name,
             previewUrl: file.appProperties?.previewUrl,
-            cards: CollectionParser.parse(await getFileContents({ id: file.id! })),
+            cards: CollectionParser.serialize(await getFileContents({ id: file.id! }), SectionName.Sideboard, SectionName.Maybeboard),
         });
     }
 };
@@ -131,13 +131,13 @@ const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileConte
             },
             fileContent,
         }),
-        cards: CollectionParser.parse(fileContent),
+        cards: CollectionParser.serialize(fileContent, SectionName.Sideboard, SectionName.Maybeboard),
         ...restProps,
     });
 };
 
 const deleteDeck = async (dispatch: React.Dispatch<Action>, { name, id }: { name: string; id: string }) => {
-    await deleteFile({id});
+    await deleteFile({ id });
     dispatch({ type: "DeleteDeck", name });
 };
 

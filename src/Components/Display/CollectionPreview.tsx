@@ -1,72 +1,48 @@
-import { Button, ButtonGroup, Grid, Tooltip, Typography } from "@material-ui/core";
-import ViewHeadlineIcon from "@material-ui/icons/ViewHeadline";
-import ViewListIcon from "@material-ui/icons/ViewList";
-import ViewModuleIcon from "@material-ui/icons/ViewModule";
+import { Grid, Typography } from "@material-ui/core";
+import omit from "lodash.omit";
 import React from "react";
-import { DeckCard } from "../../State";
-import { FlexCol } from "../Styled/Grid";
-import styled from "../Styled/Theme";
 import ScrySdk from "scryfall-sdk";
+import { DeckCard, SectionName } from "../../State";
+import ImagesCollecion from "./ImagesCollection";
 import ListCollecion from "./ListCollection";
+import CompressedCollecion from "./CompressedCollection";
 
-export type PreviewStyle = "Standard" | "List" | "Images";
+export type PreviewStyle = "Standard" | "List" | "Images" | "Compressed";
+export type PreviewActions = "SearchDeck" | "SearchWishlist" | "Deck";
 
-const IconForStyle = (style: PreviewStyle) => {
-    switch (style) {
-        case "Standard":
-            return <ViewListIcon />;
-        case "List":
-            return <ViewHeadlineIcon />;
-        case "Images":
-            return <ViewModuleIcon />;
-    }
-};
-
-const DisplayRow = styled.div`
-    display: flex;
-    align-items: center;
-
-    & .MuiTypography-root {
-        margin-right: ${p => p.theme.spacing(1)}px;
-    }
-
-    & .MuiButton-root {
-        padding-left: 0;
-        padding-right: 0;
-    }
-`;
-
-type Props = {
+export type CollectionPreviewProps = {
     cards: (DeckCard & ScrySdk.Card)[];
+    actions: PreviewActions;
+    deckName?: string;
+    sectionName?: string;
 };
 
-const CollectionPreview: React.FC<Props> = ({ cards }) => {
-    const [style, setStyle] = React.useState<PreviewStyle>("Standard");
+export type CollectionCardProps = {
+    card: DeckCard & ScrySdk.Card;
+    actions: PreviewActions;
+    deckName?: string;
+    sectionName?: string;
+};
 
-    const updateStyle = (newStyle: PreviewStyle) => () => setStyle(newStyle);
+type Props = CollectionPreviewProps & {
+    style: PreviewStyle;
+};
 
+const CollectionPreview: React.FC<Props> = props => {
     const renderCollection = () => {
-        switch (style) {
+        switch (props.style) {
             case "List":
-                return <ListCollecion cards={cards} />;
+                return <ListCollecion {...omit(props, "style")} />;
+            case "Images":
+                return <ImagesCollecion {...omit(props, "style")} />;
+            case "Compressed":
+                return <CompressedCollecion {...omit(props, "style")} />;
         }
     };
 
     return (
         <>
-            <Grid container>
-                <FlexCol />
-                <DisplayRow>
-                    <Typography>Display:</Typography>
-                    <ButtonGroup variant="outlined" size="small">
-                        {(["Standard", "List", "Images"] as const).map(s => (
-                            <Button key={s} onClick={updateStyle(s)} variant={style === s ? "contained" : undefined}>
-                                <Tooltip title={s}>{IconForStyle(s)}</Tooltip>
-                            </Button>
-                        ))}
-                    </ButtonGroup>
-                </DisplayRow>
-            </Grid>
+            {props.sectionName !== SectionName.Default && <Typography variant="h6">{props.sectionName}</Typography>}
             <Grid item>{renderCollection()}</Grid>
         </>
     );

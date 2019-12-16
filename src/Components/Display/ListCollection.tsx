@@ -1,31 +1,30 @@
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import React from "react";
-import { DeckCard } from "../../State";
-import ScrySdk from "scryfall-sdk";
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import ListCard from "./ListCard";
+import { CollectionPreviewProps } from "./CollectionPreview";
 
-type Props = {
-    cards: (DeckCard & ScrySdk.Card)[];
-};
-
-const ListCollecion: React.FC<Props> = ({ cards }) => {
+const ListCollecion: React.FC<CollectionPreviewProps> = ({ cards, actions, deckName, sectionName }) => {
     return (
-        <Paper>
-            <Table size="small" aria-label="a dense table">
-                <TableHead>
+        <Table size="small" aria-label="a dense table">
+            <TableHead>
+                <TableRow>
+                    <TableCell>{actions === "Deck" ? "#" : "Fav"}</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Set</TableCell>
+                    <TableCell>Cost</TableCell>
+                    <TableCell>Type</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {cards.length >= 1 ? (
+                    cards.map(c => <ListCard key={c.name} card={c} actions={actions} deckName={deckName} sectionName={sectionName} />)
+                ) : (
                     <TableRow>
-                        <TableCell>Amt.</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Set</TableCell>
-                        <TableCell>Cost</TableCell>
-                        <TableCell>Type</TableCell>
+                        <TableCell>Empty</TableCell>
                     </TableRow>
-                </TableHead>
-                <TableBody>
-                    {cards.map(c => <ListCard key={c.name} card={c} />)}
-                </TableBody>
-            </Table>
-        </Paper>
+                )}
+            </TableBody>
+        </Table>
     );
 };
 export default ListCollecion;
