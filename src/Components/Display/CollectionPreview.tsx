@@ -1,10 +1,8 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import omit from "lodash.omit";
 import React from "react";
 import ScrySdk from "scryfall-sdk";
-import { isNullOrUndefined } from "util";
-import { DeckCard, SectionName, State } from "../../State";
-import assert from "../../Utility/Assert";
+import { DeckCard, SectionName } from "../../State";
 import CompressedCollecion from "./CompressedCollection";
 import ImagesCollecion from "./ImagesCollection";
 import ListCollecion from "./ListCollection";
@@ -29,28 +27,6 @@ export type CollectionCardProps = {
     actions: PreviewActions;
     deckName?: string;
     sectionName?: string;
-};
-
-export const useCardActions = ({ card, deckName, sectionName }: CollectionCardProps) => {
-    const dispatch = React.useContext(State)[1];
-
-    const updateCardQuantity = (val: number) => {
-        assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
-        console.log({ sectionName });
-        dispatch({
-            type: "UpdateDeckCard",
-            deckName,
-            sectionName: sectionName ?? SectionName.Default,
-            card: {
-                ...card,
-                amount: val,
-            },
-        });
-    };
-
-    
-    const openScryfallPage = () => card.scryfall_uri && window.open(card.scryfall_uri, "_blank");
-    return [updateCardQuantity, openScryfallPage] as const;
 };
 
 const desc = <T extends object>(a: T, b: T, orderBy: keyof T) => {
