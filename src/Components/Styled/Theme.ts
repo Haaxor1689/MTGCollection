@@ -4,7 +4,7 @@ import { colors } from "@material-ui/core";
 
 const additionalArgs = {
     constants: {
-        drawerWidth: "240px",
+        drawerWidth: "260px",
         drawerWidthClosed: "72px",
         appletHeight: "280px",
     },

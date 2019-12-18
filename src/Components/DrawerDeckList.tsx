@@ -3,6 +3,13 @@ import CollectionsIcon from "@material-ui/icons/Collections";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import React from "react";
 import { DeckName, State } from "../State";
+import styled from "./Styled/Theme";
+
+const StyledItemText = styled(ListItemText)`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
 
 type Props = {
     open: boolean;
@@ -24,7 +31,7 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
                                 <CollectionsIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary="Collection" />
+                        <StyledItemText primary="Collection" />
                     </ListItem>
                 </Tooltip>
                 <Tooltip title={open ? "" : "Wishlist"} placement="right">
@@ -34,7 +41,7 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
                                 <FavoriteIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary="Wishlist" />
+                        <StyledItemText primary="Wishlist" />
                     </ListItem>
                 </Tooltip>
             </List>
@@ -50,7 +57,7 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
                                         <CollectionsIcon />
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary={deck.name} />
+                                <StyledItemText primary={deck.name} />
                             </ListItem>
                         </Tooltip>
                     ))}
