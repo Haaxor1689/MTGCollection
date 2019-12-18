@@ -53,6 +53,18 @@ const decksReducer = (state: Decks, action: Action): Decks => {
                 },
             };
         case "UpdateDeckCard":
+            if (action.card.amount === 0) {
+                return {
+                    ...state,
+                    [action.deckName]: {
+                        ...state[action.deckName],
+                        cards: {
+                            ...state[action.deckName].cards,
+                            [action.sectionName]: omit(state[action.deckName].cards[action.sectionName], action.card.name),
+                        },
+                    },
+                };
+            }
             return {
                 ...state,
                 [action.deckName]: {
@@ -112,5 +124,5 @@ export const reducer = combineReducers<AppState, Action>({
     symbolList: symbolListReducer,
     decks: decksReducer,
     selectedDeck: selectedDeckReducer,
-    modifierKeys: modifierKeysReducer
+    modifierKeys: modifierKeysReducer,
 });

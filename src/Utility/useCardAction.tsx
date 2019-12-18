@@ -13,7 +13,6 @@ const useCardActions = ({ card, deckName, sectionName }: CollectionCardProps) =>
     return {
         updateCardQuantity: (val: number) => {
             assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
-            console.log({ sectionName });
             dispatch({
                 type: "UpdateDeckCard",
                 deckName,
@@ -47,6 +46,18 @@ const useCardActions = ({ card, deckName, sectionName }: CollectionCardProps) =>
                 }),
         wishlistTooltip: () => (isOnWishlist() ? "Remove from wishlist" : "Add to wishlist"),
         wishlistIcon: () => (isOnWishlist() ? <FavoriteIcon /> : <FavoriteBorderIcon />),
+        removeCard: () => {
+            assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
+            dispatch({
+                type: "UpdateDeckCard",
+                deckName,
+                sectionName: sectionName ?? SectionName.Default,
+                card: {
+                    ...card,
+                    amount: 0,
+                },
+            });
+        },
     } as const;
 };
 export default useCardActions;
