@@ -10,6 +10,7 @@ const StyledAvatar = styled(Avatar).attrs((p: ComponentProps<StyledAvatarProps>)
     className: p.size === "chip" ? p.className + " MuiChip-avatar MuiChip-avatarSmall" : p.className,
 }))<StyledAvatarProps>`
     cursor: pointer;
+    color: ${p => p.theme.palette.text.primary};
 
     ${p =>
         p.size === "inline" &&
