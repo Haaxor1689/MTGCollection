@@ -60,12 +60,17 @@ export type SymbolList = DeepReadonly<{
     [symbol: string]: ScryCardSymbol;
 }>;
 
+export type ModifierKeys = DeepReadonly<{
+    shift: boolean;
+}>
+
 export type AppState = DeepReadonly<{
     files: FileIds;
     decks: Decks;
     cardList: CardList;
     symbolList: SymbolList;
     selectedDeck: string | null;
+    modifierKeys: ModifierKeys;
 }>;
 
 export const initialState: AppState = {
@@ -80,6 +85,9 @@ export const initialState: AppState = {
     cardList: {},
     symbolList: {},
     selectedDeck: null,
+    modifierKeys: {
+        shift: false,
+    }
 };
 
 export const State = React.createContext<[AppState, React.Dispatch<Action>]>([initialState, undefined as any]);

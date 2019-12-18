@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { AppState, CardList, Decks, EmptyCards, FileIds, SymbolList } from ".";
+import { AppState, CardList, Decks, EmptyCards, FileIds, ModifierKeys, SymbolList } from ".";
 import { Action } from "./Actions";
 
 const filesReducer = (state: FileIds, action: Action): FileIds => {
@@ -85,6 +85,17 @@ const selectedDeckReducer = (state: string | null, action: Action): string | nul
     return state;
 };
 
+const modifierKeysReducer = (state: ModifierKeys, action: Action): ModifierKeys => {
+    switch (action.type) {
+        case "SetModifierKey":
+            return {
+                ...state,
+                [action.key]: action.value,
+            };
+    }
+    return state;
+};
+
 const combineReducers = <State, Action>(reducers: { [P in keyof State]: (state: State[P], action: Action) => State[P] }) => {
     return (state: State, action: Action) => {
         const temp: State = {} as any;
@@ -101,4 +112,5 @@ export const reducer = combineReducers<AppState, Action>({
     symbolList: symbolListReducer,
     decks: decksReducer,
     selectedDeck: selectedDeckReducer,
+    modifierKeys: modifierKeysReducer
 });
