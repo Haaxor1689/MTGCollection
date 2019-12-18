@@ -1,37 +1,28 @@
-import { TableCell, TableRow, Typography } from "@material-ui/core";
+import { Link, TableCell, TableRow, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import React from "react";
 import { isNullOrUndefined } from "util";
-import { SectionName, State } from "../../State";
-import assert from "../../Utility/Assert";
+import IncrementNumber from "../Styled/IncrementNumber";
 import TooltipButton from "../Styled/TooltipButton";
 import SymbolTypography from "../SymbolTypography";
-import { CollectionCardProps } from "./CollectionPreview";
+import { CollectionCardProps, useCardActions } from "./CollectionPreview";
+import { NumberCell } from "./ListCollection";
 
-const ListCard: React.FC<CollectionCardProps> = ({ card, actions, deckName, sectionName }) => {
-    const [state, dispatch] = React.useContext(State);
-
-    const updateCardQuantity = (val: number) => {
-        assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
-        console.log({ sectionName });
-        dispatch({
-            type: "UpdateDeckCard",
-            deckName,
-            sectionName: sectionName ?? SectionName.Default,
-            card: {
-                ...card,
-                amount: val,
-            },
-        });
-    };
+const ListCard: React.FC<CollectionCardProps> = props => {
+    const [updateCardQuantity, openScryfallPage] = useCardActions(props);
+    const { card } = props;
 
     return (
         <TableRow>
-            <TableCell component="th" scope="row" align="right">
-                {card.amount ?? "-"}
+            <NumberCell component="th" scope="row" align="center">
+                {!isNullOrUndefined(card.amount) ? <IncrementNumber size="inline" val={card.amount} onChange={updateCardQuantity} /> : "-"}
+            </NumberCell>
+            <TableCell>
+                <Link href="#" onClick={openScryfallPage} color="inherit" title="Open on scryfall">
+                    {card.name}
+                </Link>
             </TableCell>
-            <TableCell>{card.name}</TableCell>
             <TableCell>{card.set}</TableCell>
             <TableCell>
                 <SymbolTypography text={card.mana_cost ?? ""} noWrap />

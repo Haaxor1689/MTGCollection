@@ -1,15 +1,16 @@
-import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { AppBar, Avatar, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
+import React from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
+import useEventListener from "../Utility/useEventListener";
 import DrawerDeckList from "./DrawerDeckList";
 import Home from "./Home";
 import NotFound from "./NotFound";
@@ -18,7 +19,6 @@ import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 import TooltipButton from "./Styled/TooltipButton";
-
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -120,6 +120,13 @@ const App: React.FC = () => {
     const handleDrawerOpen = () => setOpen(true);
     const handleDrawerClose = () => setOpen(false);
 
+    useEventListener("keydown", e => {
+        if (e.key === "Shift" && !state.modifierKeys.shift) dispatch({ type: "SetModifierKey", key: "shift", value: true });
+    });
+    useEventListener("keyup", e => {
+        if (e.key === "Shift" && state.modifierKeys.shift) dispatch({ type: "SetModifierKey", key: "shift", value: false });
+    });
+
     /**
      * Called at app init, sets Google API signin callback
      * info stored in React profile state
@@ -144,6 +151,7 @@ const App: React.FC = () => {
                         <MenuIcon />
                     </MenuButton>
                     <Typography variant="h6">MTGCollection</Typography>
+                    <Typography>Shift: {state.modifierKeys.shift.toString()}</Typography>
                     <FlexCol />
                     {isSignedIn ? (
                         <>

@@ -1,8 +1,9 @@
-import { Avatar, Chip } from "@material-ui/core";
+import { Chip } from "@material-ui/core";
 import React from "react";
+import IncrementNumber from "../Styled/IncrementNumber";
 import styled from "../Styled/Theme";
 import SymbolTypography from "../SymbolTypography";
-import { CollectionCardProps } from "./CollectionPreview";
+import { CollectionCardProps, useCardActions } from "./CollectionPreview";
 
 const CustomChip = styled(Chip)`
     width: 100%;
@@ -17,22 +18,25 @@ const CustomChip = styled(Chip)`
     & .MuiChip-deleteIcon {
         width: unset;
         height: unset;
-        cursor: default;
         flex-shrink: 0;
         margin-left: ${p => p.theme.spacing(1)}px;
         margin-top: -4px;
     }
 `;
 
-const CompressedCard: React.FC<CollectionCardProps> = ({ card }) => {
+const CompressedCard: React.FC<CollectionCardProps> = props => {
+    const [updateCardQuantity, openScryfallPage] = useCardActions(props);
+    const { card } = props;
     return (
         <CustomChip
             size="small"
             variant="outlined"
             label={card.name}
             deleteIcon={<SymbolTypography text={card.mana_cost ?? ""} noWrap />}
-            onDelete={() => {}}
-            avatar={<Avatar>{card.amount}</Avatar>}
+            avatar={<IncrementNumber size="chip" val={card.amount} onChange={updateCardQuantity} />}
+            onDelete={openScryfallPage}
+            onClick={openScryfallPage}
+            title="Open on scryfall"
         />
     );
 };

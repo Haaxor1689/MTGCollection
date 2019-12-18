@@ -10,12 +10,12 @@ import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
 import CollectionPreview, { PreviewStyle, SortByOptions, SortOrderOptions } from "../Display/CollectionPreview";
 import PreviewStyleToggle from "../Display/PreviewStyleToggle";
+import ShowGroupsToggle from "../Display/ShowGroupsToggle";
+import SortToggle from "../Display/SortToggle";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import { ClipboardIcon, CompressIcon, ExpandIcon } from "../Styled/Icons";
 import styled from "../Styled/Theme";
 import TooltipButton from "../Styled/TooltipButton";
-import SortToggle from "../Display/SortToggle";
-import ShowGroupsToggle from "../Display/ShowGroupsToggle";
 
 const SectionRow = styled.div`
     margin-bottom: ${p => p.theme.spacing(2)}px;

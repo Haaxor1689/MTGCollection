@@ -1,14 +1,26 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import React from "react";
-import ListCard from "./ListCard";
+import IndentedTypography from "../Styled/IndentedTypography";
+import styled from "../Styled/Theme";
 import { CollectionPreviewProps } from "./CollectionPreview";
+import ListCard from "./ListCard";
+
+const CustomPaddingTable = styled(Table)`
+    & .MuiTableCell-sizeSmall {
+        padding: ${p => p.theme.spacing(0.5, 1)};
+    }
+`;
+
+export const NumberCell = styled(TableCell)`
+    width: 40px;
+`;
 
 const ListCollecion: React.FC<CollectionPreviewProps> = ({ cards, sortBy, sortOrder, showGroups, ...props }) => {
     return (
-        <Table size="small" aria-label="a dense table">
+        <CustomPaddingTable size="small" aria-label="card table">
             <TableHead>
                 <TableRow>
-                    <TableCell>#</TableCell>
+                    <NumberCell align="center">#</NumberCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Set</TableCell>
                     <TableCell>Cost</TableCell>
@@ -21,11 +33,13 @@ const ListCollecion: React.FC<CollectionPreviewProps> = ({ cards, sortBy, sortOr
                     cards.map(c => <ListCard key={c.name} card={c} {...props} />)
                 ) : (
                     <TableRow>
-                        <TableCell>Empty</TableCell>
+                        <TableCell colSpan={6}>
+                            <IndentedTypography color="textSecondary">Empty</IndentedTypography>
+                        </TableCell>
                     </TableRow>
                 )}
             </TableBody>
-        </Table>
+        </CustomPaddingTable>
     );
 };
 export default ListCollecion;

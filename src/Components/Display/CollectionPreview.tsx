@@ -2,10 +2,12 @@ import { Grid, Typography } from "@material-ui/core";
 import omit from "lodash.omit";
 import React from "react";
 import ScrySdk from "scryfall-sdk";
-import { DeckCard, SectionName } from "../../State";
+import { isNullOrUndefined } from "util";
+import { DeckCard, SectionName, State } from "../../State";
+import assert from "../../Utility/Assert";
+import CompressedCollecion from "./CompressedCollection";
 import ImagesCollecion from "./ImagesCollection";
 import ListCollecion from "./ListCollection";
-import CompressedCollecion from "./CompressedCollection";
 
 export type PreviewStyle = "Standard" | "List" | "Images" | "Compressed";
 export type PreviewActions = "SearchDeck" | "SearchWishlist" | "Deck";
@@ -29,7 +31,29 @@ export type CollectionCardProps = {
     sectionName?: string;
 };
 
-function desc<T>(a: T, b: T, orderBy: keyof T) {
+export const useCardActions = ({ card, deckName, sectionName }: CollectionCardProps) => {
+    const dispatch = React.useContext(State)[1];
+
+    const updateCardQuantity = (val: number) => {
+        assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
+        console.log({ sectionName });
+        dispatch({
+            type: "UpdateDeckCard",
+            deckName,
+            sectionName: sectionName ?? SectionName.Default,
+            card: {
+                ...card,
+                amount: val,
+            },
+        });
+    };
+
+    
+    const openScryfallPage = () => card.scryfall_uri && window.open(card.scryfall_uri, "_blank");
+    return [updateCardQuantity, openScryfallPage] as const;
+};
+
+const desc = <T extends object>(a: T, b: T, orderBy: keyof T) => {
     if (b[orderBy] < a[orderBy]) {
         return -1;
     }
@@ -37,13 +61,13 @@ function desc<T>(a: T, b: T, orderBy: keyof T) {
         return 1;
     }
     return 0;
-}
+};
 
-function getSorting<T>(order: SortOrderOptions, orderBy: keyof T): (a: T, b: T) => number {
+const getSorting = <T extends object>(order: SortOrderOptions, orderBy: keyof T): ((a: T, b: T) => number) => {
     return order === "Desc" ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
-}
+};
 
-function StableSort<T>(array: T[], cmp: (a: T, b: T) => number) {
+const StableSort = <T extends object>(array: T[], cmp: (a: T, b: T) => number) => {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
         const order = cmp(a[0], b[0]);
@@ -51,7 +75,7 @@ function StableSort<T>(array: T[], cmp: (a: T, b: T) => number) {
         return a[1] - b[1];
     });
     return stabilizedThis.map(el => el[0]);
-}
+};
 
 const GetSortFunction = (sortBy: SortByOptions, sortOrder: SortOrderOptions) => {
     switch (sortBy) {
@@ -89,7 +113,7 @@ const CollectionPreview: React.FC<Props> = props => {
     return (
         <>
             {props.sectionName !== SectionName.Default && <Typography variant="h6">{props.sectionName}</Typography>}
-            <Grid item>{renderCollection()}</Grid>
+            {renderCollection()}
         </>
     );
 };

@@ -16,7 +16,6 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import SearchIcon from "@material-ui/icons/Search";
 import { Autocomplete } from "@material-ui/lab";
 import React from "react";
-import { State } from "../../State";
 import Scry from "../../Utility/Scry";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
@@ -68,8 +67,6 @@ const initCardSearchFilter = (): CardSearchFilter => {
 };
 
 const CardSearch: React.FC = () => {
-    const [state, dispatch] = React.useContext(State);
-
     // Card name & autocomplete structures
     const [cardName, setCardName] = React.useState<string>("");
     const [autoompleteOptions, setAutocompleteOptions] = React.useState<string[]>([]);
@@ -148,7 +145,6 @@ const CardSearch: React.FC = () => {
                             label="Exact color match?"
                             control={<Checkbox checked={filter.colorExactMatch} onChange={e => setFilter({ ...filter, colorExactMatch: e.target.checked })} />}
                         />
-                        
 
                         {/* <br />
 

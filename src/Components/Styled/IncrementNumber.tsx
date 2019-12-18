@@ -1,24 +1,46 @@
+import { Avatar } from "@material-ui/core";
+import { AvatarProps } from "@material-ui/core/Avatar";
 import React from "react";
-import RemoveIcon from "@material-ui/icons/Remove";
-import AddIcon from "@material-ui/icons/Add";
-import { IconButton, Typography } from "@material-ui/core";
+import { State } from "../../State";
+import styled, { ComponentProps, css } from "./Theme";
+
+type StyledAvatarProps = { action: "+" | "-"; size: Props["size"] } & AvatarProps;
+
+const StyledAvatar = styled(Avatar).attrs((p: ComponentProps<StyledAvatarProps>) => ({
+    className: p.size === "chip" ? p.className + " MuiChip-avatar MuiChip-avatarSmall" : p.className,
+}))<StyledAvatarProps>`
+    cursor: pointer;
+
+    ${p =>
+        p.size === "inline" &&
+        css`
+            width: ${p.theme.spacing(3)}px;
+            height: ${p.theme.spacing(3)}px;
+            font-size: 0.875rem;
+        `}
+
+    &:hover:before {
+        content: "${p => p.action}";
+    }
+`;
 
 type Props = {
     val: number;
     onChange: (val: number) => void;
+    size?: "chip" | "inline";
 };
 
-const IncrementNumber: React.FC<Props> = ({ val, onChange }) => {
+const IncrementNumber: React.FC<Props> = ({ val, onChange, size }) => {
+    const state = React.useContext(State)[0];
+
+    const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation();
+        onChange(val + (state.modifierKeys.shift ? 1 : -1));
+    };
     return (
-        <Typography noWrap>
-            <IconButton size="small" onClick={() => onChange(val + 1)}>
-                <AddIcon fontSize="inherit" />
-            </IconButton>
+        <StyledAvatar title="" onClick={onClick} action={state.modifierKeys.shift ? "+" : "-"} size={size}>
             {val}
-            <IconButton size="small" onClick={() => onChange(val - 1)}>
-                <RemoveIcon fontSize="inherit" />
-            </IconButton>
-        </Typography>
+        </StyledAvatar>
     );
 };
 export default IncrementNumber;
