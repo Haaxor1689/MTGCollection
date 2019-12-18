@@ -6,11 +6,12 @@ import { isNullOrUndefined } from "util";
 import IncrementNumber from "../Styled/IncrementNumber";
 import TooltipButton from "../Styled/TooltipButton";
 import SymbolTypography from "../SymbolTypography";
-import { CollectionCardProps, useCardActions } from "./CollectionPreview";
+import { CollectionCardProps } from "./CollectionPreview";
 import { NumberCell } from "./ListCollection";
+import useCardActions from "../../Utility/useCardAction";
 
 const ListCard: React.FC<CollectionCardProps> = props => {
-    const [updateCardQuantity, openScryfallPage] = useCardActions(props);
+    const {updateCardQuantity, openScryfallPage} = useCardActions(props);
     const { card } = props;
 
     return (

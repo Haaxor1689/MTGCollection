@@ -1,9 +1,10 @@
 import { Chip } from "@material-ui/core";
 import React from "react";
+import useCardActions from "../../Utility/useCardAction";
 import IncrementNumber from "../Styled/IncrementNumber";
 import styled from "../Styled/Theme";
 import SymbolTypography from "../SymbolTypography";
-import { CollectionCardProps, useCardActions } from "./CollectionPreview";
+import { CollectionCardProps } from "./CollectionPreview";
 
 const CustomChip = styled(Chip)`
     width: 100%;
@@ -25,7 +26,7 @@ const CustomChip = styled(Chip)`
 `;
 
 const CompressedCard: React.FC<CollectionCardProps> = props => {
-    const [updateCardQuantity, openScryfallPage] = useCardActions(props);
+    const { updateCardQuantity, openScryfallPage } = useCardActions(props);
     const { card } = props;
     return (
         <CustomChip
