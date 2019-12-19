@@ -1,8 +1,8 @@
-import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from "@material-ui/core";
+import { Avatar, Badge, Divider, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from "@material-ui/core";
 import CollectionsIcon from "@material-ui/icons/Collections";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import React from "react";
-import { DeckName, State } from "../State";
+import { Deck, DeckName, State } from "../State";
 import styled from "./Styled/Theme";
 
 const StyledItemText = styled(ListItemText)`
@@ -21,46 +21,41 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
         dispatch({ type: "SelectDeck", name });
     };
 
+    const renderItem = (deck: Deck, name?: string, icon?: JSX.Element) => (
+        <Tooltip key={deck.name} title={open ? "" : (state.decks[deck.name].isDirty ? "*" : "") + (name ?? deck.name)} placement="right">
+            <ListItem button onClick={selectDeck(deck.name)}>
+                <ListItemAvatar>
+                    <Badge
+                        invisible={!state.decks[deck.name].isDirty}
+                        color="primary"
+                        overlap="circle"
+                        badgeContent=" "
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
+                        }}
+                    >
+                        <Avatar alt={name ?? deck.name} src={deck.previewUrl}>
+                            {icon ?? <CollectionsIcon />}
+                        </Avatar>
+                    </Badge>
+                </ListItemAvatar>
+                <StyledItemText primary={name ?? deck.name} />
+            </ListItem>
+        </Tooltip>
+    );
+
     return (
         <>
             <List>
-                <Tooltip title={open ? "" : "Collection"} placement="right">
-                    <ListItem button onClick={selectDeck(DeckName.Collection)}>
-                        <ListItemAvatar>
-                            <Avatar alt="Collection">
-                                <CollectionsIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <StyledItemText primary="Collection" />
-                    </ListItem>
-                </Tooltip>
-                <Tooltip title={open ? "" : "Wishlist"} placement="right">
-                    <ListItem button onClick={selectDeck(DeckName.Wishlist)}>
-                        <ListItemAvatar>
-                            <Avatar alt="Wishlist">
-                                <FavoriteIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <StyledItemText primary="Wishlist" />
-                    </ListItem>
-                </Tooltip>
+                {renderItem(state.decks[DeckName.Collection], "Collection")}
+                {renderItem(state.decks[DeckName.Wishlist], "Wishlist", <FavoriteIcon />)}
             </List>
             <Divider />
             <List>
                 {Object.values(state.decks)
                     .filter(deck => deck.name !== DeckName.Collection && deck.name !== DeckName.Wishlist)
-                    .map(deck => (
-                        <Tooltip key={deck.name} title={open ? "" : deck.name} placement="right">
-                            <ListItem button onClick={selectDeck(deck.name)}>
-                                <ListItemAvatar>
-                                    <Avatar alt={deck.name} src={deck.previewUrl}>
-                                        <CollectionsIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <StyledItemText primary={deck.name} />
-                            </ListItem>
-                        </Tooltip>
-                    ))}
+                    .map(deck => renderItem(deck))}
             </List>
         </>
     );
