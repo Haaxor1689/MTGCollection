@@ -30,6 +30,7 @@ type UpdateDeck = {
     name: string;
     previewUrl?: string;
     cards?: DeckCards;
+    isDirty?: boolean;
 };
 
 type UpdateDeckCard = {

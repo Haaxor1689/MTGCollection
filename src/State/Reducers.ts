@@ -57,6 +57,7 @@ const decksReducer = (state: Decks, action: Action): Decks => {
                 ...state,
                 [action.name]: {
                     ...state[action.name],
+                    isDirty: true,
                     ...omit(action, ["type"]),
                 },
             };
@@ -70,6 +71,7 @@ const decksReducer = (state: Decks, action: Action): Decks => {
                             ...state[action.deckName].cards,
                             [action.sectionName]: omit(state[action.deckName].cards[action.sectionName], action.card.name),
                         },
+                        isDirty: true,
                     },
                 };
             }
@@ -87,6 +89,7 @@ const decksReducer = (state: Decks, action: Action): Decks => {
                             },
                         },
                     },
+                    isDirty: true,
                 },
             };
         case "DeleteDeck":

@@ -33,7 +33,12 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
     } else {
         console.info("Loading collection...");
         dispatch({ type: "CreateDeck", name: DeckName.Collection, link: collectionFile.id! });
-        dispatch({ type: "UpdateDeck", name: DeckName.Collection, cards: CollectionParser.serialize(await getFileContents({ id: collectionFile.id! })) });
+        dispatch({
+            type: "UpdateDeck",
+            name: DeckName.Collection,
+            cards: CollectionParser.serialize(await getFileContents({ id: collectionFile.id! })),
+            isDirty: false,
+        });
     }
 
     const wishlistFile = response.result?.files?.find(f => f.appProperties?.name === DeckName.Wishlist);
@@ -43,7 +48,12 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
     } else {
         console.info("Loading wishlist...");
         dispatch({ type: "CreateDeck", name: DeckName.Wishlist, link: wishlistFile.id! });
-        dispatch({ type: "UpdateDeck", name: DeckName.Wishlist, cards: CollectionParser.serialize(await getFileContents({ id: wishlistFile.id! })) });
+        dispatch({
+            type: "UpdateDeck",
+            name: DeckName.Wishlist,
+            cards: CollectionParser.serialize(await getFileContents({ id: wishlistFile.id! })),
+            isDirty: false,
+        });
     }
 
     const otherFiles = response.result?.files?.filter(f => f.appProperties?.name !== DeckName.Collection && f.appProperties?.name !== DeckName.Wishlist)!;
@@ -56,6 +66,7 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
             name,
             previewUrl: file.appProperties?.previewUrl,
             cards: CollectionParser.serialize(await getFileContents({ id: file.id! }), SectionName.Sideboard, SectionName.Maybeboard),
+            isDirty: false,
         });
     }
 };
@@ -132,6 +143,7 @@ const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileConte
             fileContent,
         }),
         cards: CollectionParser.serialize(fileContent, SectionName.Sideboard, SectionName.Maybeboard),
+        isDirty: false,
         ...restProps,
     });
 };
