@@ -1,8 +1,8 @@
 import { Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from "@material-ui/core";
 import SortIcon from "@material-ui/icons/Sort";
 import React from "react";
-import styled from "../Styled/Theme";
-import { SortByOptions, SortOrderOptions } from "./CollectionPreview";
+import styled from "../../Styled/Theme";
+import { SortByOptions, SortOrderOptions } from "../CollectionPreview";
 
 const Body = styled.div`
     margin-bottom: ${p => p.theme.spacing(1)}px;

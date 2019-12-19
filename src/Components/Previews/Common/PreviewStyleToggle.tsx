@@ -3,8 +3,8 @@ import ViewHeadlineIcon from "@material-ui/icons/ViewHeadline";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import React from "react";
-import styled from "../Styled/Theme";
-import { PreviewStyle } from "./CollectionPreview";
+import styled from "../../Styled/Theme";
+import { PreviewStyle } from "../CollectionPreview";
 
 const Body = styled.div`
     display: flex;

@@ -1,7 +1,7 @@
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import React from "react";
-import TooltipButton from "../Styled/TooltipButton";
-import styled from "../Styled/Theme";
+import TooltipButton from "../../Styled/TooltipButton";
+import styled from "../../Styled/Theme";
 
 const Body = styled.div`
     margin-bottom: ${p => p.theme.spacing(1)}px;
