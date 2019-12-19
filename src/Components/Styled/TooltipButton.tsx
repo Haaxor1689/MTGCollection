@@ -29,10 +29,12 @@ type Props = {
 const TooltipButton: React.FC<Props> = ({ onClick, title, size, background, disabled, children }) => {
     return (
         <Tooltip title={title}>
-            <StyledIconButton size={size} background={background} disabled={disabled} onClick={onClick} aria-label={title}>
-                {children}
-                <Typography variant="srOnly">{title}</Typography>
-            </StyledIconButton>
+            <span>
+                <StyledIconButton size={size} background={background} disabled={disabled} onClick={onClick} aria-label={title}>
+                    {children}
+                    <Typography variant="srOnly">{title}</Typography>
+                </StyledIconButton>
+            </span>
         </Tooltip>
     );
 };
