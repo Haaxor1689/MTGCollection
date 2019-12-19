@@ -202,7 +202,6 @@ const App: React.FC = () => {
                         <MenuIcon />
                     </MenuButton>
                     <Typography variant="h6">MTGCollection</Typography>
-                    <Typography>Shift: {state.modifierKeys.shift.toString()}</Typography>
                     <FlexCol />
                     {isSignedIn ? (
                         <>
