@@ -7,7 +7,7 @@ import ListCard from "./ListCard";
 
 const CustomPaddingTable = styled(Table)`
     & .MuiTableCell-sizeSmall {
-        padding: ${p => p.theme.spacing(0.5, 1)};
+        padding: ${p => p.theme.spacing(0.25, 1)};
     }
 `;
 
@@ -22,7 +22,7 @@ const ListCollecion: React.FC<CollectionPreviewProps> = ({ cards, sortBy, sortOr
                 <TableRow>
                     <NumberCell align="center">#</NumberCell>
                     <TableCell>Name</TableCell>
-                    <TableCell>Set</TableCell>
+                    <TableCell align="center">Set</TableCell>
                     <TableCell>Cost</TableCell>
                     <TableCell>Type</TableCell>
                     <TableCell>Actions</TableCell>

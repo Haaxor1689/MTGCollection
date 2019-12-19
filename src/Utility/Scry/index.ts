@@ -1,7 +1,7 @@
 import ScrySdk from "scryfall-sdk";
 import DeepReadonly from "../DeepReadonly";
 import Axios from "axios";
-import { ScryCardSymbol, ScryManaCost } from "./Types";
+import { ScryCardSymbol, ScryManaCost, ScrySet } from "./Types";
 
 type List<T = any> = {
     data: T[];
@@ -28,8 +28,10 @@ const Api = (() => {
                     .get<List<string>>("/cards/autocomplete", { params: { q, include_extras: true } })
                     .then(r => r.data.data),
             Named: (fuzzy: string) => endpoint.get<ScrySdk.Card>("/cards/named", { params: { fuzzy } }).then(r => r.data),
-            //Filtered: (q: string) =>
         },
+        Sets: {
+            All: () => endpoint.get<List<ScrySet>>("/sets").then(r => r.data.data),
+        }
     };
 })();
 

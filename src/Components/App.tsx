@@ -19,6 +19,8 @@ import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 import TooltipButton from "./Styled/TooltipButton";
+import Axios from "axios";
+import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -140,7 +142,56 @@ const App: React.FC = () => {
             setProfile(GoogleApi.getProfile());
             GoogleApi.prepareAppData()(dispatch);
         });
-        Scry.Symbology.All().then(symbols => dispatch({ type: "AddSymbols", symbols }));
+        Scry.Symbology.All()
+            .then(symbols => {
+                const endpoint = Axios.create({
+                    baseURL: "",
+                    responseType: "text",
+                    headers: {
+                        "Content-Type": "image/svg+xml",
+                    },
+                });
+                return Promise.all(
+                    symbols.map(symbol => endpoint.get<string>(symbol.svg_uri, { data: symbol }))
+                );
+            })
+            .then(responses => {
+                dispatch({
+                    type: "AddSymbols",
+                    symbols: responses.map(
+                        response =>
+                            ({
+                                ...JSON.parse(response.config.data),
+                                svg: response.data,
+                            } as ScryCardSymbol)
+                    ),
+                });
+            })
+            .then(Scry.Sets.All)
+            .then(sets => {
+                const endpoint = Axios.create({
+                    baseURL: "",
+                    responseType: "text",
+                    headers: {
+                        "Content-Type": "image/svg+xml",
+                    },
+                });
+                return Promise.all(
+                    sets.map(set => endpoint.get<string>(set.icon_svg_uri, { data: set }))
+                );
+            })
+            .then(responses => {
+                dispatch({
+                    type: "AddSets",
+                    sets: responses.map(
+                        response =>
+                            ({
+                                ...JSON.parse(response.config.data),
+                                icon_svg: response.data,
+                            } as ScrySet)
+                    ),
+                });
+            });
     }, []);
 
     return (

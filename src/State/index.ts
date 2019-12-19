@@ -1,7 +1,7 @@
 import React from "react";
 import Scry from "scryfall-sdk";
 import DeepReadonly from "../Utility/DeepReadonly";
-import { ScryCardSymbol } from "../Utility/Scry/Types";
+import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import { Action } from "./Actions";
 
 export enum DeckName {
@@ -60,6 +60,10 @@ export type SymbolList = DeepReadonly<{
     [symbol: string]: ScryCardSymbol;
 }>;
 
+export type SetList = DeepReadonly<{
+    [setName: string]: ScrySet;
+}>;
+
 export type ModifierKeys = DeepReadonly<{
     shift: boolean;
 }>
@@ -69,6 +73,7 @@ export type AppState = DeepReadonly<{
     decks: Decks;
     cardList: CardList;
     symbolList: SymbolList;
+    setList: SetList;
     selectedDeck: string | null;
     modifierKeys: ModifierKeys;
 }>;
@@ -84,6 +89,7 @@ export const initialState: AppState = {
     },
     cardList: {},
     symbolList: {},
+    setList: {},
     selectedDeck: null,
     modifierKeys: {
         shift: false,

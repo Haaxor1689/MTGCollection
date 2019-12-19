@@ -19,7 +19,7 @@ import React from "react";
 import Scry from "../../Utility/Scry";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
-import SymbolTypography from "../SymbolTypography";
+import SymbolTypography from "../Styled/SymbolTypography";
 
 // TODO: remove from here & make it reusable?
 const PreviewRow = styled.div`

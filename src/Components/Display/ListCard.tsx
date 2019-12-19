@@ -1,14 +1,15 @@
-import { Link, TableCell, TableRow, Typography } from "@material-ui/core";
+import { Link, TableCell, TableRow } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
 import { isNullOrUndefined } from "util";
 import useCardActions from "../../Utility/useCardAction";
 import IncrementNumber from "../Styled/IncrementNumber";
+import SetIcon from "../Styled/SetIcon";
+import SymbolTypography from "../Styled/SymbolTypography";
+import styled from "../Styled/Theme";
 import TooltipButton from "../Styled/TooltipButton";
-import SymbolTypography from "../SymbolTypography";
 import { CollectionCardProps } from "./CollectionPreview";
 import { NumberCell } from "./ListCollection";
-import styled from "../Styled/Theme";
 
 const Actions = styled.div`
     white-space: nowrap;
@@ -31,7 +32,9 @@ const ListCard: React.FC<CollectionCardProps> = props => {
                     {card.name}
                 </Link>
             </TableCell>
-            <TableCell>{card.set}</TableCell>
+            <TableCell align="center">
+                <SetIcon set={card.set} rarity={card.rarity} />
+            </TableCell>
             <TableCell>
                 <SymbolTypography text={card.mana_cost ?? ""} noWrap />
             </TableCell>

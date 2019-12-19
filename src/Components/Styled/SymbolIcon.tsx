@@ -1,12 +1,13 @@
 import React from "react";
-import { Icon } from "@material-ui/core";
-import { State } from "../State";
-import { ScryCardSymbol } from "../Utility/Scry/Types";
-import styled from "./Styled/Theme";
+import { State } from "../../State";
+import { ScryCardSymbol } from "../../Utility/Scry/Types";
+import styled from "./Theme";
 
-const Symbol = styled.img`
-    height: 15px;
-    margin: 1px 1px -1px 1px;
+const Symbol = styled.svg`
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    margin: 1px 1px -2px 1px;
 `;
 
 type Props = {
@@ -19,7 +20,7 @@ const SymbolIcon: React.FC<Props> = ({ symbol }) => {
     React.useEffect(() => {
         setSymbolObj(state.symbolList[symbol] ?? Object.values(state.symbolList).find(s => s.loose_variant === symbol));
     }, [symbol, state.symbolList]);
-    return <Icon>{symbolObj ? <Symbol src={symbolObj.svg_uri} alt={symbolObj.english} /> : symbol ?? "{?}"}</Icon>;
+    return symbolObj ? <Symbol dangerouslySetInnerHTML={{ __html: symbolObj.svg }} /> : <>{symbol}</>;
 };
 
 export default SymbolIcon;

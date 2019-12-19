@@ -3,7 +3,7 @@ import React from "react";
 import useCardActions from "../../Utility/useCardAction";
 import IncrementNumber from "../Styled/IncrementNumber";
 import styled from "../Styled/Theme";
-import SymbolTypography from "../SymbolTypography";
+import SymbolTypography from "../Styled/SymbolTypography";
 import { CollectionCardProps } from "./CollectionPreview";
 
 const CustomChip = styled(Chip)`
@@ -21,7 +21,7 @@ const CustomChip = styled(Chip)`
         height: unset;
         flex-shrink: 0;
         margin-left: ${p => p.theme.spacing(1)}px;
-        margin-top: -4px;
+        margin-top: 1px;
     }
 `;
 
