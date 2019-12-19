@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogContentText, DialogTitle, Grid, TextField 
 import CloseIcon from "@material-ui/icons/Close";
 import DeleteIcon from "@material-ui/icons/Delete";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import SaveIcon from "@material-ui/icons/Save";
 import copy from "clipboard-copy";
 import React from "react";
 import * as Scry from "scryfall-sdk";
@@ -59,6 +60,10 @@ const DeckPreview = ({ deckName }: Props) => {
     const closePreview = () => dispatch({ type: "SelectDeck", name: null });
     const toggleExpanded = () => setExpanded(e => !e);
     const onDeleteDeck = () => GoogleApi.deleteDeck(dispatch, { name: deckName, id: state.files[deckName] });
+    const onSaveChanges = () =>
+        GoogleApi.updateFile({ id: state.files[deckName], fileContent: CollectionParser.deserialize(deck.cards) }).then(() =>
+            dispatch({ type: "UpdateDeck", name: deckName, isDirty: false })
+        );
     const onExportOpen = () => setExportOpened(true);
     const onExportClose = () => setExportOpened(false);
 
@@ -107,6 +112,11 @@ const DeckPreview = ({ deckName }: Props) => {
                     {deckName !== DeckName.Collection && deckName !== DeckName.Wishlist && (
                         <TooltipButton title="Delete deck" onClick={onDeleteDeck}>
                             <DeleteIcon />
+                        </TooltipButton>
+                    )}
+                    {state.decks[deck.name].isDirty && (
+                        <TooltipButton title="Save changes" onClick={onSaveChanges} background="primary">
+                            <SaveIcon />
                         </TooltipButton>
                     )}
                 </AppletActions>
