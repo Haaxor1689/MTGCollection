@@ -29,19 +29,20 @@ export type CollectionCardProps = {
     sectionName?: string;
 };
 
-const desc = <T extends object>(a: T, b: T, orderBy: keyof T) => {
-    if (b[orderBy] < a[orderBy]) {
+const desc = <T extends object>(a: T, b: T, orderBy: keyof T, func: <U extends any>(v: U) => U | number) => {
+    if (func(b[orderBy]) < func(a[orderBy])) {
         return -1;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if (func(b[orderBy]) > func(a[orderBy])) {
         return 1;
     }
     return 0;
 };
 
-const getSorting = <T extends object>(order: SortOrderOptions, orderBy: keyof T): ((a: T, b: T) => number) => {
-    return order === "Desc" ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
+const getSorting = <T extends object>(order: SortOrderOptions, orderBy: keyof T, func: <U extends any>(v: U) => U | number = v => v): ((a: T, b: T) => number) => {
+    return order === "Desc" ? (a, b) => desc(a, b, orderBy, func) : (a, b) => -desc(a, b, orderBy, func);
 };
+
 
 const StableSort = <T extends object>(array: T[], cmp: (a: T, b: T) => number) => {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
@@ -53,6 +54,7 @@ const StableSort = <T extends object>(array: T[], cmp: (a: T, b: T) => number) =
     return stabilizedThis.map(el => el[0]);
 };
 
+const rarityOrder = ["common", "uncommon", "rare", "mythic"] as const;
 const GetSortFunction = (sortBy: SortByOptions, sortOrder: SortOrderOptions) => {
     switch (sortBy) {
         case "Name":
@@ -62,7 +64,7 @@ const GetSortFunction = (sortBy: SortByOptions, sortOrder: SortOrderOptions) => 
         case "Type":
             return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "type_line");
         case "Rarity":
-            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "rarity");
+            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "rarity", v => rarityOrder.indexOf(v));
     }
 };
 
