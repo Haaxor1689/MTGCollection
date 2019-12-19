@@ -22,18 +22,18 @@ type Props = {
     onClick: () => void;
     title: string;
     size?: IconButtonProps["size"];
+    disabled?: boolean;
     background?: "primary" | "secondary";
 };
 
-const TooltipButton: React.FC<Props> = ({ onClick, title, size, background, children }) => {
+const TooltipButton: React.FC<Props> = ({ onClick, title, size, background, disabled, children }) => {
     return (
         <Tooltip title={title}>
-            <StyledIconButton size={size} background={background} onClick={onClick} aria-label={title}>
+            <StyledIconButton size={size} background={background} disabled={disabled} onClick={onClick} aria-label={title}>
                 {children}
                 <Typography variant="srOnly">{title}</Typography>
             </StyledIconButton>
         </Tooltip>
     );
 };
-
 export default TooltipButton;

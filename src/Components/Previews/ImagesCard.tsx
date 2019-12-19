@@ -1,5 +1,4 @@
 import { Fab } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { isNullOrUndefined } from "util";
@@ -7,7 +6,9 @@ import Scry from "../../Utility/Scry";
 import useCardActions from "../../Utility/useCardAction";
 import IncrementNumber from "../Styled/IncrementNumber";
 import styled from "../Styled/Theme";
-import TooltipButton from "../Styled/TooltipButton";
+import ChangeSectionButton from "./ActionButtons/ChangeSectionButton";
+import DeleteButton from "./ActionButtons/DeleteButton";
+import WishlistButton from "./ActionButtons/WishlistButton";
 import { CollectionCardProps } from "./CollectionPreview";
 
 const Body = styled.div`
@@ -76,12 +77,9 @@ const ImagesCard: React.FC<CollectionCardProps> = props => {
             )}
             <BottomActions>
                 <ActionsMenu open={actionsOpen}>
-                    <TooltipButton title={actions.wishlistTooltip()} onClick={actions.toggleWishlist} background="secondary">
-                        {actions.wishlistIcon()}
-                    </TooltipButton>
-                    <TooltipButton title="Remove card" onClick={actions.removeCard} background="secondary">
-                        <DeleteIcon />
-                    </TooltipButton>
+                    <WishlistButton actions={actions} background="secondary" />
+                    <ChangeSectionButton actions={actions} background="secondary" />
+                    <DeleteButton actions={actions} background="secondary" />
                 </ActionsMenu>
                 <Fab color="primary" onClick={toggleActionsOpen}>
                     <MenuIcon />

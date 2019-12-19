@@ -1,5 +1,4 @@
 import { Link, TableCell, TableRow } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
 import { isNullOrUndefined } from "util";
 import useCardActions from "../../Utility/useCardAction";
@@ -7,14 +6,16 @@ import IncrementNumber from "../Styled/IncrementNumber";
 import SetIcon from "../Styled/SetIcon";
 import SymbolTypography from "../Styled/SymbolTypography";
 import styled from "../Styled/Theme";
-import TooltipButton from "../Styled/TooltipButton";
+import ChangeSectionButton from "./ActionButtons/ChangeSectionButton";
+import DeleteButton from "./ActionButtons/DeleteButton";
+import WishlistButton from "./ActionButtons/WishlistButton";
 import { CollectionCardProps } from "./CollectionPreview";
 import { NumberCell } from "./ListCollection";
 
 const Actions = styled.div`
     white-space: nowrap;
     & > *:not(:last-child) {
-        margin-right: ${p => p.theme.spacing(1)}px;
+        margin-right: ${p => p.theme.spacing(0.5)}px;
     }
 `;
 
@@ -41,12 +42,9 @@ const ListCard: React.FC<CollectionCardProps> = props => {
             <TableCell>{card.type_line}</TableCell>
             <TableCell>
                 <Actions>
-                    <TooltipButton size="small" title={actions.wishlistTooltip()} onClick={actions.toggleWishlist}>
-                        {actions.wishlistIcon()}
-                    </TooltipButton>
-                    <TooltipButton size="small" title="Remove card" onClick={actions.removeCard}>
-                        <DeleteIcon />
-                    </TooltipButton>
+                    <WishlistButton actions={actions} size="small" />
+                    <ChangeSectionButton actions={actions} size="small" />
+                    <DeleteButton actions={actions} size="small" />
                 </Actions>
             </TableCell>
         </TableRow>

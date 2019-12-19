@@ -1,5 +1,3 @@
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import React from "react";
 import { isNullOrUndefined } from "util";
 import { CollectionCardProps } from "../Components/Previews/CollectionPreview";
@@ -11,7 +9,7 @@ const useCardActions = ({ card, deckName, sectionName }: CollectionCardProps) =>
 
     const targetDeck = deckName ?? state.selectedDeck ?? null;
     const isOnWishlist = () => state.decks[DeckName.Wishlist].cards[SectionName.Default][card.name] !== undefined;
-    const sections = targetDeck ? Object.keys(state.decks[targetDeck].cards) : [];
+    const sections = (targetDeck ? Object.keys(state.decks[targetDeck].cards) : []).filter(s => s !== sectionName);
     return {
         updateCardQuantity: (val: number) => {
             assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
@@ -48,7 +46,6 @@ const useCardActions = ({ card, deckName, sectionName }: CollectionCardProps) =>
                     },
                 }),
         wishlistTooltip: () => (isOnWishlist() ? "Remove from wishlist" : "Add to wishlist"),
-        wishlistIcon: () => (isOnWishlist() ? <FavoriteIcon /> : <FavoriteBorderIcon />),
         removeCard: () => {
             assert(!isNullOrUndefined(deckName), "DeckName should not be empty if the preview actions are Deck");
             dispatch({

@@ -30,16 +30,7 @@ const SortToggle: React.FC<Props> = ({ sortBy, setSortBy, sortOrder, setSortOrde
 
     return (
         <Body>
-            <Button
-                ref={anchorRef}
-                size="small"
-                aria-controls={open ? "sort-button-menu" : undefined}
-                aria-expanded={open ? "true" : undefined}
-                aria-label="select sort option"
-                aria-haspopup="menu"
-                onClick={handleToggle}
-                startIcon={<SortIcon />}
-            >
+            <Button ref={anchorRef} size="small" onClick={handleToggle} startIcon={<SortIcon />}>
                 Sort by
             </Button>
             <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
