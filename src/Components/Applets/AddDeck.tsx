@@ -27,8 +27,6 @@ const AddDeck: React.FC = () => {
     const [open, setOpen] = React.useState(false);
     const [invalidName, setInvalidName] = React.useState<string | null>(null);
 
-    // const [previewCard, setPreviewCard] = React.useState<string>("");
-    // const [previewAutocomplete, setPreviewAutocomplete] = React.useState<string[]>([]);
     const [previewUrl, setPreviewUrl] = React.useState<string>("");
 
     const handleClickOpen = () => setOpen(true);
