@@ -1,10 +1,10 @@
 import { Avatar, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@material-ui/core";
 import CollectionsIcon from "@material-ui/icons/Collections";
-import { Autocomplete } from "@material-ui/lab";
 import React from "react";
 import { State } from "../../State";
 import GoogleApi from "../../Utility/GoogleApi";
 import Scry from "../../Utility/Scry";
+import CardNameAutocomplete from "../Styled/CardNameAutocomplete";
 import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
 
@@ -27,8 +27,8 @@ const AddDeck: React.FC = () => {
     const [open, setOpen] = React.useState(false);
     const [invalidName, setInvalidName] = React.useState<string | null>(null);
 
-    const [previewCard, setPreviewCard] = React.useState<string>("");
-    const [previewAutocomplete, setPreviewAutocomplete] = React.useState<string[]>([]);
+    // const [previewCard, setPreviewCard] = React.useState<string>("");
+    // const [previewAutocomplete, setPreviewAutocomplete] = React.useState<string[]>([]);
     const [previewUrl, setPreviewUrl] = React.useState<string>("");
 
     const handleClickOpen = () => setOpen(true);
@@ -39,8 +39,6 @@ const AddDeck: React.FC = () => {
         GoogleApi.createNewDeck(dispatch, { name: deckName, fileContent: importText, previewUrl });
         setImportText("");
         validateName("");
-        setPreviewCard("");
-        setPreviewAutocomplete([]);
         setPreviewUrl("");
     };
 
@@ -55,27 +53,16 @@ const AddDeck: React.FC = () => {
             return;
         }
         setInvalidName(null);
-        setPreviewCard("");
-        setPreviewAutocomplete([]);
     };
 
-    const updatePreviewCard = (name: string) => {
-        setPreviewCard(name);
-        Scry.Cards.Autocomplete(previewCard).then(names => setPreviewAutocomplete(names));
-    };
-
-    const updatePreview = () => {
-        if (previewCard === "") {
+    const updatePreview = (name: string) => {
+        if (!name) {
             setPreviewUrl("");
             return;
         }
-        Scry.Cards.Named(previewCard)
-            .then(card => {
-                setPreviewUrl(Scry.getImage(card, "art_crop") ?? "");
-            })
-            .catch(reason => {
-                setPreviewCard("");
-            });
+        Scry.Cards.Named(name).then(card => {
+            setPreviewUrl(Scry.getImage(card, "art_crop") ?? "");
+        });
     };
 
     React.useEffect(() => validateName(""), []);
@@ -95,15 +82,7 @@ const AddDeck: React.FC = () => {
                         fullWidth
                     />
                     <PreviewRow>
-                        <Autocomplete
-                            autoHighlight
-                            disableClearable
-                            options={previewAutocomplete}
-                            inputValue={previewCard}
-                            onInputChange={(e, value) => updatePreviewCard(value)}
-                            onBlur={updatePreview}
-                            renderInput={params => <TextField {...params} label="Preview card" variant="outlined" fullWidth />}
-                        />
+                        <CardNameAutocomplete label="Preview card" onNameSelect={updatePreview} />
                         <Avatar alt="Preview icon" src={previewUrl}>
                             <CollectionsIcon />
                         </Avatar>
