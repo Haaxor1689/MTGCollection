@@ -19,7 +19,7 @@ import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 import TooltipButton from "./Styled/TooltipButton";
-import Axios from "axios";
+import Axios, { AxiosResponse } from "axios";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 
 const bodyOpen = css<ComponentProps<any>>`
@@ -152,19 +152,13 @@ const App: React.FC = () => {
                     },
                 });
                 return Promise.all(
-                    symbols.map(symbol => endpoint.get<string>(symbol.svg_uri, { data: symbol }))
+                    symbols.map(symbol => endpoint.get<string, AxiosResponse<ScryCardSymbol>>(symbol.svg_uri, { transformResponse: r => ({ ...symbol, svg: r }) }))
                 );
             })
             .then(responses => {
                 dispatch({
                     type: "AddSymbols",
-                    symbols: responses.map(
-                        response =>
-                            ({
-                                ...JSON.parse(response.config.data),
-                                svg: response.data,
-                            } as ScryCardSymbol)
-                    ),
+                    symbols: responses.map(r => r.data),
                 });
             })
             .then(Scry.Sets.All)
@@ -177,19 +171,13 @@ const App: React.FC = () => {
                     },
                 });
                 return Promise.all(
-                    sets.map(set => endpoint.get<string>(set.icon_svg_uri, { data: set }))
+                    sets.map(set => endpoint.get<string, AxiosResponse<ScrySet>>(set.icon_svg_uri, { transformResponse: r => ({ ...set, icon_svg: r }) }))
                 );
             })
             .then(responses => {
                 dispatch({
                     type: "AddSets",
-                    sets: responses.map(
-                        response =>
-                            ({
-                                ...JSON.parse(response.config.data),
-                                icon_svg: response.data,
-                            } as ScrySet)
-                    ),
+                    sets: responses.map(r => r.data),
                 });
             });
     }, []);
