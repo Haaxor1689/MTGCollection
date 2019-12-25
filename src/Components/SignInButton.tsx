@@ -10,7 +10,7 @@ type Props = {
 const SignInButton: React.FC<Props> = ({ variant, onClick }: Props) => {
     return (
         <Button variant={variant} onClick={onClick} startIcon={<GoogleIcon />}>
-            <Typography noWrap>Sign in with Google</Typography>
+            <Typography noWrap>Sign in</Typography>
         </Button>
     );
 };
