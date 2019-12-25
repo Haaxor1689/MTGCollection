@@ -20,6 +20,9 @@ import TooltipButton from "../Styled/TooltipButton";
 
 const SectionRow = styled.div`
     margin-bottom: ${p => p.theme.spacing(2)}px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
 `;
 
 const ExportRow = styled(FlexCol)`

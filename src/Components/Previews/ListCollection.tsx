@@ -6,13 +6,23 @@ import { CollectionPreviewProps } from "./CollectionPreview";
 import ListCard from "./ListCard";
 
 const CustomPaddingTable = styled(Table)`
+    width: 100%;
+    overflow-y: scroll;
     & .MuiTableCell-sizeSmall {
         padding: ${p => p.theme.spacing(0.25, 1)};
     }
 `;
 
-export const NumberCell = styled(TableCell)`
-    width: 40px;
+export const SetWidthCell = styled(TableCell).attrs<{ width: string }>(p => ({
+    width: p.width,
+}))<{ width: string }>``;
+
+export const NameCell = styled(TableCell)`
+    width: 60%;
+    max-width: 120px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 `;
 
 const ListCollecion: React.FC<CollectionPreviewProps> = ({ cards, sortBy, sortOrder, showGroups, ...props }) => {
@@ -20,11 +30,14 @@ const ListCollecion: React.FC<CollectionPreviewProps> = ({ cards, sortBy, sortOr
         <CustomPaddingTable size="small" aria-label="card table">
             <TableHead>
                 <TableRow>
-                    <NumberCell align="center">#</NumberCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell align="center">Set</TableCell>
+                    <SetWidthCell width="40px" align="center">
+                        #
+                    </SetWidthCell>
+                    <NameCell>Name</NameCell>
+                    <SetWidthCell width="40px" align="center">
+                        Set
+                    </SetWidthCell>
                     <TableCell>Cost</TableCell>
-                    <TableCell>Type</TableCell>
                     <TableCell>Actions</TableCell>
                 </TableRow>
             </TableHead>
