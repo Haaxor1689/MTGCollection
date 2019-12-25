@@ -3,6 +3,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
+import Axios, { AxiosResponse } from "axios";
 import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { isNullOrUndefined } from "util";
@@ -10,6 +11,7 @@ import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
+import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import useEventListener from "../Utility/useEventListener";
 import DrawerDeckList from "./DrawerDeckList";
 import Home from "./Home";
@@ -19,8 +21,6 @@ import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 import TooltipButton from "./Styled/TooltipButton";
-import Axios, { AxiosResponse } from "axios";
-import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -44,6 +44,16 @@ const CustomAppBar = styled(AppBar)<{ open: boolean }>`
     z-index: ${p => p.theme.zIndex.drawer + 1};
     ${bodyClose}
     ${p => p.open && bodyOpen}
+    ${p =>
+        p.open &&
+        css`
+            ${p.theme.breakpoints.down("xs")} {
+                & {
+                    width: 100%;
+                    margin-left: 0;
+                }
+            }
+        `}
 `;
 
 const MenuButton = styled(IconButton)<{ open: boolean }>`
@@ -53,6 +63,13 @@ const MenuButton = styled(IconButton)<{ open: boolean }>`
         css`
             display: none;
         `}
+
+    ${p => p.theme.breakpoints.down("xs")} {
+        & {
+            margin-right: ${p => p.theme.spacing(1)}px;
+            display: inline-block;
+        }
+    }
 `;
 
 const drawerOpen = css<ComponentProps<any>>`
@@ -65,13 +82,19 @@ const drawerOpen = css<ComponentProps<any>>`
 `;
 
 const drawerClose = css<ComponentProps<any>>`
+    width: ${p => p.theme.constants.drawerWidthClosed};
     transition: ${p =>
         p.theme.transitions.create("width", {
             easing: p.theme.transitions.easing.sharp,
             duration: p.theme.transitions.duration.leavingScreen,
         })};
     overflow-x: hidden;
-    width: ${p => p.theme.constants.drawerWidthClosed};
+
+    ${p => p.theme.breakpoints.down("xs")} {
+        & {
+            width: 0;
+        }
+    }
 `;
 
 const CustomDrawer = styled(Drawer).attrs(() => ({
@@ -100,6 +123,23 @@ const MainContent = styled.div<{ open: boolean }>`
     margin-left: ${p => p.theme.constants.drawerWidthClosed};
     ${bodyClose}
     ${p => p.open && bodyOpen}
+
+    ${p =>
+        p.open &&
+        css`
+            ${p.theme.breakpoints.down("sm")} {
+                & {
+                    margin-left: ${p => p.theme.constants.drawerWidthClosed};
+                    width: calc(100% - ${p => p.theme.constants.drawerWidthClosed});
+                }
+            }
+        `}
+    ${p => p.theme.breakpoints.down("xs")} {
+        & {
+            width: 100%;
+            margin-left: 0;
+        }
+    }
 `;
 
 const ProfileAvatar = styled.div`
@@ -119,7 +159,7 @@ const App: React.FC = () => {
 
     const [open, setOpen] = React.useState(false);
 
-    const handleDrawerOpen = () => setOpen(true);
+    const handleDrawerToggle = () => setOpen(p => !p);
     const handleDrawerClose = () => setOpen(false);
 
     useEventListener("keydown", e => {
@@ -152,7 +192,9 @@ const App: React.FC = () => {
                     },
                 });
                 return Promise.all(
-                    symbols.map(symbol => endpoint.get<string, AxiosResponse<ScryCardSymbol>>(symbol.svg_uri, { transformResponse: r => ({ ...symbol, svg: r }) }))
+                    symbols.map(symbol =>
+                        endpoint.get<string, AxiosResponse<ScryCardSymbol>>(symbol.svg_uri, { transformResponse: r => ({ ...symbol, svg: r }) })
+                    )
                 );
             })
             .then(responses => {
@@ -186,10 +228,12 @@ const App: React.FC = () => {
         <State.Provider value={[state, dispatch]}>
             <CustomAppBar position="sticky" open={open}>
                 <Toolbar>
-                    <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" open={open}>
+                    <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" open={open}>
                         <MenuIcon />
                     </MenuButton>
-                    <Typography variant="h6">MTGCollection</Typography>
+                    <Typography variant="h6" style={{ overflow: "hidden" }}>
+                        MTGCollection
+                    </Typography>
                     <FlexCol />
                     {isSignedIn ? (
                         <>
