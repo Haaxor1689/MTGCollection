@@ -258,7 +258,7 @@ const App: React.FC = () => {
                     <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
                 </DrawerToolbar>
                 <Divider />
-                <DrawerDeckList open={open} />
+                {isSignedIn && <DrawerDeckList open={open} />}
             </CustomDrawer>
             <MainContent open={open}>
                 <BrowserRouter basename={process.env.PUBLIC_URL}>
