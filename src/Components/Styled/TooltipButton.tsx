@@ -1,8 +1,8 @@
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import { IconButtonProps } from "@material-ui/core/IconButton/IconButton";
+import { darken } from "@material-ui/core/styles";
 import React from "react";
 import styled, { css } from "./Theme";
-import { darken, fade } from "@material-ui/core/styles";
 
 const StyledIconButton = styled(IconButton)<{ background?: "primary" | "secondary" }>`
     ${p =>

@@ -1,4 +1,4 @@
-import { ClickAwayListener, Link, TableCell, TableRow } from "@material-ui/core";
+import { Link, TableCell, TableRow } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { isNullOrUndefined } from "util";
