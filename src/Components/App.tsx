@@ -13,7 +13,7 @@ import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import useEventListener from "../Utility/useEventListener";
-import DrawerDeckList from "./DrawerDeckList";
+import DrawerDeckList from "./Drawer/DrawerDeckList";
 import Home from "./Home";
 import NotFound from "./NotFound";
 import SignIn from "./SignIn";

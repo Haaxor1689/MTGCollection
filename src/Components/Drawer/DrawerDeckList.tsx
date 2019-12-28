@@ -2,8 +2,8 @@ import { Avatar, Badge, Divider, List, ListItem, ListItemAvatar, ListItemText, T
 import CollectionsIcon from "@material-ui/icons/Collections";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import React from "react";
-import { Deck, DeckName, State } from "../State";
-import styled from "./Styled/Theme";
+import { Deck, DeckName, State } from "../../State";
+import styled from "../Styled/Theme";
 
 const StyledAvatar = styled(Avatar)`
     background-color: ${p => p.theme.palette.background.paper};
