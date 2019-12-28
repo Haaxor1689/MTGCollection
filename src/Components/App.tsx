@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
+import { AppBar, Avatar, ClickAwayListener, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -157,10 +157,10 @@ const App: React.FC = () => {
         setProfile(undefined);
     };
 
-    const [open, setOpen] = React.useState(false);
+    const [[open], setOpen] = React.useState<[boolean, boolean]>([false, false]);
 
-    const handleDrawerToggle = () => setOpen(p => !p);
-    const handleDrawerClose = () => setOpen(false);
+    const handleDrawerToggle = () => setOpen(p => [!p[0], true]);
+    const handleDrawerClose = () => setOpen(p => [p[1] ? p[0] : false, false]);
 
     useEventListener("keydown", e => {
         if (e.key === "Shift" && !state.modifierKeys.shift) dispatch({ type: "SetModifierKey", key: "shift", value: true });
@@ -253,13 +253,15 @@ const App: React.FC = () => {
                     )}
                 </Toolbar>
             </CustomAppBar>
-            <CustomDrawer open={open}>
-                <DrawerToolbar>
-                    <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
-                </DrawerToolbar>
-                <Divider />
-                {isSignedIn && <DrawerDeckList open={open} />}
-            </CustomDrawer>
+            <ClickAwayListener onClickAway={handleDrawerClose}>
+                <CustomDrawer open={open}>
+                    <DrawerToolbar>
+                        <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+                    </DrawerToolbar>
+                    <Divider />
+                    {isSignedIn && <DrawerDeckList open={open} />}
+                </CustomDrawer>
+            </ClickAwayListener>
             <MainContent open={open}>
                 <BrowserRouter basename={process.env.PUBLIC_URL}>
                     <Redirect to={isSignedIn ? "/" : "/signin/"} />
