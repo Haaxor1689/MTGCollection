@@ -1,11 +1,11 @@
-import { Avatar, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField } from "@material-ui/core";
+import { Avatar, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@material-ui/core";
 import CollectionsIcon from "@material-ui/icons/Collections";
 import React from "react";
 import { State } from "../../State";
 import GoogleApi from "../../Utility/GoogleApi";
 import Scry from "../../Utility/Scry";
 import CardNameAutocomplete from "../Styled/CardNameAutocomplete";
-import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
+import { AppletActions, AppletContent, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
 
 const PreviewRow = styled.div`
@@ -66,62 +66,60 @@ const AddDeck: React.FC = () => {
     React.useEffect(() => validateName(""), []);
 
     return (
-        <Grid item xs={12} sm={6} md={4}>
-            <AppletPaper>
-                <Title>Add deck</Title>
-                <FlexCol>
+        <AppletContent>
+            <Title>Add deck</Title>
+            <FlexCol>
+                <TextField
+                    label="Deck name"
+                    variant="outlined"
+                    error={!!invalidName}
+                    helperText={invalidName}
+                    value={deckName}
+                    onChange={e => validateName(e.target.value)}
+                    fullWidth
+                />
+                <PreviewRow>
+                    <CardNameAutocomplete label="Preview card" onNameSelect={updatePreview} />
+                    <Avatar alt="Preview icon" src={previewUrl}>
+                        <CollectionsIcon />
+                    </Avatar>
+                </PreviewRow>
+            </FlexCol>
+            <AppletActions>
+                <ButtonGroup size="small">
+                    <Button disabled={!!invalidName} onClick={handleClickOpen}>
+                        Import
+                    </Button>
+                    <Button disabled={!!invalidName} color="primary" onClick={handleImport}>
+                        Create empty
+                    </Button>
+                </ButtonGroup>
+            </AppletActions>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="import-deck-dialog" fullWidth maxWidth="md">
+                <DialogTitle id="import-deck-dialog">Import</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Paste exported deck below.</DialogContentText>
                     <TextField
-                        label="Deck name"
-                        variant="outlined"
-                        error={!!invalidName}
-                        helperText={invalidName}
-                        value={deckName}
-                        onChange={e => validateName(e.target.value)}
+                        autoFocus
                         fullWidth
+                        label="Import"
+                        multiline
+                        rows="15"
+                        variant="outlined"
+                        value={importText}
+                        onChange={e => setImportText(e.target.value)}
                     />
-                    <PreviewRow>
-                        <CardNameAutocomplete label="Preview card" onNameSelect={updatePreview} />
-                        <Avatar alt="Preview icon" src={previewUrl}>
-                            <CollectionsIcon />
-                        </Avatar>
-                    </PreviewRow>
-                </FlexCol>
-                <AppletActions>
-                    <ButtonGroup size="small">
-                        <Button disabled={!!invalidName} onClick={handleClickOpen}>
-                            Import
-                        </Button>
-                        <Button disabled={!!invalidName} color="primary" onClick={handleImport}>
-                            Create empty
-                        </Button>
-                    </ButtonGroup>
-                </AppletActions>
-                <Dialog open={open} onClose={handleClose} aria-labelledby="import-deck-dialog" fullWidth maxWidth="md">
-                    <DialogTitle id="import-deck-dialog">Import</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>Paste exported deck below.</DialogContentText>
-                        <TextField
-                            autoFocus
-                            fullWidth
-                            label="Import"
-                            multiline
-                            rows="15"
-                            variant="outlined"
-                            value={importText}
-                            onChange={e => setImportText(e.target.value)}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleImport} color="primary">
-                            Import
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </AppletPaper>
-        </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleImport} color="primary">
+                        Import
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </AppletContent>
     );
 };
 

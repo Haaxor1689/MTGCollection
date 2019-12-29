@@ -13,7 +13,7 @@ import CollectionPreview, { PreviewStyle, SortByOptions, SortOrderOptions } from
 import PreviewStyleToggle from "../Previews/Common/PreviewStyleToggle";
 import ShowGroupsToggle from "../Previews/Common/ShowGroupsToggle";
 import SortToggle from "../Previews/Common/SortToggle";
-import { AppletActions, AppletPaper, FlexCol, Title } from "../Styled/Grid";
+import { AppletActions, AppletContent, FlexCol, Title } from "../Styled/Grid";
 import { ClipboardIcon, CompressIcon, ExpandIcon } from "../Styled/Icons";
 import styled from "../Styled/Theme";
 import TooltipButton from "../Styled/TooltipButton";
@@ -71,82 +71,80 @@ const DeckPreview = ({ deckName }: Props) => {
     const onExportClose = () => setExportOpened(false);
 
     return (
-        <Grid item xs={12} md={expanded ? 6 : 4}>
-            <AppletPaper>
-                <Grid container direction="row" justify="space-between">
-                    <Grid item>
-                        <Title>Deck preview</Title>
-                    </Grid>
-                    <Grid item>
-                        <TooltipButton title={expanded ? "Compress" : "Expand"} size="small" onClick={toggleExpanded}>
-                            {expanded ? <CompressIcon /> : <ExpandIcon />}
-                        </TooltipButton>
-                        <TooltipButton title="Close preview" size="small" onClick={closePreview}>
-                            <CloseIcon />
-                        </TooltipButton>
-                    </Grid>
+        <AppletContent>
+            <Grid container direction="row" justify="space-between">
+                <Grid item>
+                    <Title>Deck preview</Title>
                 </Grid>
-                <Grid container justify="space-between">
-                    <SortToggle sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder} />
-                    <ShowGroupsToggle show={showGroups} setShow={setShowGroups} />
-                    <FlexCol />
-                    {expanded && <PreviewStyleToggle style={style} onToggle={setStyle} />}
-                </Grid>
-                <FlexCol>
-                    {Object.entries(deck.cards).map(([sectionName, cards]) => (
-                        <SectionRow key={sectionName}>
-                            <CollectionPreview
-                                cards={Object.values(cards).map(c => ({ ...c, ...(state.cardList[c.name] ?? {}) })) as any}
-                                style={expanded ? style : "Compressed"}
-                                actions={deckName === DeckName.Wishlist ? "SearchWishlist" : "Deck"}
-                                sortBy={sortBy}
-                                sortOrder={sortOrder}
-                                showGroups={showGroups}
-                                deckName={deckName}
-                                sectionName={sectionName}
-                            />
-                        </SectionRow>
-                    ))}
-                </FlexCol>
-                <AppletActions>
-                    <TooltipButton title="Export deck" onClick={onExportOpen}>
-                        <GetAppIcon />
+                <Grid item>
+                    <TooltipButton title={expanded ? "Compress" : "Expand"} size="small" onClick={toggleExpanded}>
+                        {expanded ? <CompressIcon /> : <ExpandIcon />}
                     </TooltipButton>
-                    {deckName !== DeckName.Collection && deckName !== DeckName.Wishlist && (
-                        <TooltipButton title="Delete deck" onClick={onDeleteDeck}>
-                            <DeleteIcon />
-                        </TooltipButton>
-                    )}
-                    {state.decks[deck.name].isDirty && (
-                        <TooltipButton title="Save changes" onClick={onSaveChanges} background="primary">
-                            <SaveIcon />
-                        </TooltipButton>
-                    )}
-                </AppletActions>
-                <Dialog open={exportOpened} onClose={onExportClose} aria-labelledby="export-deck-dialog" fullWidth maxWidth="md">
-                    <DialogTitle id="import-deck-dialog">Export</DialogTitle>
-                    <DialogContent>
-                        <ExportRow>
-                            <DialogContentText>Copy exported text below.</DialogContentText>
-                            <TooltipButton title="Copy to clipboard" onClick={() => copy(CollectionParser.deserialize(deck.cards))}>
-                                <ClipboardIcon />
-                            </TooltipButton>
-                        </ExportRow>
-                        <TextField
-                            label="Export"
-                            multiline
-                            rows="15"
-                            fullWidth
-                            variant="outlined"
-                            value={CollectionParser.deserialize(deck.cards)}
-                            InputProps={{
-                                readOnly: true,
-                            }}
+                    <TooltipButton title="Close preview" size="small" onClick={closePreview}>
+                        <CloseIcon />
+                    </TooltipButton>
+                </Grid>
+            </Grid>
+            <Grid container justify="space-between">
+                <SortToggle sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+                <ShowGroupsToggle show={showGroups} setShow={setShowGroups} />
+                <FlexCol />
+                {expanded && <PreviewStyleToggle style={style} onToggle={setStyle} />}
+            </Grid>
+            <FlexCol>
+                {Object.entries(deck.cards).map(([sectionName, cards]) => (
+                    <SectionRow key={sectionName}>
+                        <CollectionPreview
+                            cards={Object.values(cards).map(c => ({ ...c, ...(state.cardList[c.name] ?? {}) })) as any}
+                            style={expanded ? style : "Compressed"}
+                            actions={deckName === DeckName.Wishlist ? "SearchWishlist" : "Deck"}
+                            sortBy={sortBy}
+                            sortOrder={sortOrder}
+                            showGroups={showGroups}
+                            deckName={deckName}
+                            sectionName={sectionName}
                         />
-                    </DialogContent>
-                </Dialog>
-            </AppletPaper>
-        </Grid>
+                    </SectionRow>
+                ))}
+            </FlexCol>
+            <AppletActions>
+                <TooltipButton title="Export deck" onClick={onExportOpen}>
+                    <GetAppIcon />
+                </TooltipButton>
+                {deckName !== DeckName.Collection && deckName !== DeckName.Wishlist && (
+                    <TooltipButton title="Delete deck" onClick={onDeleteDeck}>
+                        <DeleteIcon />
+                    </TooltipButton>
+                )}
+                {state.decks[deck.name].isDirty && (
+                    <TooltipButton title="Save changes" onClick={onSaveChanges} background="primary">
+                        <SaveIcon />
+                    </TooltipButton>
+                )}
+            </AppletActions>
+            <Dialog open={exportOpened} onClose={onExportClose} aria-labelledby="export-deck-dialog" fullWidth maxWidth="md">
+                <DialogTitle id="import-deck-dialog">Export</DialogTitle>
+                <DialogContent>
+                    <ExportRow>
+                        <DialogContentText>Copy exported text below.</DialogContentText>
+                        <TooltipButton title="Copy to clipboard" onClick={() => copy(CollectionParser.deserialize(deck.cards))}>
+                            <ClipboardIcon />
+                        </TooltipButton>
+                    </ExportRow>
+                    <TextField
+                        label="Export"
+                        multiline
+                        rows="15"
+                        fullWidth
+                        variant="outlined"
+                        value={CollectionParser.deserialize(deck.cards)}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                    />
+                </DialogContent>
+            </Dialog>
+        </AppletContent>
     );
 };
 

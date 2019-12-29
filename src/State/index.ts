@@ -9,6 +9,12 @@ export enum DeckName {
     Wishlist = "_wishlist",
 }
 
+export const getDeckName = (name: string) => {
+    if (name === DeckName.Collection) return "Collection";
+    if (name === DeckName.Wishlist) return "Wishlist";
+    return name;
+};
+
 export enum SectionName {
     Default = "_default",
     Sideboard = "Sideboard",
@@ -91,7 +97,7 @@ export const initialState: AppState = {
     cardList: {},
     symbolList: {},
     setList: {},
-    selectedDeck: null,
+    selectedDeck: DeckName.Collection,
     modifierKeys: {
         shift: false,
     }

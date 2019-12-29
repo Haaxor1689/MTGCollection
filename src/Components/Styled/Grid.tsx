@@ -1,11 +1,11 @@
-import { Paper, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import styled from "./Theme";
 
 export const FlexCol = styled.div`
     flex: 1 1 auto;
 `;
 
-export const AppletPaper = styled(Paper)`
+export const AppletContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
