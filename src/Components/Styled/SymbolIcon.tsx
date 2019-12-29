@@ -1,13 +1,40 @@
 import React from "react";
 import { State } from "../../State";
 import { ScryCardSymbol } from "../../Utility/Scry/Types";
-import styled from "./Theme";
+import styled, { css } from "./Theme";
+import { TypographyProps } from "@material-ui/core/Typography";
+
+const sizeMap: [TypographyProps["variant"], number][] = [
+    ["h1", 80],
+    ["h2", 51],
+    ["h3", 42],
+    ["h4", 30],
+    ["h5", 25],
+    ["h6", 20],
+    ["subtitle1", 16],
+    ["subtitle2", 14],
+    ["body1", 16],
+    ["body2", 14],
+    ["caption", 12],
+    ["button", 16],
+    ["overline", 14],
+];
 
 const Symbol = styled.svg`
     display: inline-block;
     height: 16px;
     width: 16px;
     margin: 1px 1px -2px 1px;
+
+    ${p =>
+        sizeMap.map(
+            ([v, size]) => css`
+                .MuiTypography-${v} & {
+                    height: ${size}px;
+                    width: ${size}px;
+                }
+            `
+        )}
 `;
 
 type Props = {
