@@ -20,18 +20,24 @@ const Api = (() => {
         endpoint,
         Symbology: {
             All: () => endpoint.get<List<ScryCardSymbol>>("/symbology").then(r => r.data.data),
-            ParseMana: (cost: string) => endpoint.get<ScryManaCost>("/symbology/parse-mana", { params: { cost } }).then(r => r.data),
+            ParseMana: (cost: string) =>
+                endpoint
+                    .get<ScryManaCost>("/symbology/parse-mana", { params: { cost } })
+                    .then(r => r.data),
         },
         Cards: {
             Autocomplete: (q: string) =>
                 endpoint
                     .get<List<string>>("/cards/autocomplete", { params: { q, include_extras: true } })
                     .then(r => r.data.data),
-            Named: (fuzzy: string) => endpoint.get<ScrySdk.Card>("/cards/named", { params: { fuzzy } }).then(r => r.data),
+            Named: (fuzzy: string) =>
+                endpoint
+                    .get<ScrySdk.Card>("/cards/named", { params: { fuzzy } })
+                    .then(r => r.data),
         },
         Sets: {
             All: () => endpoint.get<List<ScrySet>>("/sets").then(r => r.data.data),
-        }
+        },
     };
 })();
 
@@ -50,9 +56,18 @@ const getImage = (card: DeepReadonly<ScrySdk.Card>, type: keyof ScrySdk.ImageUri
 
 const getPlaceholder = (cardName: string): string => `https://via.placeholder.com/146x204?text=${cardName.replace(/\s/, "+")}`;
 
+const getColorIdentity = (...cards: DeepReadonly<ScrySdk.Card>[]): string =>
+    cards
+        .filter(c => !!c)
+        .flatMap(c => c.color_identity)
+        .filter((v, i, self) => self.indexOf(v) === i)
+        .map(c => `{${c}}`)
+        .join("");
+
 const Scry = {
     ...Api,
     getImage,
     getPlaceholder,
+    getColorIdentity,
 };
 export default Scry;

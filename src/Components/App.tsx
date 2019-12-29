@@ -14,10 +14,11 @@ import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import useEventListener from "../Utility/useEventListener";
 import AddDeck from "./Applets/AddDeck";
+import DeckList from "./Applets/DeckList";
 import DeckPreview from "./Applets/DeckPreview";
 import UserInfo from "./Applets/UserInfo";
-import AppletsBody from "./AppletsBody";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
+import Home from "./Home";
 import NotFound from "./NotFound";
 import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
@@ -271,7 +272,7 @@ const App: React.FC = () => {
             <Container maxWidth="xl">
                 <MainContent open={open}>
                     <Switch>
-                        <Route exact path="/" component={AppletsBody} />
+                        <Route exact path="/" component={Home} />
                         <Route exact path="/signin/" component={SignIn} />
                         <Route exact path="/user/" component={UserInfo} />
                         <Route exact path="/addDeck/" component={AddDeck} />
