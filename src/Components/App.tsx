@@ -1,11 +1,11 @@
-import { AppBar, Avatar, ClickAwayListener, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
+import { AppBar, Avatar, ClickAwayListener, Container, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import Axios, { AxiosResponse } from "axios";
 import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { Link, Route, Switch, useHistory } from "react-router-dom";
 import { isNullOrUndefined } from "util";
 import { initialState, State } from "../State";
 import { reducer } from "../State/Reducers";
@@ -13,14 +13,15 @@ import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import useEventListener from "../Utility/useEventListener";
+import AppletsBody from "./AppletsBody";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
-import Home from "./Home";
 import NotFound from "./NotFound";
 import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 import TooltipButton from "./Styled/TooltipButton";
+import UserInfo from "./UserInfo";
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -147,6 +148,7 @@ const ProfileAvatar = styled.div`
 `;
 
 const App: React.FC = () => {
+    const history = useHistory();
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
     const [profile, setProfile] = React.useState<GoogleProfile>();
@@ -169,16 +171,15 @@ const App: React.FC = () => {
         if (e.key === "Shift" && state.modifierKeys.shift) dispatch({ type: "SetModifierKey", key: "shift", value: false });
     });
 
-    /**
-     * Called at app init, sets Google API signin callback
-     * info stored in React profile state
-     */
     React.useEffect(() => {
         GoogleApi.initClient(async (isSignedIn: boolean) => {
+            let redirect = history.location.pathname;
             setIsSignedIn(isSignedIn);
             if (!isSignedIn) {
+                history.push("/signin/");
                 return;
             }
+            history.push(redirect);
             setProfile(GoogleApi.getProfile());
             GoogleApi.prepareAppData()(dispatch);
         });
@@ -226,52 +227,54 @@ const App: React.FC = () => {
 
     return (
         <State.Provider value={[state, dispatch]}>
-            <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <CustomAppBar position="sticky" open={open}>
-                    <Toolbar>
-                        <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" open={open}>
-                            <MenuIcon />
-                        </MenuButton>
-                        <Typography variant="h6" style={{ overflow: "hidden" }}>
-                            MTGCollection
-                        </Typography>
-                        <FlexCol />
-                        {isSignedIn ? (
-                            <>
-                                {!isNullOrUndefined(profile) && (
-                                    <ProfileAvatar>
+            <CustomAppBar position="sticky" open={open}>
+                <Toolbar>
+                    <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" open={open}>
+                        <MenuIcon />
+                    </MenuButton>
+                    <Typography variant="h6" style={{ overflow: "hidden" }}>
+                        MTGCollection
+                    </Typography>
+                    <FlexCol />
+                    {isSignedIn ? (
+                        <>
+                            {!isNullOrUndefined(profile) && (
+                                <ProfileAvatar>
+                                    <Link to="/user/">
                                         <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
                                             <Avatar alt={profile.getGivenName()} src={profile.getImageUrl()} />
                                         </Tooltip>
-                                    </ProfileAvatar>
-                                )}
-                                <TooltipButton title="SignOut" onClick={handleSignoutClick}>
-                                    <ExitToAppIcon />
-                                </TooltipButton>
-                            </>
-                        ) : (
-                            <SignInButton onClick={GoogleApi.signIn} />
-                        )}
-                    </Toolbar>
-                </CustomAppBar>
-                <ClickAwayListener onClickAway={handleDrawerClose}>
-                    <CustomDrawer open={open}>
-                        <DrawerToolbar>
-                            <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
-                        </DrawerToolbar>
-                        <Divider />
-                        {isSignedIn && <DrawerDeckList open={open} />}
-                    </CustomDrawer>
-                </ClickAwayListener>
+                                    </Link>
+                                </ProfileAvatar>
+                            )}
+                            <TooltipButton title="SignOut" onClick={handleSignoutClick}>
+                                <ExitToAppIcon />
+                            </TooltipButton>
+                        </>
+                    ) : (
+                        <SignInButton onClick={GoogleApi.signIn} />
+                    )}
+                </Toolbar>
+            </CustomAppBar>
+            <ClickAwayListener onClickAway={handleDrawerClose}>
+                <CustomDrawer open={open}>
+                    <DrawerToolbar>
+                        <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+                    </DrawerToolbar>
+                    <Divider />
+                    {isSignedIn && <DrawerDeckList open={open} />}
+                </CustomDrawer>
+            </ClickAwayListener>
+            <Container maxWidth="xl">
                 <MainContent open={open}>
-                    {isSignedIn === false && <Redirect to="/signin/" />}
                     <Switch>
-                        <Route exact path="/" component={Home} />
+                        <Route exact path="/" component={AppletsBody} />
                         <Route exact path="/signin/" component={SignIn} />
+                        <Route exact path="/user/" component={UserInfo} />
                         <Route component={NotFound} />
                     </Switch>
                 </MainContent>
-            </BrowserRouter>
+            </Container>
         </State.Provider>
     );
 };
