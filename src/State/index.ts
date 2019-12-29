@@ -71,10 +71,6 @@ export type SetList = DeepReadonly<{
     [setName: string]: ScrySet;
 }>;
 
-export type ModifierKeys = DeepReadonly<{
-    shift: boolean;
-}>;
-
 export type AppState = DeepReadonly<{
     files: FileIds;
     decks: Decks;
@@ -82,7 +78,6 @@ export type AppState = DeepReadonly<{
     symbolList: SymbolList;
     setList: SetList;
     selectedDeck: string | null;
-    modifierKeys: ModifierKeys;
 }>;
 
 export const initialState: AppState = {
@@ -97,10 +92,7 @@ export const initialState: AppState = {
     cardList: {},
     symbolList: {},
     setList: {},
-    selectedDeck: DeckName.Collection,
-    modifierKeys: {
-        shift: false,
-    },
+    selectedDeck: DeckName.Collection
 };
 
 export const State = React.createContext<[AppState, React.Dispatch<Action>]>([initialState, undefined as any]);

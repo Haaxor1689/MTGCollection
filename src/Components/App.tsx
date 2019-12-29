@@ -12,9 +12,7 @@ import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
-import useEventListener from "../Utility/useEventListener";
 import AddDeck from "./Applets/AddDeck";
-import DeckList from "./Applets/DeckList";
 import DeckPreview from "./Applets/DeckPreview";
 import UserInfo from "./Applets/UserInfo";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
@@ -167,12 +165,6 @@ const App: React.FC = () => {
     const handleDrawerToggle = () => setOpen(p => [!p[0], true]);
     const handleDrawerClose = () => setOpen(p => [p[1] ? p[0] : false, false]);
 
-    useEventListener("keydown", e => {
-        if (e.key === "Shift" && !state.modifierKeys.shift) dispatch({ type: "SetModifierKey", key: "shift", value: true });
-    });
-    useEventListener("keyup", e => {
-        if (e.key === "Shift" && state.modifierKeys.shift) dispatch({ type: "SetModifierKey", key: "shift", value: false });
-    });
     React.useEffect(() => {
         GoogleApi.initClient(async (isSignedIn: boolean) => {
             let redirect = history.location.pathname;
@@ -181,7 +173,6 @@ const App: React.FC = () => {
                 history.push("/signin/");
                 return;
             }
-            console.log(redirect);
             if (redirect.match("/signin")) redirect = "/";
             history.push(redirect);
             setProfile(GoogleApi.getProfile());

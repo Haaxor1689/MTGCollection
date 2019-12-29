@@ -1,5 +1,5 @@
 import Scry from "scryfall-sdk";
-import { DeckCard, DeckCards, ModifierKeys } from ".";
+import { DeckCard, DeckCards } from ".";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 
 type AddCard = {
@@ -50,10 +50,4 @@ type SelectDeck = {
     name: string | null;
 };
 
-type SetModifierKey = {
-    type: "SetModifierKey";
-    key: keyof ModifierKeys;
-    value: boolean;
-};
-
-export type Action = AddCard | AddSymbols | AddSets | CreateDeck | UpdateDeck | UpdateDeckCard | DeleteDeck | SelectDeck | SetModifierKey;
+export type Action = AddCard | AddSymbols | AddSets | CreateDeck | UpdateDeck | UpdateDeckCard | DeleteDeck | SelectDeck;
