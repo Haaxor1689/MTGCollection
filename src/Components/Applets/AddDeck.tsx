@@ -7,6 +7,7 @@ import Scry from "../../Utility/Scry";
 import CardNameAutocomplete from "../Styled/CardNameAutocomplete";
 import { AppletActions, AppletContent, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
+import { useHistory } from "react-router";
 
 const PreviewRow = styled.div`
     display: flex;
@@ -20,6 +21,7 @@ const PreviewRow = styled.div`
 `;
 
 const AddDeck: React.FC = () => {
+    const history = useHistory();
     const [state, dispatch] = React.useContext(State);
 
     const [importText, setImportText] = React.useState<string>("");
@@ -33,17 +35,18 @@ const AddDeck: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     const handleImport = () => {
-        setOpen(false);
         GoogleApi.createNewDeck(dispatch, { name: deckName, fileContent: importText, previewUrl });
-        setImportText("");
-        validateName("");
-        setPreviewUrl("");
+        history.push(`/decks/${encodeURIComponent(deckName)}`);
     };
 
     const validateName = (name: string) => {
         setDeckName(name);
         if (name === "") {
             setInvalidName("Deck name can't be empty");
+            return;
+        }
+        if (name.indexOf("%") >= 0) {
+            setInvalidName("Deck name can't contain '%'");
             return;
         }
         if (state.decks[name]) {

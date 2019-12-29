@@ -1,11 +1,11 @@
-import { Typography } from "@material-ui/core";
+import { Avatar, Paper, Typography } from "@material-ui/core";
 import styled from "./Theme";
 
 export const FlexCol = styled.div`
     flex: 1 1 auto;
 `;
 
-export const AppletContent = styled.div`
+export const AppletContent = styled(Paper)`
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -23,3 +23,8 @@ export const Title = styled(Typography).attrs(p => ({
     color: "primary",
     gutterBottom: true,
 }))``;
+
+export const DrawerAvatar = styled(Avatar)`
+    background-color: ${p => p.theme.palette.background.paper};
+    color: ${p => p.theme.palette.text.secondary};
+`;

@@ -1,4 +1,4 @@
-import { AppBar, Avatar, ClickAwayListener, Container, Divider, Drawer, IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
+import { AppBar, Avatar, ClickAwayListener, Container, Divider, Drawer, IconButton, Link as MUILink, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -13,6 +13,9 @@ import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import useEventListener from "../Utility/useEventListener";
+import AddDeck from "./Applets/AddDeck";
+import DeckPreview from "./Applets/DeckPreview";
+import UserInfo from "./Applets/UserInfo";
 import AppletsBody from "./AppletsBody";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
 import NotFound from "./NotFound";
@@ -21,7 +24,6 @@ import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
 import TooltipButton from "./Styled/TooltipButton";
-import UserInfo from "./UserInfo";
 
 const bodyOpen = css<ComponentProps<any>>`
     margin-left: ${p => p.theme.constants.drawerWidth};
@@ -170,7 +172,6 @@ const App: React.FC = () => {
     useEventListener("keyup", e => {
         if (e.key === "Shift" && state.modifierKeys.shift) dispatch({ type: "SetModifierKey", key: "shift", value: false });
     });
-
     React.useEffect(() => {
         GoogleApi.initClient(async (isSignedIn: boolean) => {
             let redirect = history.location.pathname;
@@ -179,6 +180,8 @@ const App: React.FC = () => {
                 history.push("/signin/");
                 return;
             }
+            console.log(redirect);
+            if (redirect.match("/signin")) redirect = "/";
             history.push(redirect);
             setProfile(GoogleApi.getProfile());
             GoogleApi.prepareAppData()(dispatch);
@@ -233,18 +236,18 @@ const App: React.FC = () => {
                         <MenuIcon />
                     </MenuButton>
                     <Typography variant="h6" style={{ overflow: "hidden" }}>
-                        MTGCollection
+                        <MUILink variant="inherit" color="inherit" underline="none" component={Link} to="/">
+                            MTGCollection
+                        </MUILink>
                     </Typography>
                     <FlexCol />
                     {isSignedIn ? (
                         <>
                             {!isNullOrUndefined(profile) && (
                                 <ProfileAvatar>
-                                    <Link to="/user/">
-                                        <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
-                                            <Avatar alt={profile.getGivenName()} src={profile.getImageUrl()} />
-                                        </Tooltip>
-                                    </Link>
+                                    <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
+                                        <Avatar component={Link} to="/user/" alt={profile.getGivenName()} src={profile.getImageUrl()} />
+                                    </Tooltip>
                                 </ProfileAvatar>
                             )}
                             <TooltipButton title="SignOut" onClick={handleSignoutClick}>
@@ -271,6 +274,8 @@ const App: React.FC = () => {
                         <Route exact path="/" component={AppletsBody} />
                         <Route exact path="/signin/" component={SignIn} />
                         <Route exact path="/user/" component={UserInfo} />
+                        <Route exact path="/addDeck/" component={AddDeck} />
+                        <Route path="/decks/:deckName" component={DeckPreview} />
                         <Route component={NotFound} />
                     </Switch>
                 </MainContent>

@@ -5,6 +5,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import SaveIcon from "@material-ui/icons/Save";
 import copy from "clipboard-copy";
 import React from "react";
+import { useHistory, useParams } from "react-router";
 import * as Scry from "scryfall-sdk";
 import { DeckCard, DeckName, State } from "../../State";
 import CollectionParser from "../../Utility/CollectionParser";
@@ -36,11 +37,15 @@ const ExportRow = styled(FlexCol)`
     }
 `;
 
-type Props = {
+type Params = {
     deckName: string;
 };
 
-const DeckPreview = ({ deckName }: Props) => {
+const DeckPreview: React.FC = () => {
+    let { deckName } = useParams<Params>();
+    deckName = decodeURIComponent(deckName);
+
+    const history = useHistory();
     const [state, dispatch] = React.useContext(State);
     const deck = state.decks[deckName];
 
@@ -52,23 +57,31 @@ const DeckPreview = ({ deckName }: Props) => {
     const [showGroups, setShowGroups] = React.useState(false);
 
     React.useEffect(() => {
-        const missingCards = Object.values(deck.cards)
+        dispatch({ type: "SelectDeck", name: deckName });
+        const missingCards = Object.values(deck?.cards ?? {})
             .reduce((prev, val) => [...prev, ...Object.values(val)], [] as DeckCard[])
             .filter(card => !state.cardList[card.name]);
         Scry.Cards.collection(...missingCards.map(card => Scry.CardIdentifier.byName(card.name))).on("data", (card: any) =>
             dispatch({ type: "AddCard", card })
         );
-    }, [deckName]);
+    }, [deckName, deck]);
 
     const closePreview = () => dispatch({ type: "SelectDeck", name: null });
     const toggleExpanded = () => setExpanded(e => !e);
-    const onDeleteDeck = () => GoogleApi.deleteDeck(dispatch, { name: deckName, id: state.files[deckName] });
+    const onDeleteDeck = () => {
+        history.push("/");
+        GoogleApi.deleteDeck(dispatch, { name: deckName, id: state.files[deckName] });
+    };
     const onSaveChanges = () =>
         GoogleApi.updateFile({ id: state.files[deckName], fileContent: CollectionParser.deserialize(deck.cards) }).then(() =>
             dispatch({ type: "UpdateDeck", name: deckName, isDirty: false })
         );
     const onExportOpen = () => setExportOpened(true);
     const onExportClose = () => setExportOpened(false);
+
+    if (deck === undefined) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <AppletContent>
@@ -116,7 +129,7 @@ const DeckPreview = ({ deckName }: Props) => {
                         <DeleteIcon />
                     </TooltipButton>
                 )}
-                {state.decks[deck.name].isDirty && (
+                {deck.isDirty && (
                     <TooltipButton title="Save changes" onClick={onSaveChanges} background="primary">
                         <SaveIcon />
                     </TooltipButton>

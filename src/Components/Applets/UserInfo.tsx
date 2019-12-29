@@ -1,5 +1,5 @@
 import React from "react";
-import { AppletContent, Title } from "./Styled/Grid";
+import { AppletContent, Title } from "../Styled/Grid";
 
 const UserInfo: React.FC = () => {
     return (

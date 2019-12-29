@@ -73,7 +73,7 @@ export type SetList = DeepReadonly<{
 
 export type ModifierKeys = DeepReadonly<{
     shift: boolean;
-}>
+}>;
 
 export type AppState = DeepReadonly<{
     files: FileIds;
@@ -100,7 +100,7 @@ export const initialState: AppState = {
     selectedDeck: DeckName.Collection,
     modifierKeys: {
         shift: false,
-    }
+    },
 };
 
 export const State = React.createContext<[AppState, React.Dispatch<Action>]>([initialState, undefined as any]);

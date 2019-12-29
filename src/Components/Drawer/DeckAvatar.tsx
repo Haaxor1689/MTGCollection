@@ -1,14 +1,9 @@
-import { Avatar, Badge } from "@material-ui/core";
+import { Badge } from "@material-ui/core";
 import CollectionsIcon from "@material-ui/icons/Collections";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import React from "react";
 import { Deck, DeckName, getDeckName, State } from "../../State";
-import styled from "../Styled/Theme";
-
-const StyledAvatar = styled(Avatar)`
-    background-color: ${p => p.theme.palette.background.paper};
-    color: ${p => p.theme.palette.text.secondary};
-`;
+import { DrawerAvatar } from "../Styled/Grid";
 
 const getDeckIcon = (name: string) => {
     return name === DeckName.Wishlist ? <FavoriteIcon /> : <CollectionsIcon />;
@@ -31,9 +26,9 @@ const DeckAvatar: React.FC<Props> = ({ deck }) => {
                 horizontal: "right",
             }}
         >
-            <StyledAvatar alt={getDeckName(deck.name)} src={deck.previewUrl}>
+            <DrawerAvatar alt={getDeckName(deck.name)} src={deck.previewUrl}>
                 {getDeckIcon(deck.name)}
-            </StyledAvatar>
+            </DrawerAvatar>
         </Badge>
     );
 };

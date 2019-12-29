@@ -16,7 +16,7 @@ const AppletVariant: React.FC<{ tab: number }> = ({ tab }) => {
         case 1:
             return <CardSearch />;
         default:
-            return state.selectedDeck ? <DeckPreview deckName={state.selectedDeck} /> : null;
+            return state.selectedDeck ? <DeckPreview /> : null;
     }
 };
 
@@ -32,7 +32,7 @@ const AppletsBody: React.FC = () => {
                 <Tabs value={tab} onChange={handleChange}>
                     <Tab icon={<AddCircleOutlineIcon />} />
                     <Tab icon={<SearchIcon />} />
-                    {state.selectedDeck && <Tab icon={<DeckAvatar deck={state.decks[state.selectedDeck]} />} />}
+                    {state.selectedDeck && <Tab label={state.selectedDeck} icon={<DeckAvatar deck={state.decks[state.selectedDeck]} />} />}
                 </Tabs>
                 <AppletVariant tab={tab} />
             </Paper>
