@@ -92,9 +92,14 @@ const DeckBox: React.FC<Props> = ({ deck }) => {
                     {getDeckIcon(deck.name)}
                 </DeckBoxAvatar>
                 <DeckBoxTitle>
-                    <DeckColorIdentity>
-                        <SymbolTypography variant="h3" text={Scry.getColorIdentity(...Object.keys(deck.cards[SectionName.Default]).map(c => state.cardList[c]))} />
-                    </DeckColorIdentity>
+                    {deck.name !== DeckName.Collection && deck.name !== DeckName.Wishlist && (
+                        <DeckColorIdentity>
+                            <SymbolTypography
+                                variant="h3"
+                                text={Scry.getColorIdentity(...Object.keys(deck.cards[SectionName.Default]).map(c => state.cardList[c]))}
+                            />
+                        </DeckColorIdentity>
+                    )}
                     <Typography variant="h6">{getDeckName(deck.name)}</Typography>
                 </DeckBoxTitle>
             </Link>
