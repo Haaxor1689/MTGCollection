@@ -67,6 +67,8 @@ const AppletBackground = styled.div`
 
 const Body = styled.div`
     z-index: 0;
+    display: flex;
+    flex-direction: column;
 `;
 
 type Params = {
