@@ -43,6 +43,7 @@ const AppletBackground = styled.div`
     top: 0;
     right: 0;
     width: 75%;
+    z-index: 0;
 
     & img {
         width: 100%;
@@ -65,7 +66,7 @@ const AppletBackground = styled.div`
 `;
 
 const Body = styled.div`
-    z-index: 1;
+    z-index: 0;
 `;
 
 type Params = {
