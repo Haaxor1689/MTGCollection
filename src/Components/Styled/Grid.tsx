@@ -6,11 +6,13 @@ export const FlexCol = styled.div`
 `;
 
 export const AppletContent = styled(Paper)`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     min-height: ${p => p.theme.constants.appletHeight};
     padding: ${p => p.theme.spacing(2)}px;
+    overflow: hidden;
 `;
 
 export const AppletActions = styled.div`
