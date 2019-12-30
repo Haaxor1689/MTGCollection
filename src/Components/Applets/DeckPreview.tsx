@@ -8,7 +8,7 @@ import copy from "clipboard-copy";
 import React from "react";
 import { useHistory, useParams } from "react-router";
 import * as Scry from "scryfall-sdk";
-import { DeckCard, DeckName, State } from "../../State";
+import { DeckCard, DeckName, getDeckName, State } from "../../State";
 import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
 import CollectionPreview, { PreviewStyle, SortByOptions, SortOrderOptions } from "../Previews/CollectionPreview";
@@ -129,7 +129,7 @@ const DeckPreview: React.FC = () => {
             <Body>
                 <Grid container direction="row" justify="space-between">
                     <Grid item>
-                        <Title>Deck preview</Title>
+                        <Title>{getDeckName(deck.name)}</Title>
                     </Grid>
                     <Grid item>
                         <TooltipButton title={expanded ? "Compress" : "Expand"} size="small" onClick={toggleExpanded}>
