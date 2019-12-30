@@ -24,6 +24,7 @@ const useCardActions = ({ card, deckName, sectionName }: CollectionCardProps) =>
             });
         },
         openScryfallPage: () => card.scryfall_uri && window.open(card.scryfall_uri, "_blank"),
+        openScryfallSetPage: () => card.scryfall_set_uri && window.open(card.scryfall_set_uri, "_blank"),
         isOnWishlist,
         toggleWishlist: () =>
             isOnWishlist()

@@ -99,7 +99,9 @@ const ListCard: React.FC<CollectionCardProps> = props => {
                 </Link>
             </NameCell>
             <SetWidthCell width="40px" align="center">
-                <SetIcon set={card.set} rarity={card.rarity} />
+                <Link href="#" onClick={actions.openScryfallSetPage} color="inherit" title="Open set on scryfall">
+                    <SetIcon set={card.set} rarity={card.rarity} />
+                </Link>
             </SetWidthCell>
             <TableCell>
                 <SymbolTypography text={card.mana_cost ?? ""} noWrap />
