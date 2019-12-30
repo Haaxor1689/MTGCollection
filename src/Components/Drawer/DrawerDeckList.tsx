@@ -4,7 +4,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Deck, DeckName, getDeckName, State } from "../../State";
 import { DrawerAvatar } from "../Styled/Grid";
-import styled from "../Styled/Theme";
+import styled, { MainTheme } from "../Styled/Theme";
 import DeckAvatar from "./DeckAvatar";
 
 const StyledItemText = styled(ListItemText)`
@@ -15,9 +15,10 @@ const StyledItemText = styled(ListItemText)`
 
 type Props = {
     open: boolean;
+    closeDrawer: () => void;
 };
 
-const DrawerDeckList: React.FC<Props> = ({ open }) => {
+const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
     const { pathname } = useLocation();
     const [state] = React.useContext(State);
 
@@ -26,6 +27,7 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
             <ListItem
                 component={Link}
                 to={`/decks/${encodeURIComponent(deck.name)}`}
+                onClick={closeDrawer}
                 button
                 selected={state.selectedDeck === deck.name && !pathname.match("/addDeck")}
             >
@@ -46,7 +48,7 @@ const DrawerDeckList: React.FC<Props> = ({ open }) => {
             <Divider />
             <List>
                 <Tooltip title="Add deck" placement="right">
-                    <ListItem component={Link} to="/addDeck/" button selected={!!pathname.match("/addDeck")}>
+                    <ListItem component={Link} to="/addDeck/" onClick={closeDrawer} button selected={!!pathname.match("/addDeck")}>
                         <ListItemAvatar>
                             <DrawerAvatar alt="Add deck">
                                 <AddCircleOutlineIcon />

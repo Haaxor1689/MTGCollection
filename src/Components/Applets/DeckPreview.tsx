@@ -105,7 +105,7 @@ const DeckPreview: React.FC = () => {
         // eslint-disable-next-line
     }, [deckName, deck]);
 
-    const closePreview = () => dispatch({ type: "SelectDeck", name: null });
+    const closePreview = () => history.push("/");
     const toggleExpanded = () => setExpanded(e => !e);
     const onDeleteDeck = () => {
         history.push("/");

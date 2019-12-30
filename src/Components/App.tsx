@@ -13,7 +13,6 @@ import {
     useMediaQuery,
 } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import Axios, { AxiosResponse } from "axios";
@@ -28,7 +27,9 @@ import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import AddDeck from "./Applets/AddDeck";
 import DeckPreview from "./Applets/DeckPreview";
 import UserInfo from "./Applets/UserInfo";
+import CloseIcon from "@material-ui/icons/Close";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
+import MobileNavigation from "./Drawer/MobileNavigation";
 import Home from "./Home";
 import NotFound from "./NotFound";
 import SignIn from "./SignIn";
@@ -89,39 +90,45 @@ const MenuButton = styled(IconButton)<{ open: boolean }>`
 
 const drawerOpen = css<ComponentProps<any>>`
     width: ${p => p.theme.constants.drawerWidth};
-    transition: ${p =>
-        p.theme.transitions.create("width", {
-            easing: p.theme.transitions.easing.sharp,
-            duration: p.theme.transitions.duration.enteringScreen,
-        })};
-`;
-
-const drawerClose = css<ComponentProps<any>>`
-    width: ${p => p.theme.constants.drawerWidthClosed};
-    transition: ${p =>
-        p.theme.transitions.create("width", {
-            easing: p.theme.transitions.easing.sharp,
-            duration: p.theme.transitions.duration.leavingScreen,
-        })};
     overflow-x: hidden;
+    transition: ${p =>
+        ["width", "max-height"]
+            .map(d =>
+                p.theme.transitions.create(d, {
+                    easing: p.theme.transitions.easing.sharp,
+                    duration: p.theme.transitions.duration.enteringScreen,
+                })
+            )
+            .join(", ")};
 
     ${p => p.theme.breakpoints.down("xs")} {
         & {
-            width: 0;
+            width: 100%;
+            height: auto;
+            max-height: 100%;
         }
     }
 `;
 
-const CustomDrawer = styled(Drawer).attrs(() => ({
-    variant: "permanent",
-}))<{ open?: boolean }>`
-    width: ${p => p.theme.constants.drawerWidth};
+const drawerClose = css<ComponentProps<any>>`
+    width: ${p => p.theme.constants.drawerWidthClosed};
+
+    ${p => p.theme.breakpoints.down("xs")} {
+        & {
+            max-height: 0;
+        }
+    }
+`;
+
+const CustomDrawer = styled(Drawer)<{ open?: boolean }>`
     flex-shrink: 0;
     white-space: nowrap;
-    ${p => (p.open ? drawerOpen : drawerClose)}
+    ${drawerOpen}
+    ${p => !p.open && drawerClose}
 
     .MuiDrawer-paper {
-        ${p => (p.open ? drawerOpen : drawerClose)}
+        ${drawerOpen}
+        ${p => !p.open && drawerClose}
     }
 `;
 
@@ -161,7 +168,8 @@ const MainContent = styled.div<{ open: boolean }>`
         & {
             width: 100%;
             margin-left: 0;
-            padding: 0;
+            margin-bottom: ${p => p.theme.spacing(7)}px;
+            padding: ${p => p.theme.spacing(1)}px;
         }
     }
 `;
@@ -172,7 +180,7 @@ const ProfileAvatar = styled.div`
 
 const App: React.FC = () => {
     const history = useHistory();
-    const isSmall = useMediaQuery(MainTheme.breakpoints.down("sm"));
+    const isMobile = useMediaQuery(MainTheme.breakpoints.down("xs"));
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
     const [profile, setProfile] = React.useState<GoogleProfile>();
@@ -186,7 +194,8 @@ const App: React.FC = () => {
     const [[open], setOpen] = React.useState<[boolean, boolean]>([false, false]);
 
     const handleDrawerToggle = () => setOpen(p => [!p[0], true]);
-    const handleDrawerClose = () => setOpen(p => [p[1] ? p[0] : false, false]);
+    const handleDrawerClickaway = () => setOpen(p => [p[1] ? p[0] : false, false]);
+    const handleDrawerClose = () => setOpen([false, false]);
 
     React.useEffect(() => {
         GoogleApi.initClient(async (isSignedIn: boolean) => {
@@ -248,9 +257,11 @@ const App: React.FC = () => {
         <State.Provider value={[state, dispatch]}>
             <CustomAppBar position="sticky" open={open}>
                 <Toolbar>
-                    <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" open={open}>
-                        <MenuIcon />
-                    </MenuButton>
+                    {!isMobile && (
+                        <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" open={open}>
+                            <MenuIcon />
+                        </MenuButton>
+                    )}
                     <Typography variant="h6" style={{ overflow: "hidden" }}>
                         <MUILink variant="inherit" color="inherit" underline="none" component={Link} to="/">
                             MTGCollection
@@ -275,13 +286,13 @@ const App: React.FC = () => {
                     )}
                 </Toolbar>
             </CustomAppBar>
-            <ClickAwayListener onClickAway={() => isSmall && handleDrawerClose()}>
-                <CustomDrawer open={open}>
+            <ClickAwayListener onClickAway={() => isMobile && handleDrawerClickaway()}>
+                <CustomDrawer open={open} anchor={isMobile ? "bottom" : "left"} variant="permanent">
                     <DrawerToolbar>
-                        <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+                        <IconButton onClick={handleDrawerClose}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
                     </DrawerToolbar>
                     <Divider />
-                    {isSignedIn && <DrawerDeckList open={open} />}
+                    {isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && open && handleDrawerToggle()} />}
                 </CustomDrawer>
             </ClickAwayListener>
             <NoGutterContainer maxWidth="xl">
@@ -296,8 +307,8 @@ const App: React.FC = () => {
                     </Switch>
                 </MainContent>
             </NoGutterContainer>
+            {isMobile && <MobileNavigation open={open} toggleOpen={handleDrawerToggle} />}
         </State.Provider>
     );
 };
-
 export default App;

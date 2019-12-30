@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { AppState, CardList, Decks, EmptyCards, FileIds, SetList, SymbolList } from ".";
+import { AppState, CardList, DeckName, Decks, EmptyCards, FileIds, SetList, SymbolList } from ".";
 import { Action } from "./Actions";
 
 const filesReducer = (state: FileIds, action: Action): FileIds => {
@@ -98,12 +98,12 @@ const decksReducer = (state: Decks, action: Action): Decks => {
     return state;
 };
 
-const selectedDeckReducer = (state: string | null, action: Action): string | null => {
+const selectedDeckReducer = (state: string, action: Action): string => {
     switch (action.type) {
         case "SelectDeck":
             return action.name;
         case "DeleteDeck":
-            return action.name === state ? null : state;
+            return action.name === state ? DeckName.Collection : state;
     }
     return state;
 };

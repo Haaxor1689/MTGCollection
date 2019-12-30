@@ -47,7 +47,7 @@ type DeleteDeck = {
 
 type SelectDeck = {
     type: "SelectDeck";
-    name: string | null;
+    name: string;
 };
 
 export type Action = AddCard | AddSymbols | AddSets | CreateDeck | UpdateDeck | UpdateDeckCard | DeleteDeck | SelectDeck;

@@ -77,7 +77,7 @@ export type AppState = DeepReadonly<{
     cardList: CardList;
     symbolList: SymbolList;
     setList: SetList;
-    selectedDeck: string | null;
+    selectedDeck: string;
 }>;
 
 export const initialState: AppState = {
