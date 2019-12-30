@@ -119,9 +119,17 @@ const DrawerToolbar = styled(Toolbar)`
     padding: ${p => p.theme.spacing(0, 1)}px;
 `;
 
+const NoGutterContainer = styled(Container)`
+    ${p => p.theme.breakpoints.down("xs")} {
+        & {
+            padding: 0;
+        }
+    }
+`;
+
 const MainContent = styled.div<{ open: boolean }>`
     flex-grow: 1;
-    padding: ${p => p.theme.spacing(3)}px;
+    padding: ${p => p.theme.spacing(2)}px;
     margin-left: ${p => p.theme.constants.drawerWidthClosed};
     ${bodyClose}
     ${p => p.open && bodyOpen}
@@ -140,6 +148,7 @@ const MainContent = styled.div<{ open: boolean }>`
         & {
             width: 100%;
             margin-left: 0;
+            padding: 0;
         }
     }
 `;
@@ -260,7 +269,7 @@ const App: React.FC = () => {
                     {isSignedIn && <DrawerDeckList open={open} />}
                 </CustomDrawer>
             </ClickAwayListener>
-            <Container maxWidth="xl">
+            <NoGutterContainer maxWidth="xl">
                 <MainContent open={open}>
                     <Switch>
                         <Route exact path="/" component={Home} />
@@ -271,7 +280,7 @@ const App: React.FC = () => {
                         <Route component={NotFound} />
                     </Switch>
                 </MainContent>
-            </Container>
+            </NoGutterContainer>
         </State.Provider>
     );
 };

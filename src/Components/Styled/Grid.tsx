@@ -11,8 +11,13 @@ export const AppletContent = styled(Paper)`
     flex-direction: column;
     align-items: stretch;
     min-height: ${p => p.theme.constants.appletHeight};
-    padding: ${p => p.theme.spacing(2)}px;
     overflow: hidden;
+    padding: ${p => p.theme.spacing(4)}px;
+    ${p => p.theme.breakpoints.down("xs")} {
+        & {
+            padding: ${p => p.theme.spacing(2)}px;
+        }
+    }
 `;
 
 export const AppletActions = styled.div`
@@ -21,7 +26,7 @@ export const AppletActions = styled.div`
 
 export const Title = styled(Typography).attrs(p => ({
     component: "h2",
-    variant: "h6",
+    variant: "h4",
     color: "primary",
     gutterBottom: true,
 }))``;
