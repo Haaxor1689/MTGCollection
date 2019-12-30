@@ -1,4 +1,17 @@
-import { AppBar, Avatar, ClickAwayListener, Container, Divider, Drawer, IconButton, Link as MUILink, Toolbar, Tooltip, Typography } from "@material-ui/core";
+import {
+    AppBar,
+    Avatar,
+    ClickAwayListener,
+    Container,
+    Divider,
+    Drawer,
+    IconButton,
+    Link as MUILink,
+    Toolbar,
+    Tooltip,
+    Typography,
+    useMediaQuery,
+} from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -159,6 +172,7 @@ const ProfileAvatar = styled.div`
 
 const App: React.FC = () => {
     const history = useHistory();
+    const isSmall = useMediaQuery(MainTheme.breakpoints.down("sm"));
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
     const [profile, setProfile] = React.useState<GoogleProfile>();
@@ -227,6 +241,7 @@ const App: React.FC = () => {
                     sets: responses.map(r => r.data),
                 });
             });
+        // eslint-disable-next-line
     }, []);
 
     return (
@@ -260,7 +275,7 @@ const App: React.FC = () => {
                     )}
                 </Toolbar>
             </CustomAppBar>
-            <ClickAwayListener onClickAway={handleDrawerClose}>
+            <ClickAwayListener onClickAway={() => isSmall && handleDrawerClose()}>
                 <CustomDrawer open={open}>
                     <DrawerToolbar>
                         <IconButton onClick={handleDrawerClose}>{MainTheme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>

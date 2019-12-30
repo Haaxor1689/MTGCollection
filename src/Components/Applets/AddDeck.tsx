@@ -66,6 +66,7 @@ const AddDeck: React.FC = () => {
         });
     };
 
+    // eslint-disable-next-line
     React.useEffect(() => validateName(""), []);
 
     return (

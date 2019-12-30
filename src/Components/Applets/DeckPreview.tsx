@@ -102,6 +102,7 @@ const DeckPreview: React.FC = () => {
         Scry.Cards.collection(...missingCards.map(card => Scry.CardIdentifier.byName(card.name))).on("data", (card: any) =>
             dispatch({ type: "AddCard", card })
         );
+        // eslint-disable-next-line
     }, [deckName, deck]);
 
     const closePreview = () => dispatch({ type: "SelectDeck", name: null });
@@ -124,7 +125,7 @@ const DeckPreview: React.FC = () => {
     return (
         <AppletContent>
             <AppletBackground>
-                <img src={deck.previewUrl} />
+                <img src={deck.previewUrl} alt="" />
             </AppletBackground>
             <Body>
                 <Grid container direction="row" justify="space-between">

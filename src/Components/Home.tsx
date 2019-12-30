@@ -2,7 +2,6 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import CardSearch from "./Applets/CardSearch";
 import DeckList from "./Applets/DeckList";
-import SymbolTypography from "./Styled/SymbolTypography";
 
 const Home: React.FC = () => {
     return (
