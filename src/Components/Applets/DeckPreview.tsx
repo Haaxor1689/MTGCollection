@@ -17,14 +17,18 @@ import ShowGroupsToggle from "../Previews/Common/ShowGroupsToggle";
 import SortToggle from "../Previews/Common/SortToggle";
 import { AppletActions, AppletContent, FlexCol, Title } from "../Styled/Grid";
 import { ClipboardIcon, CompressIcon, ExpandIcon } from "../Styled/Icons";
-import styled from "../Styled/Theme";
+import styled, { css } from "../Styled/Theme";
 import TooltipButton from "../Styled/TooltipButton";
 
-const SectionRow = styled.div`
+const SectionRow = styled.div<{ scrollable: boolean }>`
     margin-bottom: ${p => p.theme.spacing(2)}px;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
+    ${p =>
+        p.scrollable &&
+        css`
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        `}
 `;
 
 const ExportRow = styled(FlexCol)`
@@ -144,7 +148,7 @@ const DeckPreview: React.FC = () => {
                 </Grid>
                 <FlexCol>
                     {Object.entries(deck.cards).map(([sectionName, cards]) => (
-                        <SectionRow key={sectionName}>
+                        <SectionRow key={sectionName} scrollable={expanded && style === "List"}>
                             <CollectionPreview
                                 cards={Object.values(cards).map(c => ({ ...c, ...(state.cardList[c.name] ?? {}) })) as any}
                                 style={expanded ? style : "Compressed"}
