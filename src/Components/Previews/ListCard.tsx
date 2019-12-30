@@ -14,6 +14,18 @@ import WishlistButton from "./ActionButtons/WishlistButton";
 import { CollectionCardProps } from "./CollectionPreview";
 import { NameCell, SetWidthCell } from "./ListCollection";
 
+const StyledRow = styled(TableRow)`
+    &:hover {
+        background-image: linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0),
+            ${p => p.theme.palette.background.default} 10%,
+            ${p => p.theme.palette.background.default} 90%,
+            rgba(0, 0, 0, 0)
+        );
+    }
+`;
+
 const Actions = styled.div<{ open: boolean }>`
     white-space: nowrap;
     & > *:not(:last-child) {
@@ -77,7 +89,7 @@ const ListCard: React.FC<CollectionCardProps> = props => {
     const toggleActionsOpen = () => setActionsOpen(prev => !prev);
 
     return (
-        <TableRow>
+        <StyledRow>
             <SetWidthCell width="40px" component="th" scope="row" align="center">
                 {!isNullOrUndefined(card.amount) ? <IncrementNumber size="inline" val={card.amount} onChange={actions.updateCardQuantity} /> : "-"}
             </SetWidthCell>
@@ -104,7 +116,7 @@ const ListCard: React.FC<CollectionCardProps> = props => {
                     </TooltipButton>
                 </ActionsMenu>
             </TableCell>
-        </TableRow>
+        </StyledRow>
     );
 };
 export default ListCard;
