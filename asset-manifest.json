@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.js": "/MTGCollection/static/js/main.8d6a5b12.chunk.js",
-    "main.js.map": "/MTGCollection/static/js/main.8d6a5b12.chunk.js.map",
+    "main.js": "/MTGCollection/static/js/main.6193f773.chunk.js",
+    "main.js.map": "/MTGCollection/static/js/main.6193f773.chunk.js.map",
     "runtime-main.js": "/MTGCollection/static/js/runtime-main.802e3f51.js",
     "runtime-main.js.map": "/MTGCollection/static/js/runtime-main.802e3f51.js.map",
-    "static/js/2.91af5c18.chunk.js": "/MTGCollection/static/js/2.91af5c18.chunk.js",
-    "static/js/2.91af5c18.chunk.js.map": "/MTGCollection/static/js/2.91af5c18.chunk.js.map",
+    "static/js/2.efbb4814.chunk.js": "/MTGCollection/static/js/2.efbb4814.chunk.js",
+    "static/js/2.efbb4814.chunk.js.map": "/MTGCollection/static/js/2.efbb4814.chunk.js.map",
     "index.html": "/MTGCollection/index.html",
-    "precache-manifest.a5e9a46ebcf8804adcc62a5daff6da16.js": "/MTGCollection/precache-manifest.a5e9a46ebcf8804adcc62a5daff6da16.js",
+    "precache-manifest.2d19b9b7b22d541fb98d2a9c0500f671.js": "/MTGCollection/precache-manifest.2d19b9b7b22d541fb98d2a9c0500f671.js",
     "service-worker.js": "/MTGCollection/service-worker.js",
-    "static/js/2.91af5c18.chunk.js.LICENSE": "/MTGCollection/static/js/2.91af5c18.chunk.js.LICENSE",
+    "static/js/2.efbb4814.chunk.js.LICENSE": "/MTGCollection/static/js/2.efbb4814.chunk.js.LICENSE",
     "static/media/logo.png": "/MTGCollection/static/media/logo.81aa9e7e.png"
   },
   "entrypoints": [
     "static/js/runtime-main.802e3f51.js",
-    "static/js/2.91af5c18.chunk.js",
-    "static/js/main.8d6a5b12.chunk.js"
+    "static/js/2.efbb4814.chunk.js",
+    "static/js/main.6193f773.chunk.js"
   ]
 }
