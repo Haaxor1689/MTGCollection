@@ -1,8 +1,7 @@
 import Axios from "axios";
-import ScrySdk from "scryfall-sdk";
 import { Arr, ArrayChunk } from "..";
 import DeepReadonly from "../DeepReadonly";
-import { ScryCardIdentifier, ScryCardSymbol, ScryManaCost, ScrySet } from "./Types";
+import { ScryCard, ScryCardIdentifier, ScryCardImageUris, ScryCardSymbol, ScryManaCost, ScrySet } from "./Types";
 
 type List<T = any> = {
     data: T[];
@@ -33,13 +32,13 @@ const Api = (() => {
                     .then(r => r.data.data),
             Named: (fuzzy: string) =>
                 endpoint
-                    .get<ScrySdk.Card>("/cards/named", { params: { fuzzy } })
+                    .get<ScryCard>("/cards/named", { params: { fuzzy } })
                     .then(r => r.data),
             Collection: (cards: ScryCardIdentifier[]) =>
                 (cards?.length ?? 0) <= 0
                     ? Promise.resolve([])
                     : Promise.all(
-                        ArrayChunk(cards, 75).map(identifiers => endpoint.post<List<ScrySdk.Card>>("/cards/collection", { identifiers }))
+                        ArrayChunk(cards, 75).map(identifiers => endpoint.post<List<ScryCard>>("/cards/collection", { identifiers }))
                     ).then(r => r.flatMap(v => v.data.data)),
         },
         Sets: {
@@ -48,8 +47,8 @@ const Api = (() => {
     };
 })();
 
-const getImage = (card: DeepReadonly<ScrySdk.Card>, type: keyof ScrySdk.ImageUris): string | null => {
-    var images: ScrySdk.ImageUris | null | undefined;
+const getImage = (card: DeepReadonly<ScryCard>, type: keyof ScryCardImageUris): string | null => {
+    let images: ScryCardImageUris | null | undefined;
     switch (card.layout) {
         case "transform":
         case "double_faced_token":
@@ -63,7 +62,7 @@ const getImage = (card: DeepReadonly<ScrySdk.Card>, type: keyof ScrySdk.ImageUri
 
 const getPlaceholder = (cardName: string): string => `https://via.placeholder.com/146x204?text=${cardName.replace(/\s/, "+")}`;
 
-const getColorIdentity = (...cards: DeepReadonly<ScrySdk.Card>[]): string =>
+const getColorIdentity = (...cards: DeepReadonly<ScryCard>[]): string =>
     cards
         .filter(Arr.NotNull)
         .flatMap(c => c.color_identity)

@@ -1,10 +1,9 @@
-import Scry from "scryfall-sdk";
 import { DeckCard, DeckCards } from ".";
-import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
+import { ScryCard, ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 
 type AddCards = {
     type: "AddCards";
-    cards: Scry.Card[];
+    cards: ScryCard[];
 };
 
 type AddSymbols = {

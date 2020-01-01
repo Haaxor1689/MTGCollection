@@ -1,8 +1,8 @@
 import { Typography } from "@material-ui/core";
 import omit from "lodash.omit";
 import React from "react";
-import ScrySdk from "scryfall-sdk";
 import { DeckCard, SectionName } from "../../State";
+import { ScryCard } from "../../Utility/Scry/Types";
 import CompressedCollecion from "./CompressedCollection";
 import ImagesCollecion from "./ImagesCollection";
 import ListCollecion from "./ListCollection";
@@ -13,7 +13,7 @@ export type SortByOptions = "Name" | "Cmc" | "Type" | "Rarity";
 export type SortOrderOptions = "Asc" | "Desc";
 
 export type CollectionPreviewProps = {
-    cards: (DeckCard & ScrySdk.Card)[];
+    cards: (DeckCard & ScryCard)[];
     actions: PreviewActions;
     sortBy: SortByOptions;
     sortOrder: SortOrderOptions;
@@ -23,7 +23,7 @@ export type CollectionPreviewProps = {
 };
 
 export type CollectionCardProps = {
-    card: DeckCard & ScrySdk.Card;
+    card: DeckCard & ScryCard;
     actions: PreviewActions;
     deckName?: string;
     sectionName?: string;
@@ -39,10 +39,13 @@ const desc = <T extends object>(a: T, b: T, orderBy: keyof T, func: <U extends a
     return 0;
 };
 
-const getSorting = <T extends object>(order: SortOrderOptions, orderBy: keyof T, func: <U extends any>(v: U) => U | number = v => v): ((a: T, b: T) => number) => {
+const getSorting = <T extends object>(
+    order: SortOrderOptions,
+    orderBy: keyof T,
+    func: <U extends any>(v: U) => U | number = v => v
+): ((a: T, b: T) => number) => {
     return order === "Desc" ? (a, b) => desc(a, b, orderBy, func) : (a, b) => -desc(a, b, orderBy, func);
 };
-
 
 const StableSort = <T extends object>(array: T[], cmp: (a: T, b: T) => number) => {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
@@ -58,13 +61,13 @@ const rarityOrder = ["common", "uncommon", "rare", "mythic"] as const;
 const GetSortFunction = (sortBy: SortByOptions, sortOrder: SortOrderOptions) => {
     switch (sortBy) {
         case "Name":
-            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "name");
+            return getSorting<DeckCard & ScryCard>(sortOrder, "name");
         case "Cmc":
-            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "mana_cost");
+            return getSorting<DeckCard & ScryCard>(sortOrder, "mana_cost");
         case "Type":
-            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "type_line");
+            return getSorting<DeckCard & ScryCard>(sortOrder, "type_line");
         case "Rarity":
-            return getSorting<DeckCard & ScrySdk.Card>(sortOrder, "rarity", v => rarityOrder.indexOf(v));
+            return getSorting<DeckCard & ScryCard>(sortOrder, "rarity", v => rarityOrder.indexOf(v));
     }
 };
 

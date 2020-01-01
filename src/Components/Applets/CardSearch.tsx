@@ -1,9 +1,22 @@
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, FormGroup, TextField, Tooltip, Typography } from "@material-ui/core";
+import {
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    FormGroup,
+    TextField,
+    Tooltip,
+    Typography,
+} from "@material-ui/core";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import SearchIcon from "@material-ui/icons/Search";
 import { Autocomplete } from "@material-ui/lab";
 import React from "react";
 import Scry from "../../Utility/Scry";
+import { ScryCardColor } from "../../Utility/Scry/Types";
 import { AppletActions, AppletContent, FlexCol, Title } from "../Styled/Grid";
 import SymbolTypography from "../Styled/SymbolTypography";
 import styled from "../Styled/Theme";
@@ -23,13 +36,7 @@ const PreviewRow = styled.div`
 // Reusable?
 interface CardSearchFilter {
     /** Array of selected colors inside advanced search */
-    colors: {
-        r: boolean; // Red
-        g: boolean; // Green
-        u: boolean; // Blue
-        b: boolean; // Black
-        w: boolean; // White
-    };
+    colors: Record<ScryCardColor, boolean>;
     /** Checkbox whether the search should match exact colors */
     colorExactMatch: boolean;
 
@@ -46,7 +53,7 @@ interface CardSearchFilter {
 
 const initCardSearchFilter = (): CardSearchFilter => {
     return {
-        colors: { r: false, g: false, u: false, b: false, w: false },
+        colors: { R: false, G: false, U: false, B: false, W: false },
         colorExactMatch: false,
         cmc: 0,
         cmcType: "=",
@@ -76,7 +83,7 @@ const CardSearch: React.FC = () => {
     const [filter, setFilter] = React.useState<CardSearchFilter>(initCardSearchFilter());
 
     const resetFilter = () => setFilter(initCardSearchFilter());
-    const handleColors = (color: "r" | "g" | "u" | "b" | "w") => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleColors = (color: ScryCardColor) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const newFilter = { ...filter };
         newFilter.colors[color] = event.target.checked;
         setFilter(newFilter);
@@ -107,23 +114,23 @@ const CardSearch: React.FC = () => {
                     <FormGroup row>
                         <FormControlLabel
                             label={<SymbolTypography text="{R} Red" />}
-                            control={<Checkbox checked={filter.colors.r} onChange={handleColors("r")} />}
+                            control={<Checkbox checked={filter.colors.R} onChange={handleColors("R")} />}
                         />
                         <FormControlLabel
                             label={<SymbolTypography text="{G} Green" />}
-                            control={<Checkbox checked={filter.colors.g} onChange={handleColors("g")} />}
+                            control={<Checkbox checked={filter.colors.G} onChange={handleColors("G")} />}
                         />
                         <FormControlLabel
                             label={<SymbolTypography text="{U} Blue" />}
-                            control={<Checkbox checked={filter.colors.u} onChange={handleColors("u")} />}
+                            control={<Checkbox checked={filter.colors.U} onChange={handleColors("U")} />}
                         />
                         <FormControlLabel
                             label={<SymbolTypography text="{B} Black" />}
-                            control={<Checkbox checked={filter.colors.b} onChange={handleColors("b")} />}
+                            control={<Checkbox checked={filter.colors.B} onChange={handleColors("B")} />}
                         />
                         <FormControlLabel
                             label={<SymbolTypography text="{W} White" />}
-                            control={<Checkbox checked={filter.colors.w} onChange={handleColors("w")} />}
+                            control={<Checkbox checked={filter.colors.W} onChange={handleColors("W")} />}
                         />
                     </FormGroup>
 
