@@ -1,4 +1,4 @@
-import { Avatar, IconButton, Popper } from "@material-ui/core";
+import { Avatar, ClickAwayListener, IconButton, Popper } from "@material-ui/core";
 import { AvatarProps } from "@material-ui/core/Avatar";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
@@ -82,6 +82,8 @@ const IncrementNumber: React.FC<Props> = ({ val, onChange, size }) => {
         e.stopPropagation();
     };
 
+    const handleClose = () => setAnchorEl(null);
+
     const onIncrement = (incr: number) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation();
         onChange(val + incr);
@@ -93,14 +95,16 @@ const IncrementNumber: React.FC<Props> = ({ val, onChange, size }) => {
                 {val}
             </StyledAvatar>
             <Popper open={open} anchorEl={anchorEl}>
-                <Body size={size}>
-                    <Arrows s={size} onClick={onIncrement(1)}>
-                        <ArrowDropUpIcon />
-                    </Arrows>
-                    <Arrows s={size} onClick={onIncrement(-1)}>
-                        <ArrowDropDownIcon />
-                    </Arrows>
-                </Body>
+                <ClickAwayListener onClickAway={handleClose}>
+                    <Body size={size}>
+                        <Arrows s={size} onClick={onIncrement(1)}>
+                            <ArrowDropUpIcon />
+                        </Arrows>
+                        <Arrows s={size} onClick={onIncrement(-1)}>
+                            <ArrowDropDownIcon />
+                        </Arrows>
+                    </Body>
+                </ClickAwayListener>
             </Popper>
         </>
     );
