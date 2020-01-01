@@ -1,17 +1,22 @@
-import { Avatar, IconButton } from "@material-ui/core";
+import { Avatar, IconButton, Popper } from "@material-ui/core";
 import { AvatarProps } from "@material-ui/core/Avatar";
-import React from "react";
-import styled, { ComponentProps, css } from "./Theme";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import React from "react";
+import styled, { css } from "./Theme";
 
-type StyledAvatarProps = { size: Props["size"] } & AvatarProps;
+type StyledAvatarProps = { size: Props["size"]; open: boolean } & AvatarProps;
 
-const StyledAvatar = styled(Avatar).attrs((p: ComponentProps<StyledAvatarProps>) => ({
+const StyledAvatar = styled(Avatar).attrs<StyledAvatarProps>(p => ({
     className: p.size === "chip" ? p.className + " MuiChip-avatar MuiChip-avatarSmall" : p.className,
 }))<StyledAvatarProps>`
     cursor: pointer;
     color: ${p => p.theme.palette.text.primary};
+    ${p =>
+        p.open &&
+        css`
+            background-color: ${p.theme.palette.grey[500]};
+        `}
 
     ${p =>
         p.size === "inline" &&
@@ -22,8 +27,23 @@ const StyledAvatar = styled(Avatar).attrs((p: ComponentProps<StyledAvatarProps>)
         `}
 `;
 
-const Body = styled.div`
+const pxFromSize = (size: Props["size"]) => {
+    switch (size) {
+        case "chip":
+            return 9;
+        case "inline":
+            return 12;
+        case undefined:
+            return 20;
+    }
+};
+
+const Body = styled.div<{ size: Props["size"] }>`
     display: flex;
+    flex-direction: column;
+    transform: translate(calc(50% + ${p => pxFromSize(p.size)}px), calc(-100% + ${p => pxFromSize(p.size)}px));
+    background-color: ${p => p.theme.palette.grey[600]};
+    border-radius: ${p => pxFromSize(p.size)}px;
 `;
 
 const Arrows = styled(IconButton)<{ s: Props["size"] }>`
@@ -36,15 +56,14 @@ const Arrows = styled(IconButton)<{ s: Props["size"] }>`
             & .MuiIconButton-label {
                 margin-top: -3px;
             }
-
-            &:first-of-type {
-                margin-left: 5px;
-            }
         `}
-
-    display: none;
-    ${Body}:hover & {
-        display: block;
+    &:first-of-type {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    &:last-of-type {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
     }
 `;
 
@@ -55,22 +74,35 @@ type Props = {
 };
 
 const IncrementNumber: React.FC<Props> = ({ val, onChange, size }) => {
-    const onClick = (incr: number) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
+    const open = !!anchorEl;
+
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        setAnchorEl(!anchorEl ? e.currentTarget : null);
+        e.stopPropagation();
+    };
+
+    const onIncrement = (incr: number) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation();
         onChange(val + incr);
     };
+
     return (
-        <Body>
-            <StyledAvatar title="" size={size} onClick={e => e.stopPropagation()}>
+        <>
+            <StyledAvatar title="" size={size} onClick={handleClick} open={open}>
                 {val}
             </StyledAvatar>
-            <Arrows s={size} onClick={onClick(1)}>
-                <ArrowDropUpIcon />
-            </Arrows>
-            <Arrows s={size} onClick={onClick(-1)}>
-                <ArrowDropDownIcon />
-            </Arrows>
-        </Body>
+            <Popper open={open} anchorEl={anchorEl}>
+                <Body size={size}>
+                    <Arrows s={size} onClick={onIncrement(1)}>
+                        <ArrowDropUpIcon />
+                    </Arrows>
+                    <Arrows s={size} onClick={onIncrement(-1)}>
+                        <ArrowDropDownIcon />
+                    </Arrows>
+                </Body>
+            </Popper>
+        </>
     );
 };
 export default IncrementNumber;
