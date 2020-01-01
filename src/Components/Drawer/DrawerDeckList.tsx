@@ -4,7 +4,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Deck, DeckName, getDeckName, State } from "../../State";
 import { DrawerAvatar } from "../Styled/Grid";
-import styled, { MainTheme } from "../Styled/Theme";
+import styled from "../Styled/Theme";
 import DeckAvatar from "./DeckAvatar";
 
 const StyledItemText = styled(ListItemText)`

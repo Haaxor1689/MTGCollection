@@ -2,9 +2,9 @@ import Scry from "scryfall-sdk";
 import { DeckCard, DeckCards } from ".";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 
-type AddCard = {
-    type: "AddCard";
-    card: Scry.Card;
+type AddCards = {
+    type: "AddCards";
+    cards: Scry.Card[];
 };
 
 type AddSymbols = {
@@ -50,4 +50,4 @@ type SelectDeck = {
     name: string;
 };
 
-export type Action = AddCard | AddSymbols | AddSets | CreateDeck | UpdateDeck | UpdateDeckCard | DeleteDeck | SelectDeck;
+export type Action = AddCards | AddSymbols | AddSets | CreateDeck | UpdateDeck | UpdateDeckCard | DeleteDeck | SelectDeck;

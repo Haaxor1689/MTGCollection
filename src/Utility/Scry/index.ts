@@ -1,7 +1,8 @@
-import ScrySdk from "scryfall-sdk";
-import DeepReadonly from "../DeepReadonly";
 import Axios from "axios";
-import { ScryCardSymbol, ScryManaCost, ScrySet } from "./Types";
+import ScrySdk from "scryfall-sdk";
+import { Arr, ArrayChunk } from "..";
+import DeepReadonly from "../DeepReadonly";
+import { ScryCardIdentifier, ScryCardSymbol, ScryManaCost, ScrySet } from "./Types";
 
 type List<T = any> = {
     data: T[];
@@ -34,6 +35,12 @@ const Api = (() => {
                 endpoint
                     .get<ScrySdk.Card>("/cards/named", { params: { fuzzy } })
                     .then(r => r.data),
+            Collection: (cards: ScryCardIdentifier[]) =>
+                (cards?.length ?? 0) <= 0
+                    ? Promise.resolve([])
+                    : Promise.all(
+                        ArrayChunk(cards, 75).map(identifiers => endpoint.post<List<ScrySdk.Card>>("/cards/collection", { identifiers }))
+                    ).then(r => r.flatMap(v => v.data.data)),
         },
         Sets: {
             All: () => endpoint.get<List<ScrySet>>("/sets").then(r => r.data.data),
@@ -58,9 +65,9 @@ const getPlaceholder = (cardName: string): string => `https://via.placeholder.co
 
 const getColorIdentity = (...cards: DeepReadonly<ScrySdk.Card>[]): string =>
     cards
-        .filter(c => !!c)
+        .filter(Arr.NotNull)
         .flatMap(c => c.color_identity)
-        .filter((v, i, self) => self.indexOf(v) === i)
+        .filter(Arr.Unique)
         .map(c => `{${c}}`)
         .join("");
 

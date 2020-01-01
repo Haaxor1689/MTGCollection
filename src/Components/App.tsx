@@ -1,18 +1,6 @@
-import {
-    AppBar,
-    Avatar,
-    ClickAwayListener,
-    Container,
-    Divider,
-    Drawer,
-    IconButton,
-    Link as MUILink,
-    Toolbar,
-    Tooltip,
-    Typography,
-    useMediaQuery,
-} from "@material-ui/core";
+import { AppBar, Avatar, ClickAwayListener, Container, Divider, Drawer, IconButton, Link as MUILink, Toolbar, Tooltip, Typography, useMediaQuery } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import CloseIcon from "@material-ui/icons/Close";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import Axios, { AxiosResponse } from "axios";
@@ -27,7 +15,6 @@ import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import AddDeck from "./Applets/AddDeck";
 import DeckPreview from "./Applets/DeckPreview";
 import UserInfo from "./Applets/UserInfo";
-import CloseIcon from "@material-ui/icons/Close";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
 import MobileNavigation from "./Drawer/MobileNavigation";
 import Home from "./Home";
@@ -208,7 +195,7 @@ const App: React.FC = () => {
             if (redirect.match("/signin")) redirect = "/";
             history.push(redirect);
             setProfile(GoogleApi.getProfile());
-            GoogleApi.prepareAppData()(dispatch);
+            GoogleApi.prepareAppData(dispatch, state)();
         });
         Scry.Symbology.All()
             .then(symbols => {

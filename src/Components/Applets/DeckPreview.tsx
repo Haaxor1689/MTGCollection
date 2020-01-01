@@ -7,10 +7,10 @@ import SaveIcon from "@material-ui/icons/Save";
 import copy from "clipboard-copy";
 import React from "react";
 import { useHistory, useParams } from "react-router";
-import * as Scry from "scryfall-sdk";
-import { DeckCard, DeckName, getDeckName, State } from "../../State";
+import { DeckName, getDeckName, State } from "../../State";
 import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
+import useThunk from "../../Utility/useThunk";
 import CollectionPreview, { PreviewStyle, SortByOptions, SortOrderOptions } from "../Previews/CollectionPreview";
 import PreviewStyleToggle from "../Previews/Common/PreviewStyleToggle";
 import ShowGroupsToggle from "../Previews/Common/ShowGroupsToggle";
@@ -85,6 +85,7 @@ const DeckPreview: React.FC = () => {
 
     const history = useHistory();
     const [state, dispatch] = React.useContext(State);
+    const deleteDeck = useThunk(State, GoogleApi.deleteDeck);
     const deck = state.decks[deckName];
 
     const [expanded, setExpanded] = React.useState(true);
@@ -96,12 +97,6 @@ const DeckPreview: React.FC = () => {
 
     React.useEffect(() => {
         dispatch({ type: "SelectDeck", name: deckName });
-        const missingCards = Object.values(deck?.cards ?? {})
-            .reduce((prev, val) => [...prev, ...Object.values(val)], [] as DeckCard[])
-            .filter(card => !state.cardList[card.name]);
-        Scry.Cards.collection(...missingCards.map(card => Scry.CardIdentifier.byName(card.name))).on("data", (card: any) =>
-            dispatch({ type: "AddCard", card })
-        );
         // eslint-disable-next-line
     }, [deckName, deck]);
 
@@ -109,7 +104,7 @@ const DeckPreview: React.FC = () => {
     const toggleExpanded = () => setExpanded(e => !e);
     const onDeleteDeck = () => {
         history.push("/");
-        GoogleApi.deleteDeck(dispatch, { name: deckName, id: state.files[deckName] });
+        deleteDeck({ name: deckName, id: state.files[deckName] });
     };
     const onSaveChanges = () =>
         GoogleApi.updateFile({ id: state.files[deckName], fileContent: CollectionParser.deserialize(deck.cards) }).then(() =>

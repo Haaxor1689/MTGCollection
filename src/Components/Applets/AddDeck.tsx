@@ -1,13 +1,14 @@
 import { Avatar, Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@material-ui/core";
 import CollectionsIcon from "@material-ui/icons/Collections";
 import React from "react";
+import { useHistory } from "react-router";
 import { State } from "../../State";
 import GoogleApi from "../../Utility/GoogleApi";
 import Scry from "../../Utility/Scry";
+import useThunk from "../../Utility/useThunk";
 import CardNameAutocomplete from "../Styled/CardNameAutocomplete";
 import { AppletActions, AppletContent, FlexCol, Title } from "../Styled/Grid";
 import styled from "../Styled/Theme";
-import { useHistory } from "react-router";
 
 const PreviewRow = styled.div`
     display: flex;
@@ -22,7 +23,8 @@ const PreviewRow = styled.div`
 
 const AddDeck: React.FC = () => {
     const history = useHistory();
-    const [state, dispatch] = React.useContext(State);
+    const [state] = React.useContext(State);
+    const createNewDeck = useThunk(State, GoogleApi.createNewDeck);
 
     const [importText, setImportText] = React.useState<string>("");
     const [deckName, setDeckName] = React.useState<string>("");
@@ -35,7 +37,7 @@ const AddDeck: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     const handleImport = () => {
-        GoogleApi.createNewDeck(dispatch, { name: deckName, fileContent: importText, previewUrl });
+        createNewDeck({ name: deckName, fileContent: importText, previewUrl });
         history.push(`/decks/${encodeURIComponent(deckName)}`);
     };
 

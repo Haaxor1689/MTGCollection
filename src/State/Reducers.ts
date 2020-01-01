@@ -1,4 +1,4 @@
-import { omit } from "lodash";
+import { keyBy, omit } from "lodash";
 import { AppState, CardList, DeckName, Decks, EmptyCards, FileIds, SetList, SymbolList } from ".";
 import { Action } from "./Actions";
 
@@ -17,10 +17,10 @@ const filesReducer = (state: FileIds, action: Action): FileIds => {
 
 const cardListReducer = (state: CardList, action: Action): CardList => {
     switch (action.type) {
-        case "AddCard":
+        case "AddCards":
             return {
                 ...state,
-                [action.card.name]: action.card,
+                ...keyBy(action.cards, "name"),
             };
     }
     return state;

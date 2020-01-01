@@ -1,7 +1,8 @@
 /* global gapi */
 import React from "react";
-import { DeckName, DeckProps, SectionName } from "../State";
+import { AppState, Deck, DeckName, DeckProps, SectionName } from "../State";
 import { Action } from "../State/Actions";
+import { downloadCards } from "../State/Thunks";
 import CollectionParser from "./CollectionParser";
 
 const GoogleApiInit = {
@@ -20,7 +21,7 @@ const initClient = (onUpdateStatus: (isSignedIn: boolean) => void) => {
     });
 };
 
-const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
+const prepareAppData = (dispatch: React.Dispatch<Action>, state: AppState) => async () => {
     var response = await gapi.client.drive.files.list({
         spaces: "appDataFolder",
         fields: "nextPageToken, files(id, name, appProperties)",
@@ -29,46 +30,42 @@ const prepareAppData = () => async (dispatch: React.Dispatch<Action>) => {
     const collectionFile = response.result?.files?.find(f => f.appProperties?.name === DeckName.Collection);
     if (!collectionFile) {
         console.info("Creating collection...");
-        createNewDeck(dispatch, { name: DeckName.Collection });
+        createNewDeck(dispatch)({ name: DeckName.Collection });
     } else {
         console.info("Loading collection...");
-        dispatch({ type: "CreateDeck", name: DeckName.Collection, link: collectionFile.id! });
-        dispatch({
-            type: "UpdateDeck",
-            name: DeckName.Collection,
-            cards: CollectionParser.serialize(await getFileContents({ id: collectionFile.id! })),
-            isDirty: false,
-        });
+        downloadDeck(dispatch, state)(DeckName.Collection, collectionFile);
     }
 
     const wishlistFile = response.result?.files?.find(f => f.appProperties?.name === DeckName.Wishlist);
     if (!wishlistFile) {
         console.info("Creating wishlist...");
-        createNewDeck(dispatch, { name: DeckName.Wishlist });
+        createNewDeck(dispatch)({ name: DeckName.Wishlist });
     } else {
         console.info("Loading wishlist...");
-        dispatch({ type: "CreateDeck", name: DeckName.Wishlist, link: wishlistFile.id! });
-        dispatch({
-            type: "UpdateDeck",
-            name: DeckName.Wishlist,
-            cards: CollectionParser.serialize(await getFileContents({ id: wishlistFile.id! })),
-            isDirty: false,
-        });
+        downloadDeck(dispatch, state)(DeckName.Wishlist, wishlistFile);
     }
 
     const otherFiles = response.result?.files?.filter(f => f.appProperties?.name !== DeckName.Collection && f.appProperties?.name !== DeckName.Wishlist)!;
     for (let i = 0; i < otherFiles.length; i++) {
         const file = otherFiles[i];
         const name = file.appProperties?.name ?? file.name?.match(/(.*?)\.txt/)?.[0] ?? "unnamed";
-        dispatch({ type: "CreateDeck", name, link: file.id! });
-        dispatch({
-            type: "UpdateDeck",
-            name,
-            previewUrl: file.appProperties?.previewUrl,
-            cards: CollectionParser.serialize(await getFileContents({ id: file.id! }), SectionName.Sideboard, SectionName.Maybeboard),
-            isDirty: false,
-        });
+        downloadDeck(dispatch, state)(name, file);
     }
+};
+
+export const downloadDeck = (dispatch: React.Dispatch<Action>, state: AppState) => async (name: string, file: gapi.client.drive.File) => {
+    const deck: Deck = {
+        name,
+        previewUrl: file.appProperties?.previewUrl,
+        cards: CollectionParser.serialize(await GoogleApi.getFileContents({ id: file.id! }), SectionName.Sideboard, SectionName.Maybeboard),
+        isDirty: false,
+    };
+    dispatch({ type: "CreateDeck", name, link: file.id! });
+    dispatch({
+        type: "UpdateDeck",
+        ...deck,
+    });
+    downloadCards(dispatch, state)(deck);
 };
 
 const createNewFile = async ({
@@ -130,7 +127,7 @@ const getFileContents = async ({ id }: { id: string }) => {
 
 const deleteFile = async ({ id }: { id: string }) => gapi.client.drive.files.delete({ fileId: id });
 
-const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileContent, ...restProps }: DeckProps & { fileContent?: string }) => {
+const createNewDeck = (dispatch: React.Dispatch<Action>) => async ({ name, fileContent, ...restProps }: DeckProps & { fileContent?: string }) => {
     dispatch({
         type: "CreateDeck",
         name,
@@ -148,7 +145,7 @@ const createNewDeck = async (dispatch: React.Dispatch<Action>, { name, fileConte
     });
 };
 
-const deleteDeck = async (dispatch: React.Dispatch<Action>, { name, id }: { name: string; id: string }) => {
+const deleteDeck = (dispatch: React.Dispatch<Action>) => async ({ name, id }: { name: string; id: string }) => {
     await deleteFile({ id });
     dispatch({ type: "DeleteDeck", name });
 };
