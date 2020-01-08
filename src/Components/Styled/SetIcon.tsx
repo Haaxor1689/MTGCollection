@@ -1,5 +1,5 @@
 import React from "react";
-import { State } from "../../State";
+import { AppState } from "../../State";
 import { ScryCardRarity, ScrySet } from "../../Utility/Scry/Types";
 import styled from "./Theme";
 
@@ -15,7 +15,7 @@ type Props = {
 };
 
 const SetIcon: React.FC<Props> = ({ set, rarity }) => {
-    const [state] = React.useContext(State);
+    const [state] = React.useContext(AppState);
     const [setObj, setSetObj] = React.useState<ScrySet>();
     React.useEffect(() => {
         setSetObj(state.setList[set]);

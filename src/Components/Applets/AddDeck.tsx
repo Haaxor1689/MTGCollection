@@ -2,7 +2,7 @@ import { Avatar, Button, ButtonGroup, Dialog, DialogActions, DialogContent, Dial
 import CollectionsIcon from "@material-ui/icons/Collections";
 import React from "react";
 import { useHistory } from "react-router";
-import { State } from "../../State";
+import { AppState } from "../../State";
 import GoogleApi from "../../Utility/GoogleApi";
 import Scry from "../../Utility/Scry";
 import useThunk from "../../Utility/useThunk";
@@ -23,8 +23,8 @@ const PreviewRow = styled.div`
 
 const AddDeck: React.FC = () => {
     const history = useHistory();
-    const [state] = React.useContext(State);
-    const createNewDeck = useThunk(State, GoogleApi.createNewDeck);
+    const [state] = React.useContext(AppState);
+    const createNewDeck = useThunk(AppState, GoogleApi.createNewDeck);
 
     const [importText, setImportText] = React.useState<string>("");
     const [deckName, setDeckName] = React.useState<string>("");

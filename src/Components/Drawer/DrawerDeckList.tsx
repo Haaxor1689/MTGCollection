@@ -2,7 +2,7 @@ import { Divider, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from "
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Deck, DeckName, getDeckName, State } from "../../State";
+import { AppState, Deck, DeckName, getDeckName } from "../../State";
 import { DrawerAvatar } from "../Styled/Grid";
 import styled from "../Styled/Theme";
 import DeckAvatar from "./DeckAvatar";
@@ -20,7 +20,7 @@ type Props = {
 
 const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
     const { pathname } = useLocation();
-    const [state] = React.useContext(State);
+    const [state] = React.useContext(AppState);
 
     const renderItem = (deck: Deck) => (
         <Tooltip key={deck.name} title={open ? "" : (state.decks[deck.name].isDirty ? "*" : "") + getDeckName(deck.name)} placement="right">

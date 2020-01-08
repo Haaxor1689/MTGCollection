@@ -2,6 +2,7 @@ import React from "react";
 import DeepReadonly from "../Utility/DeepReadonly";
 import { ScryCard, ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import { Action } from "./Actions";
+import { GoogleProfile } from "../Utility/GoogleApi";
 
 export enum DeckName {
     Collection = "_collection",
@@ -70,7 +71,7 @@ export type SetList = DeepReadonly<{
     [setName: string]: ScrySet;
 }>;
 
-export type AppState = DeepReadonly<{
+export type AppStateT = DeepReadonly<{
     files: FileIds;
     decks: Decks;
     cardList: CardList;
@@ -79,7 +80,7 @@ export type AppState = DeepReadonly<{
     selectedDeck: string;
 }>;
 
-export const initialState: AppState = {
+export const initialState: AppStateT = {
     files: {
         [DeckName.Collection]: "",
         [DeckName.Wishlist]: "",
@@ -94,4 +95,11 @@ export const initialState: AppState = {
     selectedDeck: DeckName.Collection,
 };
 
-export const State = React.createContext<[AppState, React.Dispatch<Action>]>([initialState, undefined as any]);
+export const AppState = React.createContext<[AppStateT, React.Dispatch<Action>]>([initialState, undefined as any]);
+
+export type LoginStateT = {
+    profile?: GoogleProfile;
+    signOut: () => void;
+};
+
+export const LoginState = React.createContext<LoginStateT>({ signOut: () => {} });

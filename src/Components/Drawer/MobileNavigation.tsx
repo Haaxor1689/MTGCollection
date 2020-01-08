@@ -3,7 +3,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { useHistory, useLocation } from "react-router";
-import { getDeckName, State } from "../../State";
+import { AppState, getDeckName } from "../../State";
 import DeckAvatar from "./DeckAvatar";
 import styled from "../Styled/Theme";
 
@@ -45,7 +45,7 @@ type Props = {
 const MobileNavigation: React.FC<Props> = ({ open, toggleOpen }) => {
     const { pathname } = useLocation();
     const history = useHistory();
-    const [state] = React.useContext(State);
+    const [state] = React.useContext(AppState);
     const [value, setValue] = React.useState(0);
 
     React.useEffect(() => setValue(open ? 2 : pathname.match("/addDeck") ? 0 : 1), [open, pathname]);

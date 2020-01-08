@@ -1,11 +1,11 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { DeckName, State } from "../../State";
+import { AppState, DeckName } from "../../State";
 import { AppletContent, Title } from "../Styled/Grid";
 import DeckBox from "./DeckBox";
 
 const DeckList: React.FC = () => {
-    const [state] = React.useContext(State);
+    const [state] = React.useContext(AppState);
     return (
         <AppletContent>
             <Title>Your decks</Title>

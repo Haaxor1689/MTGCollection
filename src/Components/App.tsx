@@ -1,4 +1,17 @@
-import { AppBar, Avatar, ClickAwayListener, Container, Divider, Drawer, IconButton, Link as MUILink, Toolbar, Tooltip, Typography, useMediaQuery } from "@material-ui/core";
+import {
+    AppBar,
+    Avatar,
+    ClickAwayListener,
+    Container,
+    Divider,
+    Drawer,
+    IconButton,
+    Link as MUILink,
+    Toolbar,
+    Tooltip,
+    Typography,
+    useMediaQuery,
+} from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import CloseIcon from "@material-ui/icons/Close";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -7,7 +20,7 @@ import Axios, { AxiosResponse } from "axios";
 import React from "react";
 import { Link, Route, Switch, useHistory } from "react-router-dom";
 import { isNullOrUndefined } from "util";
-import { initialState, State } from "../State";
+import { AppState, initialState, LoginState } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
@@ -18,6 +31,7 @@ import UserInfo from "./Applets/UserInfo";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
 import MobileNavigation from "./Drawer/MobileNavigation";
 import Home from "./Home";
+import Loading from "./Loading";
 import NotFound from "./NotFound";
 import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
@@ -185,17 +199,20 @@ const App: React.FC = () => {
     const handleDrawerClose = () => setOpen([false, false]);
 
     React.useEffect(() => {
-        GoogleApi.initClient(async (isSignedIn: boolean) => {
+        GoogleApi.initClient(async (signedIn: boolean) => {
             let redirect = history.location.pathname;
-            setIsSignedIn(isSignedIn);
-            if (!isSignedIn) {
+            if (!signedIn) {
+                setIsSignedIn(false);
                 history.push("/signin/");
                 return;
             }
             if (redirect.match("/signin")) redirect = "/";
             history.push(redirect);
+
+            await GoogleApi.prepareAppData(dispatch, state)();
+
             setProfile(GoogleApi.getProfile());
-            GoogleApi.prepareAppData(dispatch, state)();
+            setIsSignedIn(true);
         });
         Scry.Symbology.All()
             .then(symbols => {
@@ -241,61 +258,67 @@ const App: React.FC = () => {
     }, []);
 
     return (
-        <State.Provider value={[state, dispatch]}>
-            <CustomAppBar position="sticky" open={open}>
-                <Toolbar>
-                    {!isMobile && (
-                        <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" open={open}>
-                            <MenuIcon />
-                        </MenuButton>
-                    )}
-                    <Typography variant="h6" style={{ overflow: "hidden" }}>
-                        <MUILink variant="inherit" color="inherit" underline="none" component={Link} to="/">
-                            MTGCollection
-                        </MUILink>
-                    </Typography>
-                    <FlexCol />
-                    {isSignedIn ? (
-                        <>
-                            {!isNullOrUndefined(profile) && (
-                                <ProfileAvatar>
-                                    <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
-                                        <Avatar component={Link} to="/user/" alt={profile.getGivenName()} src={profile.getImageUrl()} />
-                                    </Tooltip>
-                                </ProfileAvatar>
-                            )}
-                            <TooltipButton title="SignOut" onClick={handleSignoutClick}>
-                                <ExitToAppIcon />
-                            </TooltipButton>
-                        </>
-                    ) : (
-                        <SignInButton onClick={GoogleApi.signIn} />
-                    )}
-                </Toolbar>
-            </CustomAppBar>
-            <ClickAwayListener onClickAway={() => isMobile && handleDrawerClickaway()}>
-                <CustomDrawer open={open} anchor={isMobile ? "bottom" : "left"} variant="permanent">
-                    <DrawerToolbar>
-                        <IconButton onClick={handleDrawerClose}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
-                    </DrawerToolbar>
-                    <Divider />
-                    {isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && open && handleDrawerToggle()} />}
-                </CustomDrawer>
-            </ClickAwayListener>
-            <NoGutterContainer maxWidth="xl">
-                <MainContent open={open}>
-                    <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route exact path="/signin/" component={SignIn} />
-                        <Route exact path="/user/" component={UserInfo} />
-                        <Route exact path="/addDeck/" component={AddDeck} />
-                        <Route path="/decks/:deckName" component={DeckPreview} />
-                        <Route component={NotFound} />
-                    </Switch>
-                </MainContent>
-            </NoGutterContainer>
-            {isMobile && <MobileNavigation open={open} toggleOpen={handleDrawerToggle} />}
-        </State.Provider>
+        <AppState.Provider value={[state, dispatch]}>
+            <LoginState.Provider value={{ profile, signOut: handleSignoutClick }}>
+                <CustomAppBar position="sticky" open={open}>
+                    <Toolbar>
+                        {!isMobile && (
+                            <MenuButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" open={open}>
+                                <MenuIcon />
+                            </MenuButton>
+                        )}
+                        <Typography variant="h6" style={{ overflow: "hidden" }}>
+                            <MUILink variant="inherit" color="inherit" underline="none" component={Link} to="/">
+                                MTGCollection
+                            </MUILink>
+                        </Typography>
+                        <FlexCol />
+                        {isSignedIn ? (
+                            <>
+                                {!isNullOrUndefined(profile) && (
+                                    <ProfileAvatar>
+                                        <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
+                                            <Avatar component={Link} to="/user/" alt={profile.getGivenName()} src={profile.getImageUrl()} />
+                                        </Tooltip>
+                                    </ProfileAvatar>
+                                )}
+                                <TooltipButton title="SignOut" onClick={handleSignoutClick}>
+                                    <ExitToAppIcon />
+                                </TooltipButton>
+                            </>
+                        ) : isSignedIn !== undefined && (
+                            <SignInButton onClick={GoogleApi.signIn} />
+                        )}
+                    </Toolbar>
+                </CustomAppBar>
+                <ClickAwayListener onClickAway={() => isMobile && handleDrawerClickaway()}>
+                    <CustomDrawer open={open} anchor={isMobile ? "bottom" : "left"} variant="permanent">
+                        <DrawerToolbar>
+                            <IconButton onClick={handleDrawerClose}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
+                        </DrawerToolbar>
+                        <Divider />
+                        {isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && open && handleDrawerToggle()} />}
+                    </CustomDrawer>
+                </ClickAwayListener>
+                <NoGutterContainer maxWidth="xl">
+                    <MainContent open={open}>
+                        {isSignedIn === undefined ? (
+                            <Loading />
+                        ) : (
+                            <Switch>
+                                <Route exact path="/" component={Home} />
+                                <Route exact path="/signin/" component={SignIn} />
+                                <Route exact path="/user/" component={UserInfo} />
+                                <Route exact path="/addDeck/" component={AddDeck} />
+                                <Route path="/decks/:deckName" component={DeckPreview} />
+                                <Route component={NotFound} />
+                            </Switch>
+                        )}
+                    </MainContent>
+                </NoGutterContainer>
+                {isMobile && <MobileNavigation open={open} toggleOpen={handleDrawerToggle} />}
+            </LoginState.Provider>
+        </AppState.Provider>
     );
 };
 export default App;

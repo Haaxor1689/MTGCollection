@@ -4,7 +4,7 @@ import CollectionsIcon from "@material-ui/icons/Collections";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Deck, DeckName, getDeckName, SectionName, State } from "../../State";
+import { AppState, Deck, DeckName, getDeckName, SectionName } from "../../State";
 import Scry from "../../Utility/Scry";
 import SymbolTypography from "../Styled/SymbolTypography";
 import styled, { css } from "../Styled/Theme";
@@ -73,7 +73,7 @@ type Props = {
 };
 
 const DeckBox: React.FC<Props> = ({ deck }) => {
-    const [state] = React.useContext(State);
+    const [state] = React.useContext(AppState);
     if (!deck) {
         return (
             <DeckBoxBody>

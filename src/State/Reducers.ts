@@ -1,5 +1,5 @@
 import { keyBy, omit } from "lodash";
-import { AppState, CardList, DeckName, Decks, EmptyCards, FileIds, SetList, SymbolList } from ".";
+import { AppStateT, CardList, DeckName, Decks, EmptyCards, FileIds, SetList, SymbolList } from ".";
 import { Action } from "./Actions";
 
 const filesReducer = (state: FileIds, action: Action): FileIds => {
@@ -118,7 +118,7 @@ const combineReducers = <State, Action>(reducers: { [P in keyof State]: (state: 
     };
 };
 
-export const reducer = combineReducers<AppState, Action>({
+export const reducer = combineReducers<AppStateT, Action>({
     files: filesReducer,
     cardList: cardListReducer,
     symbolList: symbolListReducer,

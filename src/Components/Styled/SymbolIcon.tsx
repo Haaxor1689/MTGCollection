@@ -1,5 +1,5 @@
 import React from "react";
-import { State } from "../../State";
+import { AppState } from "../../State";
 import { ScryCardSymbol } from "../../Utility/Scry/Types";
 import styled, { css } from "./Theme";
 import { TypographyProps } from "@material-ui/core/Typography";
@@ -42,7 +42,7 @@ type Props = {
 };
 
 const SymbolIcon: React.FC<Props> = ({ symbol }) => {
-    const [state] = React.useContext(State);
+    const [state] = React.useContext(AppState);
     const [symbolObj, setSymbolObj] = React.useState<ScryCardSymbol>();
     React.useEffect(() => {
         setSymbolObj(state.symbolList[symbol] ?? Object.values(state.symbolList).find(s => s.loose_variant === symbol));

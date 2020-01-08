@@ -7,10 +7,11 @@ import SaveIcon from "@material-ui/icons/Save";
 import copy from "clipboard-copy";
 import React from "react";
 import { useHistory, useParams } from "react-router";
-import { DeckName, getDeckName, State } from "../../State";
+import { AppState, DeckName, getDeckName } from "../../State";
 import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
 import useThunk from "../../Utility/useThunk";
+import Loading from "../Loading";
 import CollectionPreview, { PreviewStyle, SortByOptions, SortOrderOptions } from "../Previews/CollectionPreview";
 import PreviewStyleToggle from "../Previews/Common/PreviewStyleToggle";
 import ShowGroupsToggle from "../Previews/Common/ShowGroupsToggle";
@@ -84,8 +85,8 @@ const DeckPreview: React.FC = () => {
     deckName = decodeURIComponent(deckName);
 
     const history = useHistory();
-    const [state, dispatch] = React.useContext(State);
-    const deleteDeck = useThunk(State, GoogleApi.deleteDeck);
+    const [state, dispatch] = React.useContext(AppState);
+    const deleteDeck = useThunk(AppState, GoogleApi.deleteDeck);
     const deck = state.decks[deckName];
 
     const [expanded, setExpanded] = React.useState(true);
@@ -114,7 +115,7 @@ const DeckPreview: React.FC = () => {
     const onExportClose = () => setExportOpened(false);
 
     if (deck === undefined) {
-        return <div>Loading...</div>;
+        return <Loading />;
     }
 
     return (
