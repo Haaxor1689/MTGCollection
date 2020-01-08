@@ -4,3 +4,15 @@ export const Arr = {
     Unique: <T>(v: T, i: number, self: T[]) => self.indexOf(v) === i,
     NotNull: <T>(v: T) => v !== null && v !== undefined,
 };
+
+
+export const PxFromAvatarSize = (size?: "chip" | "inline") => {
+    switch (size) {
+        case "chip":
+            return 9;
+        case "inline":
+            return 12;
+        case undefined:
+            return 24;
+    }
+};

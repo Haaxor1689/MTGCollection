@@ -13,6 +13,7 @@ import DeleteButton from "./ActionButtons/DeleteButton";
 import WishlistButton from "./ActionButtons/WishlistButton";
 import { CollectionCardProps } from "./CollectionPreview";
 import { NameCell, SetWidthCell } from "./ListCollection";
+import { PxFromAvatarSize } from "../../Utility";
 
 const StyledRow = styled(TableRow)`
     &:hover {
@@ -28,6 +29,7 @@ const StyledRow = styled(TableRow)`
 
 const Actions = styled.div<{ open: boolean }>`
     white-space: nowrap;
+
     & > *:not(:last-child) {
         margin-right: ${p => p.theme.spacing(0.5)}px;
     }
@@ -43,23 +45,8 @@ const Actions = styled.div<{ open: boolean }>`
             ${p =>
         p.open &&
                 css`
-                    position: absolute;
-                    transform: translateX(calc(-100% - 4px));
-                `}
-        }
-    }
-
-    ${p => p.theme.breakpoints.between("md", "sm")} {
-        & {
-            ${p =>
-        !p.open &&
-                css`
-                    display: none;
-                `}
-
-            ${p =>
-        p.open &&
-                css`
+                    background-color: ${p => p.theme.palette.grey[600]};
+                    border-radius: ${p => PxFromAvatarSize("inline")}px;
                     position: absolute;
                     transform: translateX(calc(-100% - 4px));
                 `}
@@ -70,11 +57,6 @@ const Actions = styled.div<{ open: boolean }>`
 const ActionsMenu = styled.div`
     display: none;
     ${p => p.theme.breakpoints.down("xs")} {
-        & {
-            display: initial;
-        }
-    }
-    ${p => p.theme.breakpoints.between("md", "sm")} {
         & {
             display: initial;
         }
@@ -94,7 +76,7 @@ const ListCard: React.FC<CollectionCardProps> = props => {
                 {!isNullOrUndefined(card.amount) ? <IncrementNumber size="inline" val={card.amount} onChange={actions.updateCardQuantity} /> : "-"}
             </SetWidthCell>
             <NameCell>
-                <Link href="#" onClick={actions.openScryfallPage} color="inherit" title="Open on scryfall">
+                <Link href="#" onClick={actions.openScryfallPage} color="inherit" title={card.name}>
                     {card.name}
                 </Link>
             </NameCell>
@@ -108,9 +90,9 @@ const ListCard: React.FC<CollectionCardProps> = props => {
             </TableCell>
             <TableCell style={{ position: "relative" }}>
                 <Actions open={actionsOpen}>
-                    <WishlistButton actions={actions} size="small" background={actionsOpen ? "secondary" : undefined} />
-                    <ChangeSectionButton actions={actions} size="small" background={actionsOpen ? "secondary" : undefined} />
-                    <DeleteButton actions={actions} size="small" background={actionsOpen ? "secondary" : undefined} />
+                    <WishlistButton actions={actions} size="small" />
+                    <ChangeSectionButton actions={actions} size="small" />
+                    <DeleteButton actions={actions} size="small" />
                 </Actions>
                 <ActionsMenu>
                     <TooltipButton title="Actions" onClick={toggleActionsOpen} size="small">

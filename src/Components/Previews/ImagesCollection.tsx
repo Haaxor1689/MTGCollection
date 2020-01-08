@@ -9,7 +9,7 @@ const ImagesCollecion: React.FC<CollectionPreviewProps> = ({ cards, sortBy, sort
         <Grid container spacing={1} alignItems="center">
             {cards.length >= 1 ? (
                 cards.map(c => (
-                    <Grid key={c.name} item xs={6} lg={6} xl={4}>
+                    <Grid key={c.name} item xs={12} sm={6} lg={4} xl={3}>
                         <ImagesCard card={c} {...props} />
                     </Grid>
                 ))

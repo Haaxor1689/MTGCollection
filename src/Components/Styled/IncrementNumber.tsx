@@ -4,6 +4,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import React from "react";
 import styled, { css } from "./Theme";
+import { PxFromAvatarSize } from "../../Utility";
 
 type StyledAvatarProps = { size: Props["size"]; open: boolean } & AvatarProps;
 
@@ -12,6 +13,7 @@ const StyledAvatar = styled(Avatar).attrs<StyledAvatarProps>(p => ({
 }))<StyledAvatarProps>`
     cursor: pointer;
     color: ${p => p.theme.palette.text.primary};
+
     ${p =>
         p.open &&
         css`
@@ -25,30 +27,27 @@ const StyledAvatar = styled(Avatar).attrs<StyledAvatarProps>(p => ({
             height: ${p.theme.spacing(3)}px;
             font-size: 0.875rem;
         `}
-`;
 
-const pxFromSize = (size: Props["size"]) => {
-    switch (size) {
-        case "chip":
-            return 9;
-        case "inline":
-            return 12;
-        case undefined:
-            return 20;
-    }
-};
+    ${p =>
+        !p.size &&
+        css`
+            width: 48px;
+            height: 48px;
+            font-size: 2rem;
+        `}
+`;
 
 const Body = styled.div<{ size: Props["size"] }>`
     display: flex;
     flex-direction: column;
-    transform: translate(calc(50% + ${p => pxFromSize(p.size)}px), calc(-100% + ${p => pxFromSize(p.size)}px));
+    transform: translate(calc(50% + ${p => PxFromAvatarSize(p.size)}px), calc(-100% + ${p => PxFromAvatarSize(p.size)}px));
     background-color: ${p => p.theme.palette.grey[600]};
-    border-radius: ${p => pxFromSize(p.size)}px;
+    border-radius: ${p => PxFromAvatarSize(p.size)}px;
 `;
 
 const Arrows = styled(IconButton)<{ s: Props["size"] }>`
-    height: ${p => (!p.s ? 40 : p.s === "chip" ? 18 : 24)}px;
-    width: ${p => (!p.s ? 40 : p.s === "chip" ? 18 : 24)}px;
+    height: ${p => (!p.s ? 48 : p.s === "chip" ? 18 : 24)}px;
+    width: ${p => (!p.s ? 48 : p.s === "chip" ? 18 : 24)}px;
     padding: 0;
     ${p =>
         p.s === "chip" &&

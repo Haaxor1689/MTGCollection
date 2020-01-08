@@ -23,7 +23,7 @@ const StyledIconButton = styled(IconButton)<{ background?: "primary" | "secondar
 `;
 
 type Props = {
-    onClick: () => void;
+    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     title: string;
     size?: IconButtonProps["size"];
     disabled?: boolean;
