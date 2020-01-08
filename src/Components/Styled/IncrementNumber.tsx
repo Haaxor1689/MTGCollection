@@ -70,9 +70,10 @@ type Props = {
     val: number;
     onChange: (val: number) => void;
     size?: "chip" | "inline";
+    className?: string;
 };
 
-const IncrementNumber: React.FC<Props> = ({ val, onChange, size }) => {
+const IncrementNumber: React.FC<Props> = ({ val, onChange, size, className }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
     const open = !!anchorEl;
 
@@ -90,7 +91,7 @@ const IncrementNumber: React.FC<Props> = ({ val, onChange, size }) => {
 
     return (
         <>
-            <StyledAvatar title="" size={size} onClick={handleClick} open={open}>
+            <StyledAvatar className={className} title="" size={size} onClick={handleClick} open={open}>
                 {val}
             </StyledAvatar>
             <Popper open={open} anchorEl={anchorEl}>
