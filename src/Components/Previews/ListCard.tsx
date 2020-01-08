@@ -2,18 +2,16 @@ import { Link, TableCell, TableRow } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { isNullOrUndefined } from "util";
+import { PxFromAvatarSize } from "../../Utility";
 import useCardActions from "../../Utility/useCardAction";
 import IncrementNumber from "../Styled/IncrementNumber";
 import SetIcon from "../Styled/SetIcon";
 import SymbolTypography from "../Styled/SymbolTypography";
 import styled, { css } from "../Styled/Theme";
 import TooltipButton from "../Styled/TooltipButton";
-import ChangeSectionButton from "./ActionButtons/ChangeSectionButton";
-import DeleteButton from "./ActionButtons/DeleteButton";
-import WishlistButton from "./ActionButtons/WishlistButton";
+import CardActions from "./ActionButtons/CardActions";
 import { CollectionCardProps } from "./CollectionPreview";
 import { NameCell, SetWidthCell } from "./ListCollection";
-import { PxFromAvatarSize } from "../../Utility";
 
 const StyledRow = styled(TableRow)`
     &:hover {
@@ -27,7 +25,7 @@ const StyledRow = styled(TableRow)`
     }
 `;
 
-const Actions = styled.div<{ open: boolean }>`
+const Actions = styled(CardActions)<{ open: boolean }>`
     white-space: nowrap;
 
     & > *:not(:last-child) {
@@ -75,11 +73,7 @@ const ListCard: React.FC<CollectionCardProps> = props => {
             <SetWidthCell width="40px" component="th" scope="row" align="center">
                 {!isNullOrUndefined(card.amount) ? <IncrementNumber size="inline" val={card.amount} onChange={actions.updateCardQuantity} /> : "-"}
             </SetWidthCell>
-            <NameCell>
-                <Link href="#" onClick={actions.openScryfallPage} color="inherit" title={card.name}>
-                    {card.name}
-                </Link>
-            </NameCell>
+            <NameCell>{card.name}</NameCell>
             <SetWidthCell width="40px" align="center">
                 <Link href="#" onClick={actions.openScryfallSetPage} color="inherit" title="Open set on scryfall">
                     <SetIcon set={card.set} rarity={card.rarity} />
@@ -89,11 +83,7 @@ const ListCard: React.FC<CollectionCardProps> = props => {
                 <SymbolTypography text={card.mana_cost ?? ""} noWrap />
             </TableCell>
             <TableCell style={{ position: "relative" }}>
-                <Actions open={actionsOpen}>
-                    <WishlistButton actions={actions} size="small" />
-                    <ChangeSectionButton actions={actions} size="small" />
-                    <DeleteButton actions={actions} size="small" />
-                </Actions>
+                <Actions {...props} open={actionsOpen} size="small" />
                 <ActionsMenu>
                     <TooltipButton title="Actions" onClick={toggleActionsOpen} size="small">
                         <MenuIcon />
