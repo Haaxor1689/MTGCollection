@@ -145,6 +145,7 @@ const DrawerBody = styled.div<{ open?: boolean }>`
         left: 0;
         right: 0;
         content: "";
+        pointer-events: none;
         background: linear-gradient(
             0deg,
             ${p => p.theme.palette.background.paper} ${p => p.theme.spacing(1)}px,
