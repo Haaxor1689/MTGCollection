@@ -5,24 +5,19 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import Axios, { AxiosResponse } from "axios";
 import React from "react";
-import { Link, Route, Switch, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { isNullOrUndefined } from "util";
+import AppRouter from "../Routes/AppRouter";
+import Routes from "../Routes/Routes";
 import { AppState, initialState, LoginState } from "../State";
 import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import useClickaway from "../Utility/useClickaway";
-import AddDeck from "./Applets/AddDeck";
-import DeckPreview from "./Applets/DeckPreview";
-import Home from "./Applets/Home";
-import Lifecounter from "./Applets/Lifecounter";
-import UserInfo from "./Applets/UserInfo";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
 import MobileNavigation from "./Drawer/MobileNavigation";
 import Loading from "./Loading";
-import NotFound from "./NotFound";
-import SignIn from "./SignIn";
 import SignInButton from "./SignInButton";
 import { FlexCol } from "./Styled/Grid";
 import styled, { ComponentProps, css, MainTheme } from "./Styled/Theme";
@@ -218,10 +213,10 @@ const App: React.FC = () => {
             let redirect = history.location.pathname;
             if (!signedIn) {
                 setIsSignedIn(false);
-                history.push("/signin/");
+                if (!Routes.IsPublic(redirect)) history.push(Routes.SignIn.path);
                 return;
             }
-            if (redirect.match("/signin")) redirect = "/";
+            if (redirect.match(Routes.SignIn.path)) redirect = "/";
             history.push(redirect);
 
             await GoogleApi.prepareAppData(dispatch, state)();
@@ -283,7 +278,7 @@ const App: React.FC = () => {
                             </MenuButton>
                         )}
                         <Typography variant="h6" style={{ overflow: "hidden" }}>
-                            <MUILink variant="inherit" color="inherit" underline="none" component={Link} to="/">
+                            <MUILink variant="inherit" color="inherit" underline="none" component={Link} to={isSignedIn ? "/" : Routes.SignIn.path}>
                                 MTGCollection
                             </MUILink>
                         </Typography>
@@ -293,7 +288,7 @@ const App: React.FC = () => {
                                 {!isNullOrUndefined(profile) && (
                                     <ProfileAvatar>
                                         <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
-                                            <Avatar component={Link} to="/user/" alt={profile.getGivenName()} src={profile.getImageUrl()} />
+                                            <Avatar component={Link} to="/user" alt={profile.getGivenName()} src={profile.getImageUrl()} />
                                         </Tooltip>
                                     </ProfileAvatar>
                                 )}
@@ -314,21 +309,7 @@ const App: React.FC = () => {
                     <DrawerBody open={open}>{isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && setOpen(false)} />}</DrawerBody>
                 </CustomDrawer>
                 <NoGutterContainer maxWidth="xl">
-                    <MainContent open={open}>
-                        {isSignedIn === undefined ? (
-                            <Loading />
-                        ) : (
-                            <Switch>
-                                <Route exact path="/" component={Home} />
-                                <Route exact path="/lifecounter/" component={Lifecounter} />
-                                <Route exact path="/signin/" component={SignIn} />
-                                <Route exact path="/user/" component={UserInfo} />
-                                <Route exact path="/addDeck/" component={AddDeck} />
-                                <Route path="/decks/:deckName" component={DeckPreview} />
-                                <Route component={NotFound} />
-                            </Switch>
-                        )}
-                    </MainContent>
+                    <MainContent open={open}>{isSignedIn === undefined ? <Loading /> : <AppRouter />}</MainContent>
                 </NoGutterContainer>
                 {isMobile && <MobileNavigation open={open} toggleOpen={handleDrawerToggle} />}
             </LoginState.Provider>

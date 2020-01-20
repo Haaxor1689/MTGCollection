@@ -77,7 +77,7 @@ const DeckBox: React.FC<Props> = ({ deck }) => {
     if (!deck) {
         return (
             <DeckBoxBody>
-                <Link to="/addDeck/">
+                <Link to="/addDeck">
                     <DeckBoxAvatar variant="rounded" alt="Add deck">
                         <LargeAddCircleOutlineIcon />
                     </DeckBoxAvatar>

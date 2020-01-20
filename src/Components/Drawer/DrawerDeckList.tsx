@@ -48,7 +48,7 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
             <Divider />
             <List>
                 <Tooltip title="Add deck" placement="right">
-                    <ListItem component={Link} to="/addDeck/" onClick={closeDrawer} button selected={!!pathname.match("/addDeck")}>
+                    <ListItem component={Link} to="/addDeck" onClick={closeDrawer} button selected={!!pathname.match("/addDeck")}>
                         <ListItemAvatar>
                             <DrawerAvatar alt="Add deck">
                                 <AddCircleOutlineIcon />
