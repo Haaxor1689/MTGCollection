@@ -1,17 +1,4 @@
-import {
-    AppBar,
-    Avatar,
-    ClickAwayListener,
-    Container,
-    Divider,
-    Drawer,
-    IconButton,
-    Link as MUILink,
-    Toolbar,
-    Tooltip,
-    Typography,
-    useMediaQuery,
-} from "@material-ui/core";
+import { AppBar, Avatar, Container, Divider, Drawer, IconButton, Link as MUILink, Toolbar, Tooltip, Typography, useMediaQuery } from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import CloseIcon from "@material-ui/icons/Close";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -25,6 +12,7 @@ import { reducer } from "../State/Reducers";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
+import useClickaway from "../Utility/useClickaway";
 import AddDeck from "./Applets/AddDeck";
 import DeckPreview from "./Applets/DeckPreview";
 import UserInfo from "./Applets/UserInfo";
@@ -106,7 +94,7 @@ const drawerOpen = css<ComponentProps<any>>`
         & {
             width: 100%;
             height: auto;
-            max-height: 100%;
+            max-height: calc(100% - 56px);
         }
     }
 `;
@@ -130,6 +118,7 @@ const CustomDrawer = styled(Drawer)<{ open?: boolean }>`
     .MuiDrawer-paper {
         ${drawerOpen}
         ${p => !p.open && drawerClose}
+        overflow: hidden;
     }
 `;
 
@@ -137,7 +126,32 @@ const DrawerToolbar = styled(Toolbar)`
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: ${p => p.theme.spacing(0, 1)}px;
+    z-index: 1;
+`;
+
+const DrawerBody = styled.div<{ open?: boolean }>`
+    overflow: hidden;
+    padding-bottom: ${p => p.theme.spacing(6)}px;
+    ${p =>
+        p.open &&
+        css`
+            overflow-y: auto;
+        `}
+
+    &::after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        content: "";
+        background: linear-gradient(
+            0deg,
+            ${p => p.theme.palette.background.paper} ${p => p.theme.spacing(1)}px,
+            transparent ${p => p.theme.spacing(8)}px,
+            transparent 100%
+        );
+    }
 `;
 
 const NoGutterContainer = styled(Container)`
@@ -182,7 +196,10 @@ const ProfileAvatar = styled.div`
 const App: React.FC = () => {
     const history = useHistory();
     const isMobile = useMediaQuery(MainTheme.breakpoints.down("xs"));
+    const isSmall = useMediaQuery(MainTheme.breakpoints.down("sm"));
     const [state, dispatch] = React.useReducer(reducer, initialState);
+
+    const [drawerRef] = useClickaway<HTMLDivElement>(() => isSmall && handleDrawerClickaway());
 
     const [profile, setProfile] = React.useState<GoogleProfile>();
     const [isSignedIn, setIsSignedIn] = React.useState<boolean | undefined>(undefined);
@@ -192,11 +209,11 @@ const App: React.FC = () => {
         setProfile(undefined);
     };
 
-    const [[open], setOpen] = React.useState<[boolean, boolean]>([false, false]);
+    const [open, setOpen] = React.useState(false);
 
-    const handleDrawerToggle = () => setOpen(p => [!p[0], true]);
-    const handleDrawerClickaway = () => setOpen(p => [p[1] ? p[0] : false, false]);
-    const handleDrawerClose = () => setOpen([false, false]);
+    const handleDrawerToggle = () => setOpen(p => !p);
+    const handleDrawerClickaway = () => setOpen(false);
+    const handleDrawerClose = () => setOpen(false);
 
     React.useEffect(() => {
         GoogleApi.initClient(async (signedIn: boolean) => {
@@ -286,20 +303,20 @@ const App: React.FC = () => {
                                     <ExitToAppIcon />
                                 </TooltipButton>
                             </>
-                        ) : isSignedIn !== undefined && (
-                            <SignInButton onClick={GoogleApi.signIn} />
+                        ) : (
+                            isSignedIn !== undefined && <SignInButton onClick={GoogleApi.signIn} />
                         )}
                     </Toolbar>
                 </CustomAppBar>
-                <ClickAwayListener onClickAway={() => isMobile && handleDrawerClickaway()}>
-                    <CustomDrawer open={open} anchor={isMobile ? "bottom" : "left"} variant="permanent">
-                        <DrawerToolbar>
-                            <IconButton onClick={handleDrawerClose}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
-                        </DrawerToolbar>
-                        <Divider />
+                <CustomDrawer open={open} anchor={isMobile ? "bottom" : "left"} variant="permanent" ref={drawerRef}>
+                    <DrawerToolbar>
+                        <IconButton onClick={handleDrawerClose}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
+                    </DrawerToolbar>
+                    <Divider />
+                    <DrawerBody open={open}>
                         {isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && open && handleDrawerToggle()} />}
-                    </CustomDrawer>
-                </ClickAwayListener>
+                    </DrawerBody>
+                </CustomDrawer>
                 <NoGutterContainer maxWidth="xl">
                     <MainContent open={open}>
                         {isSignedIn === undefined ? (
