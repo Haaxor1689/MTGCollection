@@ -6,6 +6,7 @@ import { AppState, Deck, DeckName, getDeckName } from "../../State";
 import { DrawerAvatar } from "../Styled/Grid";
 import styled from "../Styled/Theme";
 import DeckAvatar from "./DeckAvatar";
+import DrawerSubtitle from "./DrawerSubtitle";
 
 const StyledItemText = styled(ListItemText)`
     white-space: nowrap;
@@ -42,6 +43,7 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
     return (
         <>
             <Divider />
+            <DrawerSubtitle open={open}>Decks</DrawerSubtitle>
             <List>
                 {renderItem(state.decks[DeckName.Collection])}
                 {renderItem(state.decks[DeckName.Wishlist])}

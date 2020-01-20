@@ -308,7 +308,7 @@ const App: React.FC = () => {
                     </DrawerToolbar>
                     <Divider />
                     <DrawerBody open={open}>
-                        <DrawerApps closeDrawer={() => isMobile && setOpen(false)} />
+                        <DrawerApps open={open} closeDrawer={() => isMobile && setOpen(false)} />
                         {isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && setOpen(false)} />}
                     </DrawerBody>
                 </CustomDrawer>
