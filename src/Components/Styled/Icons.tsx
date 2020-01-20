@@ -1,7 +1,7 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboard, faCompressAlt, faExpandAlt } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faClipboard, faCompressAlt, faDiceD20, faExpandAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import styled from "./Theme";
 
 const IconWrap = styled.div`
@@ -33,5 +33,11 @@ export const GoogleIcon: React.FC = () => (
 export const ClipboardIcon: React.FC = () => (
     <IconWrap>
         <FontAwesomeIcon icon={faClipboard} />
+    </IconWrap>
+);
+
+export const LifecounterIcon: React.FC = () => (
+    <IconWrap>
+        <FontAwesomeIcon icon={faDiceD20} />
     </IconWrap>
 );

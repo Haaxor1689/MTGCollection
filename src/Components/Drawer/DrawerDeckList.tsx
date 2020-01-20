@@ -29,7 +29,7 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
                 to={`/decks/${encodeURIComponent(deck.name)}`}
                 onClick={closeDrawer}
                 button
-                selected={state.selectedDeck === deck.name && !pathname.match("/addDeck")}
+                selected={state.selectedDeck === deck.name && !!pathname.match(/^\/decks\//)}
             >
                 <ListItemAvatar>
                     <DeckAvatar deck={deck} />
@@ -41,6 +41,7 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
 
     return (
         <>
+            <Divider />
             <List>
                 {renderItem(state.decks[DeckName.Collection])}
                 {renderItem(state.decks[DeckName.Wishlist])}
@@ -48,7 +49,7 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
             <Divider />
             <List>
                 <Tooltip title="Add deck" placement="right">
-                    <ListItem component={Link} to="/addDeck" onClick={closeDrawer} button selected={!!pathname.match("/addDeck")}>
+                    <ListItem component={Link} to="/addDeck" onClick={closeDrawer} button selected={!!pathname.match(/^\/addDeck$/)}>
                         <ListItemAvatar>
                             <DrawerAvatar alt="Add deck">
                                 <AddCircleOutlineIcon />
@@ -67,5 +68,4 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
         </>
     );
 };
-
 export default DrawerDeckList;

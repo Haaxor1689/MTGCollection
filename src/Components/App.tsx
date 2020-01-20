@@ -15,6 +15,7 @@ import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
 import useClickaway from "../Utility/useClickaway";
+import DrawerApps from "./Drawer/DrawerApps";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
 import MobileNavigation from "./Drawer/MobileNavigation";
 import Loading from "./Loading";
@@ -306,7 +307,10 @@ const App: React.FC = () => {
                         <IconButton onClick={handleDrawerToggle}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
                     </DrawerToolbar>
                     <Divider />
-                    <DrawerBody open={open}>{isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && setOpen(false)} />}</DrawerBody>
+                    <DrawerBody open={open}>
+                        <DrawerApps closeDrawer={() => isMobile && setOpen(false)} />
+                        {isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && setOpen(false)} />}
+                    </DrawerBody>
                 </CustomDrawer>
                 <NoGutterContainer maxWidth="xl">
                     <MainContent open={open}>{isSignedIn === undefined ? <Loading /> : <AppRouter />}</MainContent>
