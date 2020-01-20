@@ -16,6 +16,7 @@ import useClickaway from "../Utility/useClickaway";
 import AddDeck from "./Applets/AddDeck";
 import DeckPreview from "./Applets/DeckPreview";
 import Home from "./Applets/Home";
+import Lifecounter from "./Applets/Lifecounter";
 import UserInfo from "./Applets/UserInfo";
 import DrawerDeckList from "./Drawer/DrawerDeckList";
 import MobileNavigation from "./Drawer/MobileNavigation";
@@ -200,8 +201,6 @@ const App: React.FC = () => {
     const isSmall = useMediaQuery(MainTheme.breakpoints.down("sm"));
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
-    const [drawerRef] = useClickaway<HTMLDivElement>(() => isSmall && handleDrawerClickaway());
-
     const [profile, setProfile] = React.useState<GoogleProfile>();
     const [isSignedIn, setIsSignedIn] = React.useState<boolean | undefined>(undefined);
 
@@ -211,10 +210,8 @@ const App: React.FC = () => {
     };
 
     const [open, setOpen] = React.useState(false);
-
     const handleDrawerToggle = () => setOpen(p => !p);
-    const handleDrawerClickaway = () => setOpen(false);
-    const handleDrawerClose = () => setOpen(false);
+    const [drawerRef] = useClickaway<HTMLDivElement>(() => isSmall && setOpen(false));
 
     React.useEffect(() => {
         GoogleApi.initClient(async (signedIn: boolean) => {
@@ -311,12 +308,10 @@ const App: React.FC = () => {
                 </CustomAppBar>
                 <CustomDrawer open={open} anchor={isMobile ? "bottom" : "left"} variant="permanent" ref={drawerRef}>
                     <DrawerToolbar>
-                        <IconButton onClick={handleDrawerClose}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
+                        <IconButton onClick={handleDrawerToggle}>{isMobile ? <CloseIcon /> : <ChevronLeftIcon />}</IconButton>
                     </DrawerToolbar>
                     <Divider />
-                    <DrawerBody open={open}>
-                        {isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && open && handleDrawerToggle()} />}
-                    </DrawerBody>
+                    <DrawerBody open={open}>{isSignedIn && <DrawerDeckList open={open} closeDrawer={() => isMobile && setOpen(false)} />}</DrawerBody>
                 </CustomDrawer>
                 <NoGutterContainer maxWidth="xl">
                     <MainContent open={open}>
@@ -325,6 +320,7 @@ const App: React.FC = () => {
                         ) : (
                             <Switch>
                                 <Route exact path="/" component={Home} />
+                                <Route exact path="/lifecounter/" component={Lifecounter} />
                                 <Route exact path="/signin/" component={SignIn} />
                                 <Route exact path="/user/" component={UserInfo} />
                                 <Route exact path="/addDeck/" component={AddDeck} />
