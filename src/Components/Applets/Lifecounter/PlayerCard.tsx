@@ -1,46 +1,86 @@
-import { Box, Button, ButtonGroup, Typography } from "@material-ui/core";
 import React from "react";
 import { Flex } from "reflexbox";
-import { Counters, CounterVariant, LifecounterState } from "../../../State/Lifecounter";
-import SymbolIcon from "../../Styled/SymbolIcon";
-import styled from "../../Styled/Theme";
+import { LifecounterState } from "../../../State/Lifecounter";
+import useDimensions from "../../../Utility/useDimensions";
+import styled, { css } from "../../Styled/Theme";
 
-const SymbolButton = styled(Button)`
-    padding: 5px 5px;
-    padding-bottom: 7px;
-    min-width: 0;
+const Wrapper = styled.div<{ flexBasis: string; players: number }>`
+    position: relative;
+    height: ${p => (p.players > 4 ? 100.0 / 3.0 : 50)}%;
+    flex-basis: ${p => p.flexBasis};
 `;
+
+const Body = styled(Flex)<{ rotate: number; w: number; h: number }>`
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: rotate(${p => p.rotate}deg) translate(-50%, -50%);
+    transform-origin: top left;
+    ${p =>
+        Math.abs(p.rotate) === 90
+            ? css`
+                  width: ${p.h}px;
+                  height: ${p.w}px;
+              `
+            : css`
+                  width: ${p.w}px;
+                  height: ${p.h}px;
+              `}
+`;
+
+type PlayerCount = 2 | 3 | 4 | 5 | 6;
+type PlayerTransform = {
+    rotate: number;
+    flexBasis: string;
+};
+
+const PlayerTransforms: Record<PlayerCount, PlayerTransform[]> = {
+    2: [
+        { rotate: 180, flexBasis: "100%" },
+        { rotate: 0, flexBasis: "100%" },
+    ],
+    3: [
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+        { rotate: 0, flexBasis: "100%" },
+    ],
+    4: [
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+    ],
+    5: [
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "100%" },
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+    ],
+    6: [
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "50%" },
+        { rotate: -90, flexBasis: "50%" },
+    ],
+};
 
 type Props = {
     player: number;
 };
-
 const PlayerCard: React.FC<Props> = ({ player }) => {
-    const [state, dispatch] = React.useContext(LifecounterState);
-    const { name, counters } = state.players[player];
+    const [state] = React.useContext(LifecounterState);
+    const [ref, width, height] = useDimensions<HTMLDivElement>();
 
-    const toggleCounter = (counter: CounterVariant) => dispatch({ type: "ToggleCounter", player, counter });
-
+    const { rotate, flexBasis } = PlayerTransforms[state.players.length as PlayerCount][player];
     return (
-        <Flex width={["33%", "16%"]} flexDirection="column" alignItems="center" my={2}>
-            <Typography>{name}</Typography>
-            <Box mt={1}>
-                <ButtonGroup orientation="vertical">
-                    {Counters.slice(0, 5).map(c => (
-                        <SymbolButton key={c} onClick={() => toggleCounter(c)} variant={counters[c] !== undefined ? "contained" : undefined}>
-                            <SymbolIcon symbol={c} />
-                        </SymbolButton>
-                    ))}
-                </ButtonGroup>
-                <ButtonGroup orientation="vertical">
-                    {Counters.slice(5).map(c => (
-                        <SymbolButton key={c} onClick={() => toggleCounter(c)} variant={counters[c] !== undefined ? "contained" : undefined}>
-                            <SymbolIcon symbol={c} />
-                        </SymbolButton>
-                    ))}
-                </ButtonGroup>
-            </Box>
-        </Flex>
+        <Wrapper ref={ref} flexBasis={flexBasis} players={state.players.length}>
+            <Body rotate={rotate} w={width} h={height} backgroundColor="blue" flexGrow={1} alignItems="center" justifyContent="center">
+                Player {player}
+            </Body>
+        </Wrapper>
     );
 };
 export default PlayerCard;

@@ -5,7 +5,8 @@ import { initialState, LifecounterState } from "../../../State/Lifecounter";
 import { reducer } from "../../../State/Lifecounter/Reducers";
 import { AppletContent, Title } from "../../Styled/Grid";
 import styled from "../../Styled/Theme";
-import PlayerCard from "./PlayerCard";
+import LifecounterDialog from "./LifecounterDialog";
+import PlayerSettings from "./PlayerSettings";
 
 const SliderLabel = styled(Typography)`
     flex-basis: 20%;
@@ -58,9 +59,10 @@ const Lifecounter: React.FC = () => {
                 </Flex>
                 <Flex justifyContent="center" flexWrap="wrap">
                     {state.players.map((_, i) => (
-                        <PlayerCard key={i} player={i} />
+                        <PlayerSettings key={i} player={i} />
                     ))}
                 </Flex>
+                <LifecounterDialog />
             </AppletContent>
         </LifecounterState.Provider>
     );
