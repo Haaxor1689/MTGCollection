@@ -17,4 +17,9 @@ type ToggleCounter = {
     counter: CounterVariant;
 };
 
-export type Action = SetPlayers | SetName | ToggleCounter;
+type SetStartingLife = {
+    type: "SetStartingLife";
+    value: number;
+}
+
+export type Action = SetPlayers | SetName | ToggleCounter | SetStartingLife;

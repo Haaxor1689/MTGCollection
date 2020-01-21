@@ -17,6 +17,12 @@ export const combineReducers = <State, Action>(reducers: { [P in keyof State]: (
     };
 };
 
+export const chainReducers = <State, Action>(...reducers: ((state: State, action: Action) => State)[]) => {
+    return (state: State, action: Action) => {
+        return reducers.reduce((curr, reducer) => reducer(curr, action), state);
+    };
+};
+
 export const PxFromAvatarSize = (size?: "chip" | "inline") => {
     switch (size) {
         case "chip":

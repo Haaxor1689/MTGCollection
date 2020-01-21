@@ -18,11 +18,8 @@ const SliderValue = styled(Typography)`
 
 const Lifecounter: React.FC = () => {
     const [playersCount, setPlayersCount] = React.useState(2);
-    const [life, setLife] = React.useState<number>(20);
 
     const [state, dispatch] = React.useReducer(reducer, initialState);
-
-    React.useEffect(() => dispatch({ type: "SetPlayers", count: playersCount }), []);
 
     return (
         <LifecounterState.Provider value={[state, dispatch]}>
@@ -47,9 +44,17 @@ const Lifecounter: React.FC = () => {
                 <Flex alignItems="center" justifyContent="space-between">
                     <SliderLabel>Starting life</SliderLabel>
                     <Box mx={3} flexGrow={1}>
-                        <Slider value={life} onChange={(e, v) => setLife(v as number)} step={5} min={10} max={50} marks valueLabelDisplay="off" />
+                        <Slider
+                            value={state.startingLife}
+                            onChange={(e, v) => dispatch({ type: "SetStartingLife", value: v as number })}
+                            step={5}
+                            min={10}
+                            max={50}
+                            marks
+                            valueLabelDisplay="off"
+                        />
                     </Box>
-                    <SliderValue>{life}</SliderValue>
+                    <SliderValue>{state.startingLife}</SliderValue>
                 </Flex>
                 <Flex justifyContent="center" flexWrap="wrap">
                     {state.players.map((_, i) => (
