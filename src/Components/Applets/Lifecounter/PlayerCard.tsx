@@ -74,10 +74,12 @@ const PlayerCard: React.FC<Props> = ({ player }) => {
     const [state] = React.useContext(LifecounterState);
     const [ref, width, height] = useDimensions<HTMLDivElement>();
 
+    const bg = React.useMemo(() => `hsl(${Math.random() * 360}, 20%, 30%)`, []);
+
     const { rotate, flexBasis } = PlayerTransforms[state.players.length as PlayerCount][player];
     return (
         <Wrapper ref={ref} flexBasis={flexBasis} players={state.players.length}>
-            <Body rotate={rotate} w={width} h={height} backgroundColor="blue" flexGrow={1} alignItems="center" justifyContent="center">
+            <Body rotate={rotate} w={width} h={height} backgroundColor={bg} flexGrow={1} alignItems="center" justifyContent="center">
                 Player {player}
             </Body>
         </Wrapper>

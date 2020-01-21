@@ -43,7 +43,7 @@ const LifecounterDialog: React.FC = () => {
                 </TooltipButton>
             </AppletActions>
             <Dialog fullScreen={isMobile} open={open} onClose={handleClose}>
-                <Flex flexWrap="wrap" width={isMobile ? "100%" : "600px"} height={isMobile ? "100%" : "900px"}>
+                <Flex flexWrap="wrap" width={isMobile ? "100%" : "550px"} height={isMobile ? "100%" : "900px"}>
                     {state.players.map((_, i) => (
                         <PlayerCard key={i} player={i} />
                     ))}
