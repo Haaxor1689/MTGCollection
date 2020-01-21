@@ -6,6 +6,12 @@
  * @license MIT
  */
 
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
 /**
  * @license
  * Lodash <https://lodash.com/>
@@ -14,12 +20,6 @@
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  */
-
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
