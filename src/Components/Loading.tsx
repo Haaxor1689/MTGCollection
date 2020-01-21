@@ -16,7 +16,7 @@ const MarginedTypography = styled(Typography)`
 const Loading: React.FC = () => (
     <Body>
         <CircularProgress size={60} />
-        <MarginedTypography component="h2" variant="h6">
+        <MarginedTypography variant="h6">
             Loading...
         </MarginedTypography>
     </Body>

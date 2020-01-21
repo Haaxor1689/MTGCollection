@@ -1,6 +1,7 @@
 import { keyBy, omit } from "lodash";
 import { AppStateT, CardList, DeckName, Decks, EmptyCards, FileIds, SetList, SymbolList } from ".";
 import { Action } from "./Actions";
+import { combineReducers } from "../Utility";
 
 const filesReducer = (state: FileIds, action: Action): FileIds => {
     switch (action.type) {
@@ -106,16 +107,6 @@ const selectedDeckReducer = (state: string, action: Action): string => {
             return action.name === state ? DeckName.Collection : state;
     }
     return state;
-};
-
-const combineReducers = <State, Action>(reducers: { [P in keyof State]: (state: State[P], action: Action) => State[P] }) => {
-    return (state: State, action: Action) => {
-        const temp: State = {} as any;
-        for (const i in reducers) {
-            temp[i] = reducers[i](state[i], action);
-        }
-        return temp;
-    };
 };
 
 export const reducer = combineReducers<AppStateT, Action>({
