@@ -12,8 +12,9 @@ import PlayerCard from "./PlayerCard";
 
 const CloseButton = styled(IconButton)`
     position: absolute;
-    top: ${p => p.theme.spacing(1)}px;
-    right: ${p => p.theme.spacing(1)}px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `;
 
 const LifecounterDialog: React.FC = () => {

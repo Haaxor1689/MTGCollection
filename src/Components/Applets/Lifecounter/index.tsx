@@ -18,9 +18,9 @@ const SliderValue = styled(Typography)`
 `;
 
 const Lifecounter: React.FC = () => {
-    const [playersCount, setPlayersCount] = React.useState(2);
-
     const [state, dispatch] = React.useReducer(reducer, initialState);
+
+    const [playersCount, setPlayersCount] = React.useState(state.players.length);
 
     return (
         <LifecounterState.Provider value={[state, dispatch]}>

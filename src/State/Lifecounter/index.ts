@@ -3,7 +3,7 @@ import { MakeTuple } from "../../Utility";
 import DeepReadonly from "../../Utility/DeepReadonly";
 import { Action } from "./Actions";
 
-export const instantiatePlayers = (count: number): PlayerInfoArray => Array.from(Array(count), (_, i) => ({ name: `Player ${i + 1}`, life: 0, counters: {} }));
+export const instantiatePlayers = (count: number): PlayerInfoArray => Array.from(Array(count), (_, i) => ({ name: `Player ${i + 1}`, life: 20, counters: {} }));
 
 export const Counters = MakeTuple("{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{S}", "{E}", "{B/P}");
 export type CounterVariant = typeof Counters[number];

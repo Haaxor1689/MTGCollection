@@ -22,4 +22,11 @@ type SetStartingLife = {
     value: number;
 }
 
-export type Action = SetPlayers | SetName | ToggleCounter | SetStartingLife;
+type SetPlayerCounter = {
+    type: "SetPlayerCounter";
+    player: number;
+    counter?: CounterVariant;
+    value: number;
+}
+
+export type Action = SetPlayers | SetName | ToggleCounter | SetStartingLife | SetPlayerCounter;

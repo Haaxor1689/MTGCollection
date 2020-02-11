@@ -15,6 +15,14 @@ const playerReducer = (state: PlayerInfoArray, action: Action): PlayerInfoArray 
                     ? { ...p, counters: p.counters[action.counter] === undefined ? { ...p.counters, [action.counter]: 0 } : omit(p.counters, action.counter) }
                     : p
             );
+        case "SetPlayerCounter":
+            return state.map((p, i) =>
+                i === action.player
+                    ? action.counter
+                        ? { ...p, counters: { ...p.counters, [action.counter]: p.counters[action.counter]! + action.value } }
+                        : { ...p, life: p.life + action.value }
+                    : p
+            );
     }
     return state;
 };
