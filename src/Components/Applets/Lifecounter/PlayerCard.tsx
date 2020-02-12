@@ -1,11 +1,11 @@
-import { Button, Typography } from "@material-ui/core";
+import { Button, Typography, useMediaQuery } from "@material-ui/core";
 import React from "react";
 import { Flex } from "reflexbox";
 import { CounterVariant, LifecounterState } from "../../../State/Lifecounter";
+import { debounce } from "../../../Utility";
 import useDimensions from "../../../Utility/useDimensions";
-import SymbolIcon from "../../Styled/SymbolIcon";
-import styled, { css } from "../../Styled/Theme";
 import SymbolTypography from "../../Styled/SymbolTypography";
+import styled, { css, MainTheme } from "../../Styled/Theme";
 
 const Wrapper = styled.div<{ flexBasis: string; players: number }>`
     position: relative;
@@ -17,6 +17,8 @@ const Body = styled(Flex)<{ rotate: number; w: number; h: number }>`
     position: absolute;
     left: 50%;
     top: 50%;
+    background: radial-gradient(circle, ${p => p.theme.palette.background.paper} 0%, ${p => p.theme.palette.background.default} 75%);
+    border: 2px dashed ${p => p.theme.palette.background.paper};
     transform: rotate(${p => p.rotate}deg) translate(-50%, -50%);
     transform-origin: top left;
     ${p =>
@@ -49,6 +51,12 @@ const CounterBackground = styled(SymbolTypography)`
     position: absolute;
     opacity: 0.1;
     transform: scale(2);
+    line-height: 0;
+`;
+
+const DebouncedValue = styled(Typography)`
+    position: absolute;
+    top: ${p => p.theme.spacing(2)}px;
 `;
 
 const IconButton = styled(Button)<{ selected: boolean }>`
@@ -108,26 +116,50 @@ const PlayerCard: React.FC<Props> = ({ player }) => {
     const [ref, width, height] = useDimensions<HTMLDivElement>();
 
     const [activeCounter, setActiveCounter] = React.useState<CounterVariant>();
+    const [debouncedValue, setDebouncedValue] = React.useState<number>(0);
+
+    const { name, life, counters } = state.players[player];
+    const activeValue = activeCounter ? counters[activeCounter]! : life;
+    const activeDiff = activeValue - debouncedValue;
+
+    // eslint-disable-next-line
+    React.useEffect(() => setDebouncedValue(activeValue), [activeCounter]);
+
+    const debouncedSet = React.useCallback(debounce(setDebouncedValue, 1000), []);
+    const setCounter = (value: number) => {
+        debouncedSet(activeValue + value);
+        dispatch({ type: "SetPlayerCounter", player, value, counter: activeCounter });
+    };
+
+    const isMobile = useMediaQuery(MainTheme.breakpoints.down("xs"));
+    const valueTextVariant = React.useMemo(() => (isMobile ? "h2" : "h1"), [isMobile]);
 
     const bg = React.useMemo(() => `hsl(${Math.random() * 360}, 20%, 30%)`, []);
 
     const { rotate, flexBasis } = PlayerTransforms[state.players.length as PlayerCount][player];
-    const { name, life, counters } = state.players[player];
     return (
         <Wrapper ref={ref} flexBasis={flexBasis} players={state.players.length}>
             <Body rotate={rotate} w={width} h={height} backgroundColor={bg} flexGrow={1} flexDirection="column" justifyContent="center">
                 <Flex py={3} height="20%" justifyContent="center" alignItems="center">
-                    <Typography align="center">{name}</Typography>
+                    <Typography variant="caption" align="center">
+                        {name}
+                    </Typography>
                 </Flex>
                 <Counter flexGrow={1} justifyContent="center" alignItems="center">
-                    <CounterBackground variant="h1" text={activeCounter ?? "{PW}"} />
-                    <IncrementButton position="left" onClick={() => dispatch({ type: "SetPlayerCounter", player, value: -1, counter: activeCounter })}>
+                    <CounterBackground variant={valueTextVariant} text={activeCounter ?? "{PW}"} />
+                    {activeDiff !== 0 && (
+                        <DebouncedValue color="primary" variant="h6">
+                            {activeDiff > 0 ? "+" : ""}
+                            {activeDiff}
+                        </DebouncedValue>
+                    )}
+                    <IncrementButton position="left" onClick={() => setCounter(-1)}>
                         <Typography variant="h6">-</Typography>
                     </IncrementButton>
-                    <Typography variant="h1" align="center">
-                        {activeCounter ? counters[activeCounter] : life}
+                    <Typography variant={valueTextVariant} align="center">
+                        {activeValue}
                     </Typography>
-                    <IncrementButton position="right" onClick={() => dispatch({ type: "SetPlayerCounter", player, value: 1, counter: activeCounter })}>
+                    <IncrementButton position="right" onClick={() => setCounter(1)}>
                         <Typography variant="h6">+</Typography>
                     </IncrementButton>
                 </Counter>

@@ -7,6 +7,19 @@ export const Arr = {
 
 export const MakeTuple = <T extends string[]>(...args: T) => args;
 
+export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
+    let timeout: number;
+
+    return (...args: Parameters<F>): Promise<ReturnType<F>> =>
+        new Promise(resolve => {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+
+            timeout = setTimeout(() => resolve(func(...args)), waitFor);
+        });
+};
+
 export const combineReducers = <State, Action>(reducers: { [P in keyof State]: (state: State[P], action: Action) => State[P] }) => {
     return (state: State, action: Action) => {
         const temp: State = {} as any;
