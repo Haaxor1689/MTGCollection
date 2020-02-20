@@ -26,15 +26,14 @@ const Symbol = styled.svg`
     width: 16px;
     margin: 1px 1px -2px 1px;
 
-    ${p =>
-        sizeMap.map(
-            ([v, size]) => css`
-                .MuiTypography-${v} & {
-                    height: ${size}px;
-                    width: ${size}px;
-                }
-            `
-        )}
+    ${sizeMap.map(
+        ([v, size]) => css`
+            .MuiTypography-${v} & {
+                height: ${size}px;
+                width: ${size}px;
+            }
+        `
+    )}
 `;
 
 type Props = {
