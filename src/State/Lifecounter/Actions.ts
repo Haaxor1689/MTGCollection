@@ -1,9 +1,18 @@
 import { CounterVariant } from ".";
 
+type Restart = {
+    type: "Restart";
+}
+
 type SetPlayers = {
     type: "SetPlayers";
     count: number;
-}
+};
+
+type SetStartingPlayer = {
+    type: "SetStartingPlayer";
+    player: number | null;
+};
 
 type SetName = {
     type: "SetName";
@@ -20,13 +29,13 @@ type ToggleCounter = {
 type SetStartingLife = {
     type: "SetStartingLife";
     value: number;
-}
+};
 
 type SetPlayerCounter = {
     type: "SetPlayerCounter";
     player: number;
     counter?: CounterVariant;
     value: number;
-}
+};
 
-export type Action = SetPlayers | SetName | ToggleCounter | SetStartingLife | SetPlayerCounter;
+export type Action = Restart | SetPlayers | SetStartingPlayer | SetName | ToggleCounter | SetStartingLife | SetPlayerCounter;

@@ -2,6 +2,7 @@ import omit from "lodash-es/omit";
 import { instantiatePlayers, LifecounterStateT, PlayerInfoArray } from ".";
 import { chainReducers, combineReducers } from "../../Utility";
 import { Action } from "./Actions";
+import { mapValues } from "lodash-es";
 
 const playerReducer = (state: PlayerInfoArray, action: Action): PlayerInfoArray => {
     switch (action.type) {
@@ -23,12 +24,13 @@ const playerReducer = (state: PlayerInfoArray, action: Action): PlayerInfoArray 
                         : { ...p, life: p.life + action.value }
                     : p
             );
+        case "SetStartingLife":
+            return state.map(p => ({ ...p, life: action.value }));
     }
     return state;
 };
 
 const startingLifeReducer = (state: number, action: Action): number => {
-    console.log("life");
     switch (action.type) {
         case "SetStartingLife":
             return action.value;
@@ -36,21 +38,30 @@ const startingLifeReducer = (state: number, action: Action): number => {
     return state;
 };
 
-const combinedReducer = combineReducers<LifecounterStateT, Action>({
+const startingPlayerReducer = (state: number | null, action: Action): number | null => {
+    switch (action.type) {
+        case "SetStartingPlayer":
+            return action.player;
+    }
+    return state;
+};
+
+export const combinedReducer = combineReducers<LifecounterStateT, Action>({
     players: playerReducer,
     startingLife: startingLifeReducer,
+    startingPlayer: startingPlayerReducer,
 });
 
-const lifeFixReducer = (state: LifecounterStateT, action: Action): LifecounterStateT => {
+const restartReducer = (state: LifecounterStateT, action: Action): LifecounterStateT => {
     switch (action.type) {
-        case "SetPlayers":
-        case "SetStartingLife":
+        case "Restart":
             return {
                 ...state,
-                players: state.players.map(p => ({ ...p, life: state.startingLife })),
+                players: state.players.map(p => ({ ...p, life: state.startingLife, counters: mapValues(p.counters, () => 0) })),
+                startingPlayer: null,
             };
     }
     return state;
 };
 
-export const reducer = chainReducers<LifecounterStateT, Action>(combinedReducer, lifeFixReducer);
+export const reducer = chainReducers<LifecounterStateT, Action>(combinedReducer, restartReducer);

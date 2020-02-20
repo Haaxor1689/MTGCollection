@@ -1,4 +1,4 @@
-import { Button, Typography, useMediaQuery } from "@material-ui/core";
+import { Button, Fade, Typography, useMediaQuery } from "@material-ui/core";
 import debounce from "lodash-es/debounce";
 import React from "react";
 import { Flex } from "reflexbox";
@@ -69,6 +69,16 @@ const IconButton = styled(Button)<{ selected: boolean }>`
         `}
 `;
 
+const StartingPlayerOverlay = styled.div`
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: 1;
+`;
+
 type PlayerCount = 2 | 3 | 4 | 5 | 6;
 type PlayerTransform = {
     rotate: number;
@@ -119,11 +129,26 @@ const PlayerCard: React.FC<Props> = ({ player }) => {
     const [debouncedValue, setDebouncedValue] = React.useState<number>(0);
 
     const { name, life, counters } = state.players[player];
+    const { startingPlayer } = state;
     const activeValue = activeCounter ? counters[activeCounter]! : life;
     const activeDiff = activeValue - debouncedValue;
 
-    // eslint-disable-next-line
-    React.useEffect(() => setDebouncedValue(activeValue), [activeCounter]);
+    // Reset debounce after counter changes
+    React.useEffect(
+        () => setDebouncedValue(activeValue),
+        // eslint-disable-next-line
+        [activeCounter]
+    );
+
+    // Reset state after restart
+    React.useEffect(
+        () => {
+            setDebouncedValue(activeValue);
+            setActiveCounter(undefined);
+        },
+        // eslint-disable-next-line
+        [startingPlayer]
+    );
 
     const debouncedSet = React.useCallback(debounce(setDebouncedValue, 1000), []);
     const setCounter = (value: number) => {
@@ -131,15 +156,18 @@ const PlayerCard: React.FC<Props> = ({ player }) => {
         dispatch({ type: "SetPlayerCounter", player, value, counter: activeCounter });
     };
 
+    const clearStartingPlayer = () => dispatch({ type: "SetStartingPlayer", player: null });
+
     const isMobile = useMediaQuery(MainTheme.breakpoints.down("xs"));
     const valueTextVariant = React.useMemo(() => (isMobile ? "h2" : "h1"), [isMobile]);
-
-    const bg = React.useMemo(() => `hsl(${Math.random() * 360}, 20%, 30%)`, []);
 
     const { rotate, flexBasis } = PlayerTransforms[state.players.length as PlayerCount][player];
     return (
         <Wrapper ref={ref} flexBasis={flexBasis} players={state.players.length}>
-            <Body rotate={rotate} w={width} h={height} backgroundColor={bg} flexGrow={1} flexDirection="column" justifyContent="center">
+            <Body rotate={rotate} w={width} h={height} flexGrow={1} flexDirection="column" justifyContent="center">
+                <Fade in={player === startingPlayer}>
+                    <StartingPlayerOverlay onClick={clearStartingPlayer} />
+                </Fade>
                 <Flex py={3} height="20%" justifyContent="center" alignItems="center">
                     <Typography variant="caption" align="center">
                         {name}

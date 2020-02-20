@@ -20,11 +20,13 @@ export type PlayerInfoArray = DeepReadonly<PlayerInfo[]>;
 export type LifecounterStateT = DeepReadonly<{
     players: PlayerInfoArray;
     startingLife: number;
+    startingPlayer: number | null;
 }>;
 
 export const initialState: LifecounterStateT = {
     players: instantiatePlayers(2),
     startingLife: 20,
+    startingPlayer: null,
 };
 
 export const LifecounterState = React.createContext<[LifecounterStateT, React.Dispatch<Action>]>([initialState, undefined as any]);
