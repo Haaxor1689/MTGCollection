@@ -1,4 +1,4 @@
-import omit from "lodash.omit";
+import omit from "lodash-es/omit";
 import { instantiatePlayers, LifecounterStateT, PlayerInfoArray } from ".";
 import { chainReducers, combineReducers } from "../../Utility";
 import { Action } from "./Actions";

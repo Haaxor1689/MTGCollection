@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import omit from "lodash.omit";
+import omit from "lodash-es/omit";
 import React from "react";
 import { DeckCard, SectionName } from "../../State";
 import { ScryCard } from "../../Utility/Scry/Types";

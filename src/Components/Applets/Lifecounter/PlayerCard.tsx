@@ -1,8 +1,8 @@
 import { Button, Typography, useMediaQuery } from "@material-ui/core";
+import debounce from "lodash-es/debounce";
 import React from "react";
 import { Flex } from "reflexbox";
 import { CounterVariant, LifecounterState } from "../../../State/Lifecounter";
-import { debounce } from "../../../Utility";
 import useDimensions from "../../../Utility/useDimensions";
 import SymbolTypography from "../../Styled/SymbolTypography";
 import styled, { css, MainTheme } from "../../Styled/Theme";
