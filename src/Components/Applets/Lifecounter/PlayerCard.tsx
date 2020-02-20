@@ -1,4 +1,4 @@
-import { Button, Fade, Typography, useMediaQuery } from "@material-ui/core";
+import { Button, Fade, Typography, TypographyTypeMap, useMediaQuery } from "@material-ui/core";
 import debounce from "lodash-es/debounce";
 import React from "react";
 import { Flex } from "reflexbox";
@@ -56,16 +56,21 @@ const CounterBackground = styled(SymbolTypography)`
 
 const DebouncedValue = styled(Typography)`
     position: absolute;
-    top: ${p => p.theme.spacing(2)}px;
+    top: 0;
 `;
 
-const IconButton = styled(Button)<{ selected: boolean }>`
+const IconButton = styled(({ tight, props }) => <Button {...props} />)<{ selected: boolean; tight?: boolean }>`
     min-width: unset;
     ${p =>
         !p.selected &&
         css`
             filter: grayscale(1);
             opacity: 0.25;
+        `}
+    ${p =>
+        p.tight &&
+        css`
+            padding: 4px;
         `}
 `;
 
@@ -83,6 +88,7 @@ type PlayerCount = 2 | 3 | 4 | 5 | 6;
 type PlayerTransform = {
     rotate: number;
     flexBasis: string;
+    counter?: TypographyTypeMap["props"]["variant"];
 };
 
 const PlayerTransforms: Record<PlayerCount, PlayerTransform[]> = {
@@ -91,30 +97,30 @@ const PlayerTransforms: Record<PlayerCount, PlayerTransform[]> = {
         { rotate: 0, flexBasis: "100%" },
     ],
     3: [
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "50%", counter: "body1" },
+        { rotate: -90, flexBasis: "50%", counter: "body1" },
         { rotate: 0, flexBasis: "100%" },
     ],
     4: [
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "50%", counter: "body1" },
+        { rotate: -90, flexBasis: "50%", counter: "body1" },
+        { rotate: 90, flexBasis: "50%", counter: "body1" },
+        { rotate: -90, flexBasis: "50%", counter: "body1" },
     ],
     5: [
         { rotate: 180, flexBasis: "100%" },
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "50%", counter: "body2" },
+        { rotate: -90, flexBasis: "50%", counter: "body2" },
+        { rotate: 90, flexBasis: "50%", counter: "body2" },
+        { rotate: -90, flexBasis: "50%", counter: "body2" },
     ],
     6: [
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
-        { rotate: 90, flexBasis: "50%" },
-        { rotate: -90, flexBasis: "50%" },
+        { rotate: 90, flexBasis: "50%", counter: "body2" },
+        { rotate: -90, flexBasis: "50%", counter: "body2" },
+        { rotate: 90, flexBasis: "50%", counter: "body2" },
+        { rotate: -90, flexBasis: "50%", counter: "body2" },
+        { rotate: 90, flexBasis: "50%", counter: "body2" },
+        { rotate: -90, flexBasis: "50%", counter: "body2" },
     ],
 };
 
@@ -161,7 +167,7 @@ const PlayerCard: React.FC<Props> = ({ player }) => {
     const isMobile = useMediaQuery(MainTheme.breakpoints.down("xs"));
     const valueTextVariant = React.useMemo(() => (isMobile ? "h2" : "h1"), [isMobile]);
 
-    const { rotate, flexBasis } = PlayerTransforms[state.players.length as PlayerCount][player];
+    const { rotate, flexBasis, counter } = PlayerTransforms[state.players.length as PlayerCount][player];
     return (
         <Wrapper ref={ref} flexBasis={flexBasis} players={state.players.length}>
             <Body rotate={rotate} w={width} h={height} flexGrow={1} flexDirection="column" justifyContent="center">
@@ -193,12 +199,13 @@ const PlayerCard: React.FC<Props> = ({ player }) => {
                 </Counter>
                 <Flex mx={3} height="20%" justifyContent="space-evenly" alignItems="center">
                     {Object.keys(counters).map(c => (
-                        <Flex key={c} mx={3} justifyContent="center" alignItems="center">
+                        <Flex key={c} justifyContent="center" alignItems="center">
                             <IconButton
                                 selected={activeCounter === c}
+                                tight={counter === "body2"}
                                 onClick={() => setActiveCounter(activeCounter === c ? undefined : (c as CounterVariant))}
                             >
-                                <SymbolTypography variant="h6" text={`${counters[c as CounterVariant]} ${c}`} />
+                                <SymbolTypography variant={counter ?? "h6"} text={`${counters[c as CounterVariant]} ${c}`} />
                             </IconButton>
                         </Flex>
                     ))}
