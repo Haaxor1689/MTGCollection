@@ -8,7 +8,7 @@ if ("function" === typeof importScripts) {
         workbox.precaching.precacheAndRoute([
   {
     "url": "index.html",
-    "revision": "8eabcf806089ef0a32af55356bb5dafe"
+    "revision": "5986bc420dd6d3dd73aa219f4e691ca6"
   },
   {
     "url": "PPR_C.png",
@@ -19,8 +19,8 @@ if ("function" === typeof importScripts) {
     "revision": "ab859d4d52faa7aa74ba992af3385e86"
   },
   {
-    "url": "static/js/main.a69184b9.chunk.js",
-    "revision": "d1b02d06f1574e7d3b250d1e49d65c14"
+    "url": "static/js/main.9f64c2f4.chunk.js",
+    "revision": "34c64fc455f89a1ea671462eaed366e7"
   },
   {
     "url": "static/js/runtime-main.fb7e6c41.js",

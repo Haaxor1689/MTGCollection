@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/MTGCollection/static/js/main.a69184b9.chunk.js",
-    "main.js.map": "/MTGCollection/static/js/main.a69184b9.chunk.js.map",
+    "main.js": "/MTGCollection/static/js/main.9f64c2f4.chunk.js",
+    "main.js.map": "/MTGCollection/static/js/main.9f64c2f4.chunk.js.map",
     "runtime-main.js": "/MTGCollection/static/js/runtime-main.fb7e6c41.js",
     "runtime-main.js.map": "/MTGCollection/static/js/runtime-main.fb7e6c41.js.map",
     "static/js/2.075df5c7.chunk.js": "/MTGCollection/static/js/2.075df5c7.chunk.js",
     "static/js/2.075df5c7.chunk.js.map": "/MTGCollection/static/js/2.075df5c7.chunk.js.map",
     "index.html": "/MTGCollection/index.html",
-    "precache-manifest.e013df81422b35f00308b83229ad2136.js": "/MTGCollection/precache-manifest.e013df81422b35f00308b83229ad2136.js",
+    "precache-manifest.85f30592a629142d16b19be2200b6c14.js": "/MTGCollection/precache-manifest.85f30592a629142d16b19be2200b6c14.js",
     "service-worker.js": "/MTGCollection/service-worker.js",
     "static/js/2.075df5c7.chunk.js.LICENSE": "/MTGCollection/static/js/2.075df5c7.chunk.js.LICENSE",
     "static/media/logo.png": "/MTGCollection/static/media/logo.81aa9e7e.png",
@@ -16,6 +16,6 @@
   "entrypoints": [
     "static/js/runtime-main.fb7e6c41.js",
     "static/js/2.075df5c7.chunk.js",
-    "static/js/main.a69184b9.chunk.js"
+    "static/js/main.9f64c2f4.chunk.js"
   ]
 }
