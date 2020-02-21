@@ -16,7 +16,7 @@ const CardNameAutocomplete: React.FC<Props> = ({ label, onNameSelect }) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [typingTimer, setTypingTimer] = React.useState<number | undefined>(undefined);
 
-    const onInputChange = (newValue: string, reason: "input" | "reset") => {
+    const onInputChange = (newValue: string, reason: "input" | "reset" | "clear") => {
         if (value === newValue || reason === "reset") {
             return;
         }
@@ -61,7 +61,7 @@ const CardNameAutocomplete: React.FC<Props> = ({ label, onNameSelect }) => {
             value={value}
             onOpen={() => setOpen(true)}
             onClose={() => setOpen(false)}
-            onChange={(e, val) => onChange(val)}
+            onChange={(_: any, val: any) => onChange(val)}
             onInputChange={(e, val, reason) => onInputChange(val, reason)}
             options={options}
             loading={isLoading}
