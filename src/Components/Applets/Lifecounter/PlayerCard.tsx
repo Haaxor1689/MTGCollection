@@ -59,16 +59,16 @@ const DebouncedValue = styled(Typography)`
     top: 0;
 `;
 
-const IconButton = styled(({ tight, props }) => <Button {...props} />)<{ selected: boolean; tight?: boolean }>`
+const IconButton = styled(Button)<{ styled: { selected: boolean; tight?: boolean } }>`
     min-width: unset;
     ${p =>
-        !p.selected &&
+        !p.styled.selected &&
         css`
             filter: grayscale(1);
             opacity: 0.25;
         `}
     ${p =>
-        p.tight &&
+        p.styled.tight &&
         css`
             padding: 4px;
         `}
@@ -201,8 +201,10 @@ const PlayerCard: React.FC<Props> = ({ player }) => {
                     {Object.keys(counters).map(c => (
                         <Flex key={c} justifyContent="center" alignItems="center">
                             <IconButton
-                                selected={activeCounter === c}
-                                tight={counter === "body2"}
+                                styled={{
+                                    selected: activeCounter === c,
+                                    tight: counter === "body2",
+                                }}
                                 onClick={() => setActiveCounter(activeCounter === c ? undefined : (c as CounterVariant))}
                             >
                                 <SymbolTypography variant={counter ?? "h6"} text={`${counters[c as CounterVariant]} ${c}`} />
