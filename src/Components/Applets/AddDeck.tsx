@@ -2,6 +2,7 @@ import { Avatar, Button, ButtonGroup, Dialog, DialogActions, DialogContent, Dial
 import CollectionsIcon from "@material-ui/icons/Collections";
 import React from "react";
 import { useHistory } from "react-router";
+import { RouteNames } from "../../Routes/Routes";
 import { AppState } from "../../State";
 import GoogleApi from "../../Utility/GoogleApi";
 import Scry from "../../Utility/Scry";
@@ -38,7 +39,7 @@ const AddDeck: React.FC = () => {
 
     const handleImport = () => {
         createNewDeck({ name: deckName, fileContent: importText, previewUrl });
-        history.push(`/decks/${encodeURIComponent(deckName)}`);
+        history.push(RouteNames.Deck(encodeURIComponent(deckName)));
     };
 
     const validateName = (name: string) => {

@@ -2,6 +2,7 @@ import { Divider, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from "
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { RouteNames } from "../../Routes/Routes";
 import { AppState, Deck, DeckName, getDeckName } from "../../State";
 import { DrawerAvatar } from "../Styled/Grid";
 import styled from "../Styled/Theme";
@@ -27,7 +28,7 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
         <Tooltip key={deck.name} title={open ? "" : (state.decks[deck.name].isDirty ? "*" : "") + getDeckName(deck.name)} placement="right">
             <ListItem
                 component={Link}
-                to={`/decks/${encodeURIComponent(deck.name)}`}
+                to={RouteNames.Deck(encodeURIComponent(deck.name))}
                 onClick={closeDrawer}
                 button
                 selected={state.selectedDeck === deck.name && !!pathname.match(/^\/decks\//)}
@@ -51,7 +52,7 @@ const DrawerDeckList: React.FC<Props> = ({ open, closeDrawer }) => {
             <Divider />
             <List>
                 <Tooltip title="Add deck" placement="right">
-                    <ListItem component={Link} to="/addDeck" onClick={closeDrawer} button selected={!!pathname.match(/^\/addDeck$/)}>
+                    <ListItem component={Link} to={RouteNames.AddDeck} onClick={closeDrawer} button selected={!!pathname.match(/^\/addDeck$/)}>
                         <ListItemAvatar>
                             <DrawerAvatar alt="Add deck">
                                 <AddCircleOutlineIcon />

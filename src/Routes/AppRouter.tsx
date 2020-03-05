@@ -5,7 +5,6 @@ import Routes from "./Routes";
 
 const AppRouter: React.FC = () => (
     <Switch>
-        <Route exact {...Routes.SignIn} />
         {Routes.Public.map(r => (
             <Route key={r.path} exact {...r} />
         ))}

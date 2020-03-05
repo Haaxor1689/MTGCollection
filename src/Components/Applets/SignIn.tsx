@@ -1,9 +1,9 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import Logo from "../Assets/logo.png";
-import GoogleApi from "../Utility/GoogleApi";
-import SignInButton from "./SignInButton";
-import { AppletContent } from "./Styled/Grid";
+import GoogleApi from "../../Utility/GoogleApi";
+import Logo from "../../Assets/logo.png";
+import SignInButton from "../SignInButton";
+import { AppletContent } from "../Styled/Grid";
 
 const SignIn: React.FC = () => {
     return (

@@ -4,6 +4,7 @@ import CollectionsIcon from "@material-ui/icons/Collections";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import React from "react";
 import { Link } from "react-router-dom";
+import { RouteNames } from "../../Routes/Routes";
 import { AppState, Deck, DeckName, getDeckName, SectionName } from "../../State";
 import Scry from "../../Utility/Scry";
 import SymbolTypography from "../Styled/SymbolTypography";
@@ -77,7 +78,7 @@ const DeckBox: React.FC<Props> = ({ deck }) => {
     if (!deck) {
         return (
             <DeckBoxBody>
-                <Link to="/addDeck">
+                <Link to={RouteNames.AddDeck}>
                     <DeckBoxAvatar variant="rounded" alt="Add deck">
                         <LargeAddCircleOutlineIcon />
                     </DeckBoxAvatar>
@@ -87,7 +88,7 @@ const DeckBox: React.FC<Props> = ({ deck }) => {
     }
     return (
         <DeckBoxBody>
-            <Link to={`/decks/${encodeURIComponent(deck.name)}`}>
+            <Link to={RouteNames.Deck(encodeURIComponent(deck.name))}>
                 <DeckBoxAvatar variant="rounded" alt={getDeckName(deck.name)} src={deck.previewUrl}>
                     {getDeckIcon(deck.name)}
                 </DeckBoxAvatar>

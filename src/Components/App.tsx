@@ -8,7 +8,7 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { isNullOrUndefined } from "util";
 import AppRouter from "../Routes/AppRouter";
-import Routes from "../Routes/Routes";
+import Routes, { RouteNames } from "../Routes/Routes";
 import { AppState, initialState, LoginState } from "../State";
 import { reducer } from "../State/Reducers";
 import { isFulfilledPromise } from "../Utility";
@@ -215,10 +215,10 @@ const App: React.FC = () => {
             let redirect = history.location.pathname;
             if (!signedIn) {
                 setIsSignedIn(false);
-                if (!Routes.IsPublic(redirect)) history.push(Routes.SignIn.path);
+                if (!Routes.IsPublic(redirect)) history.push(RouteNames.SignIn);
                 return;
             }
-            if (redirect.match(Routes.SignIn.path)) redirect = "/";
+            if (redirect.match(RouteNames.SignIn)) redirect = RouteNames.Home;
             history.push(redirect);
 
             await GoogleApi.prepareAppData(dispatch, state)();
@@ -280,7 +280,7 @@ const App: React.FC = () => {
                             </MenuButton>
                         )}
                         <Typography variant="h6" style={{ overflow: "hidden" }}>
-                            <MUILink variant="inherit" color="inherit" underline="none" component={Link} to={isSignedIn ? "/" : Routes.SignIn.path}>
+                            <MUILink variant="inherit" color="inherit" underline="none" component={Link} to={isSignedIn ? RouteNames.Home : RouteNames.SignIn}>
                                 MTGCollection
                             </MUILink>
                         </Typography>
@@ -290,7 +290,7 @@ const App: React.FC = () => {
                                 {!isNullOrUndefined(profile) && (
                                     <ProfileAvatar>
                                         <Tooltip title={`Signed in as ${profile.getGivenName()} (${profile.getEmail()})`}>
-                                            <Avatar component={Link} to="/user" alt={profile.getGivenName()} src={profile.getImageUrl()} />
+                                            <Avatar component={Link} to={RouteNames.User} alt={profile.getGivenName()} src={profile.getImageUrl()} />
                                         </Tooltip>
                                     </ProfileAvatar>
                                 )}

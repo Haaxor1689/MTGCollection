@@ -7,6 +7,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import copy from "clipboard-copy";
 import React from "react";
 import { useHistory, useParams } from "react-router";
+import { RouteNames } from "../../Routes/Routes";
 import { AppState, DeckName, getDeckName } from "../../State";
 import CollectionParser from "../../Utility/CollectionParser";
 import GoogleApi from "../../Utility/GoogleApi";
@@ -101,10 +102,10 @@ const DeckPreview: React.FC = () => {
         // eslint-disable-next-line
     }, [deckName, deck]);
 
-    const closePreview = () => history.push("/");
+    const closePreview = () => history.push(RouteNames.Home);
     const toggleExpanded = () => setExpanded(e => !e);
     const onDeleteDeck = () => {
-        history.push("/");
+        history.push(RouteNames.Home);
         deleteDeck({ name: deckName, id: state.files[deckName] });
     };
     const onSaveChanges = () =>

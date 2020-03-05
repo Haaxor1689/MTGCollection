@@ -3,9 +3,10 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { useHistory, useLocation } from "react-router";
+import { RouteNames } from "../../Routes/Routes";
 import { AppState, getDeckName } from "../../State";
-import DeckAvatar from "./DeckAvatar";
 import styled from "../Styled/Theme";
+import DeckAvatar from "./DeckAvatar";
 
 const StyledNavigation = styled(BottomNavigation)`
     position: fixed;
@@ -48,16 +49,16 @@ const MobileNavigation: React.FC<Props> = ({ open, toggleOpen }) => {
     const [state] = React.useContext(AppState);
     const [value, setValue] = React.useState(0);
 
-    React.useEffect(() => setValue(open ? 2 : pathname.match("/addDeck") ? 0 : 1), [open, pathname]);
+    React.useEffect(() => setValue(open ? 2 : pathname.match(RouteNames.AddDeck) ? 0 : 1), [open, pathname]);
 
     const onChange = (tab: number) => {
         setValue(tab);
         switch (tab) {
             case 0:
-                history.push("/addDeck/");
+                history.push(RouteNames.AddDeck);
                 return;
             case 1:
-                history.push(`/decks/${encodeURIComponent(state.decks[state.selectedDeck].name)}`);
+                history.push(RouteNames.Deck(encodeURIComponent(state.decks[state.selectedDeck].name)));
                 return;
             case 2:
                 toggleOpen();
