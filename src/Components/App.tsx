@@ -11,6 +11,7 @@ import AppRouter from "../Routes/AppRouter";
 import Routes from "../Routes/Routes";
 import { AppState, initialState, LoginState } from "../State";
 import { reducer } from "../State/Reducers";
+import { isFulfilledPromise } from "../Utility";
 import GoogleApi, { GoogleProfile } from "../Utility/GoogleApi";
 import Scry from "../Utility/Scry";
 import { ScryCardSymbol, ScrySet } from "../Utility/Scry/Types";
@@ -234,7 +235,7 @@ const App: React.FC = () => {
                         "Content-Type": "image/svg+xml",
                     },
                 });
-                return Promise.all(
+                return Promise.allSettled(
                     symbols.map(symbol =>
                         endpoint.get<string, AxiosResponse<ScryCardSymbol>>(symbol.svg_uri, { transformResponse: r => ({ ...symbol, svg: r }) })
                     )
@@ -243,7 +244,7 @@ const App: React.FC = () => {
             .then(responses => {
                 dispatch({
                     type: "AddSymbols",
-                    symbols: responses.map(r => r.data),
+                    symbols: responses.filter(isFulfilledPromise).map(r => r.value.data),
                 });
             })
             .then(Scry.Sets.All)
@@ -255,14 +256,14 @@ const App: React.FC = () => {
                         "Content-Type": "image/svg+xml",
                     },
                 });
-                return Promise.all(
+                return Promise.allSettled(
                     sets.map(set => endpoint.get<string, AxiosResponse<ScrySet>>(set.icon_svg_uri, { transformResponse: r => ({ ...set, icon_svg: r }) }))
                 );
             })
             .then(responses => {
                 dispatch({
                     type: "AddSets",
-                    sets: responses.map(r => r.data),
+                    sets: responses.filter(isFulfilledPromise).map(r => r.value.data),
                 });
             });
         // eslint-disable-next-line

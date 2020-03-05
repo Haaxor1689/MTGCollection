@@ -33,3 +33,5 @@ export const PxFromAvatarSize = (size?: "chip" | "inline") => {
             return 24;
     }
 };
+
+export const isFulfilledPromise = <T extends any>(result: PromiseSettledResult<T>): result is PromiseFulfilledResult<T> => result?.status === "fulfilled";
