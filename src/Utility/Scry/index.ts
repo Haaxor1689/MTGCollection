@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { Arr, ArrayChunk } from "..";
+import { Arr, ArrayChunk, isFulfilledPromise } from "..";
 import DeepReadonly from "../DeepReadonly";
 import { ScryCard, ScryCardIdentifier, ScryCardImageUris, ScryCardSymbol, ScryManaCost, ScrySet } from "./Types";
 
@@ -37,9 +37,9 @@ const Api = (() => {
             Collection: (cards: ScryCardIdentifier[]) =>
                 (cards?.length ?? 0) <= 0
                     ? Promise.resolve([])
-                    : Promise.all(
+                    : Promise.allSettled(
                         ArrayChunk(cards, 75).map(identifiers => endpoint.post<List<ScryCard>>("/cards/collection", { identifiers }))
-                    ).then(r => r.flatMap(v => v.data.data)),
+                    ).then(r => r.filter(isFulfilledPromise).flatMap(v => v.value.data.data)),
         },
         Sets: {
             All: () => endpoint.get<List<ScrySet>>("/sets").then(r => r.data.data),
