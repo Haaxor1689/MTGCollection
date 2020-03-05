@@ -1,21 +1,23 @@
 {
   "files": {
-    "main.js": "/MTGCollection/static/js/main.9f64c2f4.chunk.js",
-    "main.js.map": "/MTGCollection/static/js/main.9f64c2f4.chunk.js.map",
+    "main.js": "/MTGCollection/static/js/main.d9a370cf.chunk.js",
+    "main.js.map": "/MTGCollection/static/js/main.d9a370cf.chunk.js.map",
     "runtime-main.js": "/MTGCollection/static/js/runtime-main.fb7e6c41.js",
     "runtime-main.js.map": "/MTGCollection/static/js/runtime-main.fb7e6c41.js.map",
-    "static/js/2.075df5c7.chunk.js": "/MTGCollection/static/js/2.075df5c7.chunk.js",
-    "static/js/2.075df5c7.chunk.js.map": "/MTGCollection/static/js/2.075df5c7.chunk.js.map",
+    "static/js/2.5158ebea.chunk.js": "/MTGCollection/static/js/2.5158ebea.chunk.js",
+    "static/js/2.5158ebea.chunk.js.map": "/MTGCollection/static/js/2.5158ebea.chunk.js.map",
     "index.html": "/MTGCollection/index.html",
-    "precache-manifest.85f30592a629142d16b19be2200b6c14.js": "/MTGCollection/precache-manifest.85f30592a629142d16b19be2200b6c14.js",
+    "precache-manifest.fa0b34a7804ddc38d1a41f50480424a0.js": "/MTGCollection/precache-manifest.fa0b34a7804ddc38d1a41f50480424a0.js",
     "service-worker.js": "/MTGCollection/service-worker.js",
-    "static/js/2.075df5c7.chunk.js.LICENSE": "/MTGCollection/static/js/2.075df5c7.chunk.js.LICENSE",
+    "static/js/2.5158ebea.chunk.js.LICENSE": "/MTGCollection/static/js/2.5158ebea.chunk.js.LICENSE",
     "static/media/logo.png": "/MTGCollection/static/media/logo.81aa9e7e.png",
-    "static/media/scryfallLogo.89ac5845.svg": "/MTGCollection/static/media/scryfallLogo.89ac5845.svg"
+    "static/media/scryfallLogo.89ac5845.svg": "/MTGCollection/static/media/scryfallLogo.89ac5845.svg",
+    "sw.js": "/MTGCollection/sw.js",
+    "sw.js.map": "/MTGCollection/sw.js.map"
   },
   "entrypoints": [
     "static/js/runtime-main.fb7e6c41.js",
-    "static/js/2.075df5c7.chunk.js",
-    "static/js/main.9f64c2f4.chunk.js"
+    "static/js/2.5158ebea.chunk.js",
+    "static/js/main.d9a370cf.chunk.js"
   ]
 }
