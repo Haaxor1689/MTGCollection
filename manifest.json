@@ -8,7 +8,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/#/",
+  "start_url": "/MTGCollection/#/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#C3C6E8"
