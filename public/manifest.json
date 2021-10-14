@@ -1,14 +1,15 @@
 {
-  "short_name": "MTG Collection",
-  "name": "Your MTG Collection online",
-  "icons": [
-    {
-      "src": "PPR_C.png",
-      "sizes": "512x512 192x192 64x64 32x32 24x24 16x16",
-      "type": "image/png"
-    }
-  ],
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#C3C6E8"
+    "short_name": "MTG Collection",
+    "name": "Your MTG Collection online",
+    "start_url": "https://haaxor1689.github.io/MTGCollection/",
+    "icons": [
+        {
+            "src": "PPR_C.png",
+            "sizes": "512x512 192x192 64x64 32x32 24x24 16x16",
+            "type": "image/png"
+        }
+    ],
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#C3C6E8"
 }
