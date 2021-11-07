@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ErrorOutline } from '@mui/icons-material';
 
-import { cardsSearch } from 'api/cardsApi';
-import { ScryCard, ScryError } from 'utils/types';
+import { useCardSearch } from 'api/cardsApi';
 import { getCardImage } from 'utils';
 
 type Props = {
@@ -12,19 +10,9 @@ type Props = {
 };
 
 const SearchResults = ({ query }: Props) => {
-	const [result, setResult] = useState<ScryCard[]>();
-	const [error, setError] = useState<ScryError>();
+	const result = useCardSearch(query);
 
-	useEffect(() => {
-		setResult(undefined);
-		setError(undefined);
-
-		cardsSearch(query)
-			.then(r => setResult(r.data))
-			.catch(setError);
-	}, [query]);
-
-	if (error) {
+	if (result.isError) {
 		return (
 			<Box
 				sx={{
@@ -40,13 +28,13 @@ const SearchResults = ({ query }: Props) => {
 			>
 				<ErrorOutline sx={{ typography: 'h1' }} />
 				<Typography variant="h5" textAlign="center">
-					{error.details}
+					{result.error.details}
 				</Typography>
 			</Box>
 		);
 	}
 
-	if (!result) {
+	if (result.isLoading || !result.data) {
 		return (
 			<Box
 				sx={{
@@ -70,7 +58,7 @@ const SearchResults = ({ query }: Props) => {
 				gap: 2
 			}}
 		>
-			{result.map(c => (
+			{result.data.data.map(c => (
 				<Box
 					key={c.id}
 					component={Link}

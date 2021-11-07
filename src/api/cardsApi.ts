@@ -1,18 +1,23 @@
+import { useQuery } from 'react-query';
+
 import api from 'api';
-import { ScryCard, ScryList } from 'utils/types';
+import { ScryCard, ScryError, ScryList } from 'utils/types';
+import { queryClient } from 'App';
 
-export const cardsSearch = (q: string) =>
-	api
-		.get(`cards/search?order=cmc&q=${q}`)
-		.json<ScryList<ScryCard>>()
-		.catch(async e => {
-			throw await e.response.json();
-		});
+export const useCardSearch = (query: string) =>
+	useQuery<ScryList<ScryCard>, ScryError>(
+		['list', 'cards', 'search', { query }],
+		() =>
+			api.get(`cards/search?order=cmc&q=${query}`).json<ScryList<ScryCard>>(),
+		{
+			onSuccess: data =>
+				data.data.forEach(card => {
+					queryClient.setQueryData(['get', 'cards', { id: card.id }], card);
+				})
+		}
+	);
 
-export const cardById = (id: string) =>
-	api
-		.get(`cards/${id}`)
-		.json<ScryCard>()
-		.catch(async e => {
-			throw await e.response.json();
-		});
+export const useCardById = (id: string) =>
+	useQuery<ScryCard, ScryError>(['get', 'cards', { id }], () =>
+		api.get(`cards/${id}`).json<ScryCard>()
+	);

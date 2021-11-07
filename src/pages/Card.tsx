@@ -1,35 +1,24 @@
-import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, CircularProgress } from '@mui/material';
 
-import { cardById } from 'api/cardsApi';
-import { ScryCard, ScryError } from 'utils/types';
+import { useCardById } from 'api/cardsApi';
 import CardDetail from 'components/CardDetail';
 
 const Card = () => {
 	const { id } = useParams();
+	const result = useCardById(id ?? '');
 
-	const [result, setResult] = useState<ScryCard>();
-	const [error, setError] = useState<ScryError>();
-
-	useEffect(() => {
-		setResult(undefined);
-		setError(undefined);
-
-		id && cardById(id).then(setResult).catch(setError);
-	}, [id]);
-
-	if (error) {
+	if (result.isError) {
 		return (
 			<Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
 				<Typography color="error" variant="h4" textAlign="center">
-					{error.details}
+					{result.error.details}
 				</Typography>
 			</Box>
 		);
 	}
 
-	if (!result) {
+	if (result.isLoading || !result.data) {
 		return (
 			<Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
 				<CircularProgress />
@@ -37,7 +26,7 @@ const Card = () => {
 		);
 	}
 
-	return <CardDetail {...result} />;
+	return <CardDetail {...result.data} />;
 };
 
 export default Card;
