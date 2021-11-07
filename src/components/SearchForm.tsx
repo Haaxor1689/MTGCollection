@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { TextField, InputAdornment, IconButton, Box } from '@mui/material';
 import { Search } from '@mui/icons-material';
 
-const SearchInput = () => {
+const SearchForm = () => {
 	const [params, setParams] = useSearchParams();
 
 	// State
@@ -39,4 +39,4 @@ const SearchInput = () => {
 	);
 };
 
-export default SearchInput;
+export default SearchForm;

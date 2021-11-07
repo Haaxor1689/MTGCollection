@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 
-import SearchInput from 'components/SearchInput';
+import SearchForm from 'components/SearchForm';
 import SearchResults from 'components/SearchResults';
 import usePageTitle from 'hooks/usePageTitle';
 
@@ -11,7 +11,7 @@ const Home = () => {
 	const query = params.get('q');
 	return (
 		<>
-			<SearchInput />
+			<SearchForm />
 			{query && <SearchResults query={query} />}
 		</>
 	);
